@@ -1,14 +1,11 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <snake.h>
+#include "snake.h"
 
 class Controller {
-  public:
-
-    Controller() {}
-    void HandleInput(bool &running, Snake &snake);
+ public:
+  void HandleInput(bool &running, Snake &snake);
 };
-
 
 #endif
