@@ -2,41 +2,50 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(const std::size_t &grid_width, const std::size_t &grid_height)
-    : kGridWidth(grid_width), kGridHeight(grid_height), engine(dev()) {
-  snake = Snake(grid_width, grid_height);
+Game::Game(std::size_t grid_width, std::size_t grid_height)
+    : snake(grid_width, grid_height),
+      engine(dev()),
+      random_w(0, static_cast<int>(grid_width)),
+      random_h(0, static_cast<int>(grid_height)) {
   PlaceFood();
 }
 
-void Game::Run(Controller &controller, Renderer &renderer,
-               const std::size_t &ms_per_frame) {
-  Uint32 frame_ms, start = SDL_GetTicks(), before, after;
+void Game::Run(Controller const &controller, Renderer &renderer,
+               std::size_t target_frame_duration) {
+  Uint32 title_timestamp = SDL_GetTicks();
+  Uint32 frame_start;
+  Uint32 frame_end;
+  Uint32 frame_duration;
   int frame_count = 0;
   bool running = true;
 
   while (running) {
-    before = SDL_GetTicks();
+    frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
     renderer.Render(snake, food);
 
-    after = SDL_GetTicks();
+    frame_end = SDL_GetTicks();
 
     // Keep track of how long each loop through the input/update/render cycle
     // takes.
     frame_count++;
-    frame_ms = after - before;
+    frame_duration = frame_end - frame_start;
 
-    if (after - start >= 1000) {
+    // After every second, update the window title.
+    if (frame_end - title_timestamp >= 1000) {
       renderer.UpdateWindowTitle(score, frame_count);
       frame_count = 0;
-      start = after;
+      title_timestamp = frame_end;
     }
 
-    if (ms_per_frame > frame_ms) {
-      SDL_Delay(ms_per_frame - frame_ms);
+    // If the time for this frame is too small (i.e. frame_duration is
+    // smaller than the target ms_per_frame), delay the loop to
+    // achieve the correct frame rate.
+    if (frame_duration < target_frame_duration) {
+      SDL_Delay(target_frame_duration - frame_duration);
     }
   }
 }
@@ -51,12 +60,10 @@ void Game::PlaceFood() {
     if (!snake.SnakeCell(x, y)) {
       food.x = x;
       food.y = y;
-      break;
+      return;
     }
   }
 }
-
-int Game::GetSize() const { return snake.size; }
 
 void Game::Update() {
   if (!snake.alive) return;
@@ -71,9 +78,10 @@ void Game::Update() {
     score++;
     PlaceFood();
     // Grow snake and increase speed.
-    snake.GrowBody(1);
+    snake.GrowBody();
     snake.speed += 0.02;
   }
 }
 
 int Game::GetScore() const { return score; }
+int Game::GetSize() const { return snake.size; }
