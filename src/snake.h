@@ -14,6 +14,20 @@ class Snake {
         head_x(grid_width / 2),
         head_y(grid_height / 2) {}
 
+  Snake(int grid_width, int grid_height, float head_x, float head_y, int size, float speed)
+      : grid_width(grid_width),
+        grid_height(grid_height),
+        head_x(head_x),
+        head_y(head_x),
+        size(size),
+        speed(speed) {}
+
+  // Snake(float head_x, float head_y, int size, int speed)
+  //     : head_x(head_x),
+  //       head_y(head_y),
+  //       size(size),
+  //       speed(speed) {}
+
   void Update();
 
   void GrowBody();
@@ -22,7 +36,7 @@ class Snake {
   Direction direction = Direction::kUp;
 
   float speed{0.1f};
-  int size{1};
+  int size{1}; //size of the body+head
   bool alive{true};
   float head_x;
   float head_y;
@@ -32,7 +46,7 @@ class Snake {
   void UpdateHead();
   void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
 
-  bool growing{false};
+  bool growing{false}; //if growing, don't erase tail
   int grid_width;
   int grid_height;
 };

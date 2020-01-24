@@ -4,15 +4,16 @@
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
-      engine(dev()),
-      random_w(0, static_cast<int>(grid_width)),
-      random_h(0, static_cast<int>(grid_height)) {
+      snake2(grid_width, grid_height, 1, 1, 10, 0.05),
+      engine(dev()), // Abel-Q1
+      random_w(1, static_cast<int>(grid_width)-1),
+      random_h(1, static_cast<int>(grid_height)-1) {
   PlaceFood();
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
-  Uint32 title_timestamp = SDL_GetTicks();
+  Uint32 title_timestamp = SDL_GetTicks(); // Abel-Q2
   Uint32 frame_start;
   Uint32 frame_end;
   Uint32 frame_duration;
@@ -25,7 +26,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake, snake2, food);
 
     frame_end = SDL_GetTicks();
 
@@ -57,9 +58,11 @@ void Game::PlaceFood() {
     y = random_h(engine);
     // Check that the location is not occupied by a snake item before placing
     // food.
-    if (!snake.SnakeCell(x, y)) {
+    if (!snake.SnakeCell(x, y) && !snake2.SnakeCell(x, y)) {
       food.x = x;
-      food.y = y;
+      food.y = y;  
+      std::cout << "Food x = " << x << std::endl;
+      std::cout << "Food y = " << y << std::endl;
       return;
     }
   }
@@ -69,6 +72,26 @@ void Game::Update() {
   if (!snake.alive) return;
 
   snake.Update();
+  // Update snake2: move in x
+  // Controller::ChangeDirection(snake2, Snake::Direction::kLeft, Snake::Direction::kRight);
+  snake2.direction = Snake::Direction::kRight; //Abel
+  snake2.Update();
+  // if the snake runs into any part of snake2, it dies
+  // std::cout << "snake.head_x = " << snake.head_x << std::endl;
+  // std::cout << "snake2.head_x = " << snake2.head_x << std::endl;
+  // std::cout << "snake.head_y = " << snake.head_y << std::endl;
+  // std::cout << "snake2.head_y = " << snake2.head_y << std::endl;
+
+  if (abs(snake.head_x-snake2.head_x)<1 && abs(snake.head_y-snake2.head_y)<1) {
+    snake.alive = false;
+  }
+  else {
+    for (auto const &item : snake2.body) {
+      if (abs(snake.head_x-item.x)<1 && abs(snake.head_y-item.y)<1) {
+        snake.alive = false;
+      }
+    } 
+  }
 
   int new_x = static_cast<int>(snake.head_x);
   int new_y = static_cast<int>(snake.head_y);
@@ -76,12 +99,18 @@ void Game::Update() {
   // Check if there's food over here
   if (food.x == new_x && food.y == new_y) {
     score++;
+    std::cout << "Just ate a food!" << std::endl;
     PlaceFood();
     // Grow snake and increase speed.
     snake.GrowBody();
-    snake.speed += 0.02;
+    snake2.GrowBody(); //Abel
+    // snake.speed += 0.02;
   }
 }
 
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
+
+// //Abel
+// void StartTrain() {
+// }
