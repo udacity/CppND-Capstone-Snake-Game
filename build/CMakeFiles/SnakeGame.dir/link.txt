@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/SnakeGame.dir/src/main.cpp.o CMakeFiles/SnakeGame.dir/src/game.cpp.o CMakeFiles/SnakeGame.dir/src/controller.cpp.o CMakeFiles/SnakeGame.dir/src/renderer.cpp.o CMakeFiles/SnakeGame.dir/src/snake.cpp.o  -o SnakeGame -lSDL2 /usr/lib/x86_64-linux-gnu/libSDL2_image.so 
