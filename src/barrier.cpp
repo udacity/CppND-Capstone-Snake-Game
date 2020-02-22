@@ -8,8 +8,6 @@ std::vector<SDL_Point> BarrierSingleton::body;
 BarrierSingleton& BarrierSingleton::getInstance()
 {
     static BarrierSingleton    instance;
-    if(!isInit)
-        init();
     return instance;
 }
 
