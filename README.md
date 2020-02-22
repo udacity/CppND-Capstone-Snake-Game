@@ -18,7 +18,7 @@ In this project, you can build your own C++ application or extend this Snake gam
 * SDL2 >= 2.0
   * All installation instructions can be found [here](https://wiki.libsdl.org/Installation)
   * Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source.
-* SDL2_ttf
+* SDL2_ttf >= 2.0.15
   * All installation instructions can be found [here](https://www.libsdl.org/projects/SDL_ttf/)
   * Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source.
 * gcc/g++ >= 5.4
