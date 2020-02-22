@@ -1,4 +1,5 @@
 #include "snake.h"
+#include "barrier.h"
 #include <cmath>
 #include <iostream>
 
@@ -56,8 +57,16 @@ void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) 
   }
 
   // Check if the snake has died.
+  if (BarrierSingleton::getInstance().BarrierCell(current_head_cell.x, current_head_cell.y))
+  {
+    alive = false;
+  }
   for (auto const &item : body) {
     if (current_head_cell.x == item.x && current_head_cell.y == item.y) {
+      alive = false;
+    }
+    if (BarrierSingleton::getInstance().BarrierCell(item.x, item.y))
+    {
       alive = false;
     }
   }
