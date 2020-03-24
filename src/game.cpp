@@ -83,4 +83,4 @@ void Game::Update() {
 }
 
 int Game::GetScore() const { return score; }
-int Game::GetSize() const { return shooter.size; }
+//int Game::GetSize() const { return shooter.size; }

@@ -15,18 +15,22 @@ void Shooter::Update() {
     if (current_cell.x != prev_cell.x) {
         PopulateBody();
     }
+    
+    if (missiles.size() > 0) {
+        UpdateMissiles();
+    }
 }
 
 void Shooter::UpdateCenter() {
     switch (direction) {
         case Direction::kLeft:
-            if (center_x > 4.5 && moving) {
+            if (center_x > xbuffer && moving) {
                 center_x -= speed;
             }
             break;
 
         case Direction::kRight:
-            if (center_x < grid_width - 4.5 && moving) {
+            if (center_x < grid_width - xbuffer && moving) {
                 center_x += speed;
             }
             break;
@@ -44,6 +48,24 @@ void Shooter::PopulateBody() {
     for (int i = 0; i < x_rel.size(); i++) {
         body.push_back(SDL_Point{x + x_rel[i], y + y_rel[i]});
     }
+}
+
+void Shooter::ShootMissile() {
+    
+    missiles.push_back(Missile(center_x - 2, center_y-2 , missileSpeed));
+    missiles.push_back(Missile(center_x + 2, center_y-2 , missileSpeed));
+
+}
+
+void Shooter::UpdateMissiles() {
+    for (auto &missile : missiles) {
+        missile.UpdateLocation();
+    }
+    
+    // TODO: missile cleanup
+    missiles.erase(std::remove_if(missiles.begin(), missiles.end(),
+                                  [](const Missile & missile) { return !missile.active; }),
+                   missiles.end());
 }
 
 // Inefficient method to check if cell is occupied by snake.

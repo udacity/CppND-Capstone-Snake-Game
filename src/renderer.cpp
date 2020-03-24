@@ -70,6 +70,14 @@ void Renderer::Render(Shooter const shooter, SDL_Point const &food) {
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
   }
   SDL_RenderFillRect(sdl_renderer, &block);
+    
+    // Render shooter's missiles
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    for (Missile const &missile : shooter.missiles) {
+        block.x = static_cast<int>(missile.x) * block.w;
+        block.y = static_cast<int>(missile.y) * block.h;
+        SDL_RenderFillRect(sdl_renderer, &block);
+    }
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);

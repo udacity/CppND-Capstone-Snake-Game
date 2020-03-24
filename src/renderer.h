@@ -4,6 +4,7 @@
 #include <vector>
 #include "SDL.h"
 #include "shooter.h"
+#include "missile.h"
 
 class Renderer {
  public:

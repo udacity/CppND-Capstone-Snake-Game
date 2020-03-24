@@ -34,6 +34,7 @@ void Controller::HandleInput(bool &running, Shooter &shooter) const {
                         
                 case SDLK_SPACE:
                     // TODO: shoot missile
+                    shooter.ShootMissile();
                     break;
             }
         }
