@@ -1,7 +1,7 @@
 #include "controller.h"
 #include <iostream>
 #include "SDL.h"
-#include "snake.h"
+#include "shooter.h"
 
 void Controller::ChangeDirection(Shooter &shooter, Shooter::Direction input) const
 {

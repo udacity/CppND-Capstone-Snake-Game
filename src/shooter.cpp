@@ -1,4 +1,4 @@
-#include "snake.h"
+#include "shooter.h"
 #include <cmath>
 #include <iostream>
 
@@ -20,13 +20,13 @@ void Shooter::Update() {
 void Shooter::UpdateCenter() {
     switch (direction) {
         case Direction::kLeft:
-            if (center_x > 4 && moving) {
+            if (center_x > 4.5 && moving) {
                 center_x -= speed;
             }
             break;
 
         case Direction::kRight:
-            if (center_x < grid_width - 5 && moving) {
+            if (center_x < grid_width - 4.5 && moving) {
                 center_x += speed;
             }
             break;
