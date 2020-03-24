@@ -51,9 +51,9 @@ void Shooter::PopulateBody() {
 }
 
 void Shooter::ShootMissile() {
-    
-    missiles.push_back(Missile(center_x - 2, center_y-2 , missileSpeed));
-    missiles.push_back(Missile(center_x + 2, center_y-2 , missileSpeed));
+    // two missiles from the shooter, left and right
+    missiles.push_back(Missile(center_x-2, center_y-2 , missileSpeed));
+    missiles.push_back(Missile(center_x+2, center_y-2 , missileSpeed));
 
 }
 
@@ -62,8 +62,9 @@ void Shooter::UpdateMissiles() {
         missile.UpdateLocation();
     }
     
-    // TODO: missile cleanup
-    missiles.erase(std::remove_if(missiles.begin(), missiles.end(),
+    // Clean-up missile if not active
+    missiles.erase(std::remove_if(missiles.begin(),
+                                  missiles.end(),
                                   [](const Missile & missile) { return !missile.active; }),
                    missiles.end());
 }
