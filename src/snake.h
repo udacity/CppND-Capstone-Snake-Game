@@ -1,40 +1,39 @@
-#ifndef SNAKE_H
-#define SNAKE_H
+#ifndef SHOOTER_H
+#define SHOOTER_H
 
 #include <vector>
 #include "SDL.h"
 
-class Snake {
- public:
-  enum class Direction { kUp, kDown, kLeft, kRight };
+class Shooter {
+public:
+    enum class Direction { kLeft, kRight };
 
-  Snake(int grid_width, int grid_height)
-      : grid_width(grid_width),
-        grid_height(grid_height),
-        head_x(grid_width / 2),
-        head_y(grid_height / 2) {}
+    Shooter(int grid_width, int grid_height) : grid_width(grid_width), grid_height(grid_height),
+                                               center_x(grid_width/2), center_y(grid_height-4)
+    {
+        PopulateBody();
+    }
 
-  void Update();
+    void Update();
 
-  void GrowBody();
-  bool SnakeCell(int x, int y);
+    bool SnakeCell(int x, int y);
 
-  Direction direction = Direction::kUp;
+    Direction direction = Direction::kLeft;
 
-  float speed{0.1f};
-  int size{1};
-  bool alive{true};
-  float head_x;
-  float head_y;
-  std::vector<SDL_Point> body;
+    float speed{0.3f};
+    bool moving{false};
+    int size{1};
+    bool alive{true};
+    float center_x;
+    float center_y;
+    std::vector<SDL_Point> body;
 
- private:
-  void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
+private:
+    void UpdateCenter();
+    void PopulateBody();
 
-  bool growing{false};
-  int grid_width;
-  int grid_height;
+    int grid_width;
+    int grid_height;
 };
 
 #endif
