@@ -4,6 +4,7 @@
 #include <vector>
 #include "SDL.h"
 #include "shooter.h"
+#include "EnemyShipManager.h"
 #include "missile.h"
 
 class Renderer {
@@ -12,7 +13,7 @@ class Renderer {
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void Render(Shooter const shooter, SDL_Point const &food);
+  void Render(Shooter const &shooter, EnemyShipManager const &enemyShipManager);
   void UpdateWindowTitle(int score, int fps);
 
  private:

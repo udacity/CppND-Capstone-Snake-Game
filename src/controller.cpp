@@ -3,7 +3,7 @@
 #include "SDL.h"
 #include "shooter.h"
 
-void Controller::ChangeDirection(Shooter &shooter, Shooter::Direction input) const
+void Controller::ChangeDirection(Shooter &shooter, Direction input) const
 {
     if (shooter.direction != input) {
         shooter.direction = input;
@@ -19,12 +19,12 @@ void Controller::HandleInput(bool &running, Shooter &shooter) const {
         } else if (e.type == SDL_KEYDOWN) {
             switch (e.key.keysym.sym) {
                 case SDLK_LEFT:
-                    ChangeDirection(shooter, Shooter::Direction::kLeft);
+                    ChangeDirection(shooter, Direction::kLeft);
                     shooter.moving = true;
                     break;
 
                 case SDLK_RIGHT:
-                    ChangeDirection(shooter, Shooter::Direction::kRight);
+                    ChangeDirection(shooter, Direction::kRight);
                     shooter.moving = true;
                     break;
                 
@@ -33,7 +33,6 @@ void Controller::HandleInput(bool &running, Shooter &shooter) const {
                     break;
                         
                 case SDLK_SPACE:
-                    // TODO: shoot missile
                     shooter.ShootMissile();
                     break;
             }

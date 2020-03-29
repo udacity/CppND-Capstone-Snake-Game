@@ -8,7 +8,7 @@ class Controller {
   void HandleInput(bool &running, Shooter &shooter) const;
 
  private:
-  void ChangeDirection(Shooter &shooter, Shooter::Direction input) const;
+  void ChangeDirection(Shooter &shooter, Direction input) const;
 };
 
 #endif

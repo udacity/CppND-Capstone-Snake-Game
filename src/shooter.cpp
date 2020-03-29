@@ -1,9 +1,10 @@
-#include "shooter.h"
 #include <cmath>
 #include <iostream>
 
+#include "shooter.h"
+
 void Shooter::Update() {
-    // We first capture the head's cell before updating.
+    // We first capture the center cell before updating.
     SDL_Point prev_cell{ static_cast<int>(center_x), static_cast<int>(center_y)};
     
     UpdateCenter();
@@ -11,11 +12,14 @@ void Shooter::Update() {
     // Capture the center's cell after updating.
     SDL_Point current_cell{ static_cast<int>(center_x), static_cast<int>(center_y)};
 
-    // Update all of the body vector items if the shooter's center has moved to a new cell.
+    // Update all of the body vector items if the shooter's
+    // center has moved to a new cell (x-direction only).
     if (current_cell.x != prev_cell.x) {
         PopulateBody();
     }
     
+    // If the shooter has any active missiles on the screen
+    // update missile locations / active status
     if (missiles.size() > 0) {
         UpdateMissiles();
     }
@@ -30,9 +34,12 @@ void Shooter::UpdateCenter() {
             break;
 
         case Direction::kRight:
-            if (center_x < grid_width - xbuffer && moving) {
+            if (center_x < grid_x - xbuffer && moving) {
                 center_x += speed;
             }
+            break;
+        case Direction::kDown:
+            // shooter will never enter kDown case
             break;
     }
 }
@@ -50,11 +57,18 @@ void Shooter::PopulateBody() {
     }
 }
 
+void Shooter::MoveBody() {
+    if ( 0 == body.size() ) {
+        // no body to move
+    } else {
+        // TODO:
+    }
+}
+
 void Shooter::ShootMissile() {
     // two missiles from the shooter, left and right
-    missiles.push_back(Missile(center_x-2, center_y-2 , missileSpeed));
-    missiles.push_back(Missile(center_x+2, center_y-2 , missileSpeed));
-
+    missiles.push_back(Missile(center_x-2, center_y-2 , missileSpeed, grid_y));
+    missiles.push_back(Missile(center_x+2, center_y-2 , missileSpeed, grid_y));
 }
 
 void Shooter::UpdateMissiles() {
@@ -70,7 +84,7 @@ void Shooter::UpdateMissiles() {
 }
 
 // Inefficient method to check if cell is occupied by snake.
-bool Shooter::SnakeCell(int x, int y) {
+bool Shooter::ShooterCell(int x, int y) {
     if (x == static_cast<int>(center_x) && y == static_cast<int>(center_y)) {
         return true;
     }

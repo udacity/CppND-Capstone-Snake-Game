@@ -3,29 +3,32 @@
 
 #include <vector>
 #include "SDL.h"
+
+#include "Direction.h"
 #include "missile.h"
 
 class Shooter {
 public:
-    enum class Direction { kLeft, kRight };
-
-    Shooter(int grid_width, int grid_height) : grid_width(grid_width), grid_height(grid_height),
-                                               center_x(grid_width/2), center_y(grid_height-4)
+    // constructor
+    Shooter(int grid_width, int grid_height) :
+        grid_x(grid_width),
+        grid_y(grid_height),
+        center_x(grid_width/2),
+        center_y(grid_height-4)
     {
         PopulateBody();
     }
 
+    // methods
     void Update();
     void ShootMissile();
+    bool ShooterCell(int x, int y);
 
-    bool SnakeCell(int x, int y);
-
+    // member variables
     Direction direction = Direction::kLeft;
-
     float speed{0.3f};
     float missileSpeed{-1.0f}; // negative because moving up
     bool moving{false};
-    //int size{1};
     float xbuffer{4.5f};
     bool alive{true};
     float center_x;
@@ -34,12 +37,15 @@ public:
     std::vector<Missile> missiles;
 
 private:
+    // private methods
     void UpdateCenter();
     void UpdateMissiles();
     void PopulateBody();
+    void MoveBody();
 
-    int grid_width;
-    int grid_height;
+    // private member variables
+    int grid_x;
+    int grid_y;
 };
 
 #endif
