@@ -6,10 +6,7 @@
 
 Game::Game(std::size_t grid_width, std::size_t grid_height) :
     shooter(grid_width, grid_height),
-    enemyShipManager(grid_width, grid_height)
-{
-//  PlaceFood();
-}
+    enemyShipManager(grid_width, grid_height) {}
 
 void Game::Run(Controller const &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
@@ -51,21 +48,6 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
-//void Game::PlaceFood() {
-//  int x, y;
-//  while (true) {
-//    x = random_w(engine);
-//    y = random_h(engine);
-//    // Check that the location is not occupied by a snake item before placing
-//    // food.
-//    ifzz (!shooter.SnakeCell(x, y)) {
-//      food.x = x;
-//      food.y = y;
-//      return;
-//    }
-//  }
-//}
-
 void Game::Update() {
     shooter.Update();
     enemyShipManager.Update();
@@ -76,19 +58,11 @@ void Game::Update() {
     }
     
     // check missiles
-    
-
-    
-    int new_x = static_cast<int>(shooter.center_x);
-    int new_y = static_cast<int>(shooter.center_y);
-
-//  // Check if there's food over here
-//  if (food.x == new_x && food.y == new_y) {
-//    score++;
-//    PlaceFood();
-//    // Grow snake and increase speed.
-//    shooter.speed += 0.02;
-//  }
+    enemyShipManager.ProcessShooterMissiles(shooter.missiles);
+    bool shooterHit = shooter.ProcessEnemyMissiles(enemyShipManager.missiles);
+    if (shooterHit) {
+        return;
+    }
 }
 
 int Game::GetScore() const { return score; }

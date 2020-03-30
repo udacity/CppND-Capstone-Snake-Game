@@ -67,9 +67,9 @@ void Renderer::Render(Shooter const &shooter, EnemyShipManager const &enemyShipM
     
     // Render shooter's missiles
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    for (Missile const &missile : shooter.missiles) {
-        block.x = static_cast<int>(missile.x) * block.w;
-        block.y = static_cast<int>(missile.y) * block.h;
+    for (Missile const *missile : shooter.missiles) {
+        block.x = static_cast<int>(missile->x) * block.w;
+        block.y = static_cast<int>(missile->y) * block.h;
         SDL_RenderFillRect(sdl_renderer, &block);
     }
     
@@ -87,9 +87,9 @@ void Renderer::Render(Shooter const &shooter, EnemyShipManager const &enemyShipM
     
     // Render enemy ships' missiles
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    for (Missile const &missile : enemyShipManager.missiles) {
-        block.x = static_cast<int>(missile.x) * block.w;
-        block.y = static_cast<int>(missile.y) * block.h;
+    for (Missile const *missile : enemyShipManager.missiles) {
+        block.x = static_cast<int>(missile->x) * block.w;
+        block.y = static_cast<int>(missile->y) * block.h;
         SDL_RenderFillRect(sdl_renderer, &block);
     }
     

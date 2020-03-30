@@ -67,31 +67,48 @@ void Shooter::MoveBody() {
 
 void Shooter::ShootMissile() {
     // two missiles from the shooter, left and right
-    missiles.push_back(Missile(center_x-2, center_y-2 , missileSpeed, grid_y));
-    missiles.push_back(Missile(center_x+2, center_y-2 , missileSpeed, grid_y));
+    missiles.push_back(new Missile(center_x-2, center_y-2 , missileSpeed));
+    missiles.push_back(new Missile(center_x+2, center_y-2 , missileSpeed));
 }
 
 void Shooter::UpdateMissiles() {
-    for (auto &missile : missiles) {
-        missile.UpdateLocation();
+    for (Missile *missile : missiles) {
+        missile->UpdateLocation(grid_y);
     }
     
     // Clean-up missile if not active
     missiles.erase(std::remove_if(missiles.begin(),
                                   missiles.end(),
-                                  [](const Missile & missile) { return !missile.active; }),
+                                  [](const Missile * missile) { return !missile->active; }),
                    missiles.end());
 }
 
-// Inefficient method to check if cell is occupied by snake.
-bool Shooter::ShooterCell(int x, int y) {
-    if (x == static_cast<int>(center_x) && y == static_cast<int>(center_y)) {
-        return true;
-    }
-    for (auto const &item : body) {
-        if (x == item.x && y == item.y) {
-            return true;
+bool Shooter::ProcessEnemyMissiles(const std::vector<Missile*> & enemyMissiles) {
+    
+    bool shooterHit = false;
+    
+    int enemyMissile_x;
+    int enemyMissile_y;
+     
+    for (Missile *enemyMissile : enemyMissiles) {
+        enemyMissile_x = static_cast<int>(enemyMissile->x);
+        enemyMissile_y = static_cast<int>(enemyMissile->y);
+        
+        for (auto & point : body) {
+            if ( (point.x == enemyMissile_x) && (point.y == enemyMissile_y) ) {
+                // shooter destroyed
+                // (two missiles CAN simultaneously hit the same ship)
+                    
+                // missile no longer active
+                enemyMissile->active = false;
+                shooterHit = true;
+                
+                break;
+            }
+        }
+        if (shooterHit) {
+            break;
         }
     }
-    return false;
+    return shooterHit;
 }

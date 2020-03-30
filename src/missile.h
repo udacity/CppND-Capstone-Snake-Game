@@ -3,17 +3,16 @@
 
 class Missile {
 public:
-    Missile(float x, float y, float speed, int grid_y) : x(x), y(y), speed(speed), grid_y(grid_y)
+    Missile(float x, float y, float speed) : x(x), y(y), speed(speed)
     {
         
     }
     
     float x;
     float y;
-    int grid_y;
     bool active{true};
     
-    void UpdateLocation();
+    void UpdateLocation(const int grid_y);
     
 private:
     float speed;

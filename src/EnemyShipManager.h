@@ -19,12 +19,13 @@ public:
     void Update();
     void createShips();
     void moveShips();
+    void ProcessShooterMissiles(const std::vector<Missile*> & missiles);
 
     // member variables
     std::vector<std::vector<EnemyShip*>> ships; // cols x rows
-    float speed = .99;
+    float speed = 0.0f;
     Direction direction = Direction::kRight;
-    std::vector<Missile> missiles;
+    std::vector<Missile*> missiles;
     bool enemyWin = false;
     
 private:

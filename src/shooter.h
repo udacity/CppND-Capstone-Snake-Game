@@ -23,6 +23,7 @@ public:
     void Update();
     void ShootMissile();
     bool ShooterCell(int x, int y);
+    bool ProcessEnemyMissiles(const std::vector<Missile*> & enemyMissiles);
 
     // member variables
     Direction direction = Direction::kLeft;
@@ -34,7 +35,7 @@ public:
     float center_x;
     float center_y;
     std::vector<SDL_Point> body;
-    std::vector<Missile> missiles;
+    std::vector<Missile*> missiles;
 
 private:
     // private methods

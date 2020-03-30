@@ -12,7 +12,6 @@ EnemyShipManager::EnemyShipManager(int gx, int gy) : grid_x(gx), grid_y(gy), eng
 }
 
 void EnemyShipManager::createShips() {
-
     int ship_x;
     int ship_y;
     std::vector<EnemyShip*> thisCol;
@@ -26,7 +25,6 @@ void EnemyShipManager::createShips() {
         ships.push_back(thisCol);
         thisCol.clear();
     }
-    
 }
 
 void EnemyShipManager::Update() {
@@ -52,7 +50,7 @@ void EnemyShipManager::Update() {
         }
     }
 
-    // shoot missiles
+    // enemy ship shoot missiles
     Uint32 frame_end = SDL_GetTicks();
     
     if (frame_end - missile_ts >= 1000) {
@@ -99,18 +97,55 @@ void EnemyShipManager::ShootMissile() {
     int ship_x = thisShip->ref_x;
     int ship_y = thisShip->ref_y;
     
-    missiles.push_back(Missile(ship_x    , ship_y + 2, missileSpeed, grid_y));
-    missiles.push_back(Missile(ship_x + 3, ship_y + 2, missileSpeed, grid_y));
+    missiles.push_back(new Missile(ship_x    , ship_y + 2, missileSpeed));
+    missiles.push_back(new Missile(ship_x + 3, ship_y + 2, missileSpeed));
 }
 
 void EnemyShipManager::UpdateMissiles() {
-    for (auto &missile : missiles) {
-        missile.UpdateLocation();
+    for (Missile *missile : missiles) {
+        missile->UpdateLocation(grid_y);
     }
     
     // Clean-up missile if not active
     missiles.erase(std::remove_if(missiles.begin(),
                                   missiles.end(),
-                                  [](const Missile & missile) { return !missile.active; }),
+                                  [](const Missile * missile) { return !missile->active; }),
                    missiles.end());
 }
+
+void EnemyShipManager::ProcessShooterMissiles(const std::vector<Missile*> & shooterMissiles) {
+    int shooterMissile_x;
+    int shooterMissile_y;
+     
+    for (Missile *shooterMissile : shooterMissiles) {
+        shooterMissile_x = static_cast<int>(shooterMissile->x);
+        shooterMissile_y = static_cast<int>(shooterMissile->y);
+        
+        for (auto & col : ships) {
+            if (!col.empty()) {
+                auto & points = col.back()->body;
+                for (auto & point : points) {
+                    if ( (point.x == shooterMissile_x) && (point.y == shooterMissile_y) ) {
+                        // ship destroyed
+                        // (two missiles can't simultaneously hit the same ship)
+                        col.pop_back();
+                        
+                        // missile no longer active
+                        shooterMissile->active = false;
+                        break;
+                    }
+                }
+            }
+            if (!shooterMissile->active) {
+                break; // no need to look at other columns if missile already hit
+            }
+        }
+    }
+    
+    // Clean-up columns if empty
+    ships.erase(std::remove_if(ships.begin(),
+                               ships.end(),
+                               [](std::vector<EnemyShip*> col) { return col.empty(); }),
+                   ships.end());
+}
+
