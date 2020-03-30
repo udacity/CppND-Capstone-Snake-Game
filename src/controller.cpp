@@ -1,6 +1,8 @@
-#include "controller.h"
 #include <iostream>
+
 #include "SDL.h"
+
+#include "controller.h"
 #include "shooter.h"
 
 void Controller::ChangeDirection(Shooter &shooter, Direction input) const

@@ -11,10 +11,10 @@ class Shooter {
 public:
     // constructor
     Shooter(int grid_width, int grid_height) :
-        grid_x(grid_width),
-        grid_y(grid_height),
         center_x(grid_width/2),
-        center_y(grid_height-4)
+        center_y(grid_height-4),
+        grid_x(grid_width),
+        grid_y(grid_height)
     {
         PopulateBody();
     }
@@ -36,6 +36,7 @@ public:
     float center_y;
     std::vector<SDL_Point> body;
     std::vector<Missile*> missiles;
+    int life{3};
 
 private:
     // private methods

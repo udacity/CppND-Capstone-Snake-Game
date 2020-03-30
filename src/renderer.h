@@ -14,7 +14,8 @@ class Renderer {
   ~Renderer();
 
   void Render(Shooter const &shooter, EnemyShipManager const &enemyShipManager);
-  void UpdateWindowTitle(int score, int fps);
+  void RenderBlank();
+  void UpdateWindowTitle(const std::string & windowTitle);
 
  private:
   SDL_Window *sdl_window;

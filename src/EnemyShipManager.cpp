@@ -5,13 +5,17 @@
 
 EnemyShipManager::EnemyShipManager(int gx, int gy) : grid_x(gx), grid_y(gy), engine(dev())
 {
+    InitializeState();
     ref_x_max = grid_x - (2 * screen_buffer + cols * ship_w + ship_buffer * (cols-1));
     ref_y_max = grid_y - (2 * screen_buffer + rows * ship_h + ship_buffer * (rows-1) + shooter_h);
     createShips();
-    missile_ts = SDL_GetTicks();
+    UpdateMissileTS();
 }
 
 void EnemyShipManager::createShips() {
+    
+    InitializeState();
+    
     int ship_x;
     int ship_y;
     std::vector<EnemyShip*> thisCol;
@@ -25,6 +29,8 @@ void EnemyShipManager::createShips() {
         ships.push_back(thisCol);
         thisCol.clear();
     }
+    
+    UpdateMissileTS();
 }
 
 void EnemyShipManager::Update() {
@@ -53,9 +59,9 @@ void EnemyShipManager::Update() {
     // enemy ship shoot missiles
     Uint32 frame_end = SDL_GetTicks();
     
-    if (frame_end - missile_ts >= 1000) {
+    if (frame_end - missile_ts >= missileWaitTime) {
         ShootMissile();
-        missile_ts = frame_end;
+        UpdateMissileTS();
     }
     
     // update missiles
@@ -113,7 +119,10 @@ void EnemyShipManager::UpdateMissiles() {
                    missiles.end());
 }
 
-void EnemyShipManager::ProcessShooterMissiles(const std::vector<Missile*> & shooterMissiles) {
+int EnemyShipManager::ProcessShooterMissiles(const std::vector<Missile*> & shooterMissiles) {
+    
+    int shipsHit = 0;
+    
     int shooterMissile_x;
     int shooterMissile_y;
      
@@ -128,6 +137,9 @@ void EnemyShipManager::ProcessShooterMissiles(const std::vector<Missile*> & shoo
                     if ( (point.x == shooterMissile_x) && (point.y == shooterMissile_y) ) {
                         // ship destroyed
                         // (two missiles can't simultaneously hit the same ship)
+                        shipsHit++;
+                        
+                        // destroy EnemyShip object that's been hit
                         col.pop_back();
                         
                         // missile no longer active
@@ -147,5 +159,16 @@ void EnemyShipManager::ProcessShooterMissiles(const std::vector<Missile*> & shoo
                                ships.end(),
                                [](std::vector<EnemyShip*> col) { return col.empty(); }),
                    ships.end());
+    
+    return shipsHit;
 }
 
+void EnemyShipManager::UpdateMissileTS() {
+    missile_ts = SDL_GetTicks();
+}
+
+void EnemyShipManager::InitializeState() {
+    ref_x = 0;
+    ref_y = 0;
+    direction = Direction::kRight;
+}

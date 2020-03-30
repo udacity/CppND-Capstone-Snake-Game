@@ -107,6 +107,10 @@ bool Shooter::ProcessEnemyMissiles(const std::vector<Missile*> & enemyMissiles) 
             }
         }
         if (shooterHit) {
+            life -= 1;
+            if (life == 0) {
+                alive = false;
+            }
             break;
         }
     }

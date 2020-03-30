@@ -97,8 +97,16 @@ void Renderer::Render(Shooter const &shooter, EnemyShipManager const &enemyShipM
     SDL_RenderPresent(sdl_renderer);
 }
 
-void Renderer::UpdateWindowTitle(int score, int fps) {
-    std::string title{"Shooter Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
-    SDL_SetWindowTitle(sdl_window, title.c_str());
+void Renderer::RenderBlank() {
+    // Clear screen
+    SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
+    SDL_RenderClear(sdl_renderer);
+    
+    // Update Screen
+    SDL_RenderPresent(sdl_renderer);
+}
+
+void Renderer::UpdateWindowTitle(const std::string & windowTitle) {
+    SDL_SetWindowTitle(sdl_window, windowTitle.c_str());
 }
 
