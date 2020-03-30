@@ -13,7 +13,7 @@ I modified the repo to go from a snake game using SDL2 library, to a simple vers
 ## File / Class Structure
 These files all exist in "src" directory
 * main.cpp
-* Starts the game, creates instances of renderer, controller, and game, and calls "game.Run(...)" to start the game loop
+** Starts the game, creates instances of renderer, controller, and game, and calls "game.Run(...)" to start the game loop
 * game.cpp / game.h
  * Manages the game play
 * controller.cpp / controller.h
