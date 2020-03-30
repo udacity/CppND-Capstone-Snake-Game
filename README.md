@@ -15,55 +15,54 @@ These files all exist in "src" directory
 * main.cpp
   * Starts the game, creates instances of renderer, controller, and game, and calls "game.Run(...)" to start the game loop
 * game.cpp / game.h
- * Manages the game play
+  * Manages the game play
 * controller.cpp / controller.h
- * Handles user input
+  * Handles user input
 * renderer.cpp / renderer.h
- * Renders necessary components for users to see on the screen
+  * Renders necessary components for users to see on the screen
 * shooter.cpp / shooter.h
- * handles the shooter object; populates its body, shoots missiles, and checks if any enemy missiles hit the shooter
+  * handles the shooter object; populates its body, shoots missiles, and checks if any enemy missiles hit the shooter
 * EnemyShipManager.cpp / EnemyShipManager.h
- * handles a cluster of enemy ships; creates enemy ships at appropriate locations, shoots missiles from the bottom-most ships, and checks if any shooter missiles hit enemy ships 
+  * handles a cluster of enemy ships; creates enemy ships at appropriate locations, shoots missiles from the bottom-most ships, and checks if any shooter missiles hit enemy ships 
 * EnemyShip.cpp / EnemyShip.h
- * handles individual enemy ship; populates its body, and moves it around based on the direction given by EnemyShipManager 
+  * handles individual enemy ship; populates its body, and moves it around based on the direction given by EnemyShipManager 
 * Direction.h
- * just an enum class for direction, used by shooter, EnemyShipManager, and EnemyShip.
+  * just an enum class for direction, used by shooter, EnemyShipManager, and EnemyShip.
 
 ## Criteria / Specifications Met
 ### Loops, Functions, I/O
 1. Criteria: The project demonstrates an understanding of C++ functions and control structures
- * Specification: A variety of control structures are used in the project
-  * EnemyShipManager.cpp: ProcessShooterMissiles method (line 122)
-  * shooter.cpp: ProcessEnemyMissiles method (line 78)
- * Specification: The project code is clearly organized into functions
-  * shooter.cpp: see functions throughtout the file 
-2.  Criteria: The project accepts user input and processes the input
- * Specification: The projects accepts input from a user as part of the necessary operation of the program
-  * controller.cpp: HandleInput method (line 16) 
+  * Specification: A variety of control structures are used in the project
+    * EnemyShipManager.cpp: ProcessShooterMissiles method (line 122)
+    * shooter.cpp: ProcessEnemyMissiles method (line 78)
+  * Specification: The project code is clearly organized into functions
+    * shooter.cpp: see functions throughtout the file 
+2. Criteria: The project accepts user input and processes the input
+  * Specification: The projects accepts input from a user as part of the necessary operation of the program
+    * controller.cpp: HandleInput method (line 16) 
 ### Object Oriented Programming
 3. Criteria: The project uses Object Oriented Programming (OOP) techniques
- * Specificiation: The project code is organized into classes with class attributes to hold the data, and class methods to perform tasks.
-  * shooter.h: See methods / member variables listed in the header file
-  * EnemyShipManager.h: See methods / member variables listed in the header file  
+  * Specificiation: The project code is organized into classes with class attributes to hold the data, and class methods to perform tasks.
+    * shooter.h: See methods / member variables listed in the header file
+    * EnemyShipManager.h: See methods / member variables listed in the header file  
 4. Criteria: Classes use appropriate access specifiers for class members
- * Specification: All class data members are explicitly specified as public, protected, or private
-  * EnemyShipManager.h: see public / private member variables (lines 19-30, 34-63) 
-  * shooter.h: see public/private member variables (lines 23-40, 44-50)
+  * Specification: All class data members are explicitly specified as public, protected, or private
+    * EnemyShipManager.h: see public / private member variables (lines 19-30, 34-63) 
+    * shooter.h: see public/private member variables (lines 23-40, 44-50)
 5. Criteria: Class constructors utilize member initialization lists
- * Specification: All classs members that are set to argument values are initialized through member initialization lists
-  * Enemyship.h: line 14
-  * EnemyShipManager.cpp: line 6
-  * game.cpp: line 9
-  * missile.h: line 7
-  * renderer.cpp: line 7
-  * shooter.h: line 13
+  * Specification: All classs members that are set to argument values are initialized through member initialization lists
+    * Enemyship.h: line 14
+    * EnemyShipManager.cpp: line 6
+    * game.cpp: line 9
+    * missile.h: line 7
+    * renderer.cpp: line 7
+    * shooter.h: line 13
 ### Memory Management
 6. Criteria: The project makes use of references in function declarations
- * Specification: At least two variables are defined as references, or two functions use pass-by-reference in the project code.
-  * EnemyShipManager.h: ProcessShooterMissiles method (line 22)
-  * shooter.h: ProcessEnemyMissiles method (line 25)
+  * Specification: At least two variables are defined as references, or two functions use pass-by-reference in the project code.
+    * EnemyShipManager.h: ProcessShooterMissiles method (line 22)
+    * shooter.h: ProcessEnemyMissiles method (line 25)
  
-
 ## Dependencies for Running Locally
 * cmake >= 3.7
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
