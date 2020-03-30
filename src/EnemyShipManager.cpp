@@ -6,13 +6,13 @@
 EnemyShipManager::EnemyShipManager(int gx, int gy) : grid_x(gx), grid_y(gy), engine(dev())
 {
     InitializeState();
-    ref_x_max = grid_x - (2 * screen_buffer + cols * ship_w + ship_buffer * (cols-1));
-    ref_y_max = grid_y - (2 * screen_buffer + rows * ship_h + ship_buffer * (rows-1) + shooter_h);
-    createShips();
+    ref_x_max = grid_x - (2*screen_buffer + cols*ship_w + ship_buffer*(cols-1));
+    ref_y_max = grid_y - (2*screen_buffer + rows*ship_h + ship_buffer*(rows-1) + shooter_h);
+    CreateShips();
     UpdateMissileTS();
 }
 
-void EnemyShipManager::createShips() {
+void EnemyShipManager::CreateShips() {
     
     InitializeState();
     
@@ -41,12 +41,12 @@ void EnemyShipManager::Update() {
     
     // move ship, and check to make sure ships all stay within the grid
     if (current_cell.x != prev_cell.x) {
-        moveShips();
+        MoveShips();
         if ((current_cell.x == 0) || (current_cell.x == ref_x_max)) {
             direction = Direction::kDown;
         }
     } else if (current_cell.y != prev_cell.y) {
-        moveShips();
+        MoveShips();
         if (current_cell.y == ref_y_max) {
             enemyWin = true;
         } else if (current_cell.x == 0) {
@@ -85,7 +85,7 @@ void EnemyShipManager::UpdateRefPoint() {
     }
 }
 
-void EnemyShipManager::moveShips() {
+void EnemyShipManager::MoveShips() {
     for (std::vector<EnemyShip*> & col : ships) {
         for (EnemyShip* ship : col) {
             ship->moveShip(direction);

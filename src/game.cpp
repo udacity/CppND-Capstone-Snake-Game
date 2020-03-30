@@ -102,11 +102,10 @@ void Game::Update() {
         enemyShipManager.missileWaitTime *= 0.9;
         
         shooter.missiles.clear();
-        enemyShipManager.createShips(); // Updates MissileTS as well
+        enemyShipManager.CreateShips(); // Updates MissileTS as well
         enemyShipManager.missiles.clear();
     }
     
 }
 
 int Game::GetScore() const { return score; }
-//int Game::GetSize() const { return shooter.size; }

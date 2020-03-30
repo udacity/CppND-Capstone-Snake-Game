@@ -17,8 +17,8 @@ public:
     
     // methods
     void Update();
-    void createShips();
-    void moveShips();
+    void CreateShips();
+    void MoveShips();
     int ProcessShooterMissiles(const std::vector<Missile*> & missiles);
     void UpdateMissileTS();
 

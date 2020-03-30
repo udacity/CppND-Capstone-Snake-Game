@@ -57,14 +57,6 @@ void Shooter::PopulateBody() {
     }
 }
 
-void Shooter::MoveBody() {
-    if ( 0 == body.size() ) {
-        // no body to move
-    } else {
-        // TODO:
-    }
-}
-
 void Shooter::ShootMissile() {
     // two missiles from the shooter, left and right
     missiles.push_back(new Missile(center_x-2, center_y-2 , missileSpeed));

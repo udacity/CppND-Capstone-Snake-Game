@@ -3,18 +3,19 @@
 
 class Missile {
 public:
-    Missile(float x, float y, float speed) : x(x), y(y), speed(speed)
-    {
-        
-    }
+    // constructor
+    Missile(float x, float y, float speed) : x(x), y(y), speed(speed) {}
     
+    // methods
+    void UpdateLocation(const int grid_y);
+    
+    // member variables
     float x;
     float y;
     bool active{true};
     
-    void UpdateLocation(const int grid_y);
-    
 private:
+    // private member variables
     float speed;
 };
 

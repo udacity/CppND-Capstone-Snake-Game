@@ -4,8 +4,8 @@ void EnemyShip::populateBody() {
     body.clear();
     
     // relative points to top-left point
-    std::vector<int> x_rel = { 0,  0,  1,  2,  3,  3};
-    std::vector<int> y_rel = { 0,  1,  0,  0,  0 , 1};
+    std::vector<int> x_rel = {0, 0, 1, 2, 3, 3};
+    std::vector<int> y_rel = {0, 1, 0, 0, 0, 1};
     
     for (int i = 0; i < x_rel.size(); i++) {
         body.push_back(SDL_Point{ref_x + x_rel[i], ref_y + y_rel[i]});

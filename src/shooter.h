@@ -43,7 +43,6 @@ private:
     void UpdateCenter();
     void UpdateMissiles();
     void PopulateBody();
-    void MoveBody();
 
     // private member variables
     int grid_x;
