@@ -10,7 +10,6 @@ project(ShooterGame)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 find_package(SDL2 REQUIRED)
-find_package(SDL2_IMAGE REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS} src)
 
 add_executable(ShooterGame
