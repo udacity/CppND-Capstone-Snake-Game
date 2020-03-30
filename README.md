@@ -87,11 +87,11 @@ These files all exist in "src" directory
 
 ## Game Controls
 * The shooter only moves horizontally
- * Left key - to move left
- * Right key - to move right
- * Down key - to stop the shooter
+  * Left key - to move left
+  * Right key - to move right
+  * Down key - to stop the shooter
 * The shooter will fire two missiles at a time, one from each wing.
- * Space bar - to shoot at enemy ships
+  * Space bar - to shoot at enemy ships
  
 ## Gameplay
 * The shooter will start with 3 lives
@@ -99,6 +99,6 @@ These files all exist in "src" directory
 * If the shooter destroys all 40 enemy ships, a new level will start with 40 new ships that move faster and shoot at a higher frequency.
 * Once the shooter loses all its 3 lives, or if the enemy ships reach all the way down to the shooter's location, the game is over.
 * Score is calculated in the following way:
- * Every enemy ship destroyed = (level #) * 10 points
- * Every level cleared = (level #) * 1000 points
+  * Every enemy ship destroyed = (level #) * 10 points
+  * Every level cleared = (level #) * 1000 points
 
