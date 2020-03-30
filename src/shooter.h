@@ -22,7 +22,6 @@ public:
     // methods
     void Update();
     void ShootMissile();
-    bool ShooterCell(int x, int y);
     bool ProcessEnemyMissiles(const std::vector<Missile*> & enemyMissiles);
 
     // member variables

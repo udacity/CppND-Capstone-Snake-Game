@@ -88,21 +88,23 @@ bool Shooter::ProcessEnemyMissiles(const std::vector<Missile*> & enemyMissiles) 
         
         for (auto & point : body) {
             if ( (point.x == enemyMissile_x) && (point.y == enemyMissile_y) ) {
-                // shooter destroyed
-                // (two missiles CAN simultaneously hit the same ship)
-                    
                 // missile no longer active
                 enemyMissile->active = false;
+                // shooter hit
                 shooterHit = true;
-                
+                // break out of inner for-loop
+                // (if you're hit, no need to check rest of shooter body)
                 break;
             }
         }
         if (shooterHit) {
+            // if hit, decrease life
             life -= 1;
+            // if life is 0, no longer alive
             if (life == 0) {
                 alive = false;
             }
+            // if hit, stop processing all enemy missiles
             break;
         }
     }

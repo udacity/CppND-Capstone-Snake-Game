@@ -135,8 +135,7 @@ int EnemyShipManager::ProcessShooterMissiles(const std::vector<Missile*> & shoot
                 auto & points = col.back()->body;
                 for (auto & point : points) {
                     if ( (point.x == shooterMissile_x) && (point.y == shooterMissile_y) ) {
-                        // ship destroyed
-                        // (two missiles can't simultaneously hit the same ship)
+                        // for scoring purposes, keep track of how many ships are hit
                         shipsHit++;
                         
                         // destroy EnemyShip object that's been hit
@@ -149,12 +148,12 @@ int EnemyShipManager::ProcessShooterMissiles(const std::vector<Missile*> & shoot
                 }
             }
             if (!shooterMissile->active) {
-                break; // no need to look at other columns if missile already hit
+                break; // no need to look at other columns of enemy ships if shooter missile already hit one
             }
         }
     }
     
-    // Clean-up columns if empty
+    // Clean-up enemy ship columns if empty
     ships.erase(std::remove_if(ships.begin(),
                                ships.end(),
                                [](std::vector<EnemyShip*> col) { return col.empty(); }),
