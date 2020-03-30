@@ -12,11 +12,11 @@ class EnemyShip {
 public:
     // constructor
     EnemyShip(int x, int y) : ref_x(x), ref_y(y) {
-        populateBody();
+        PopulateBody();
     };
 
     // methods
-    void moveShip(Direction direction);
+    void MoveShip(Direction direction);
 
     // member variables
     std::vector<SDL_Point> body;
@@ -25,7 +25,7 @@ public:
     
 private:
     // private methods
-    void populateBody();
+    void PopulateBody();
 };
 
 #endif /* ENEMYSHIP_H */

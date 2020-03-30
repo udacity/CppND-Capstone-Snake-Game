@@ -88,7 +88,7 @@ void EnemyShipManager::UpdateRefPoint() {
 void EnemyShipManager::MoveShips() {
     for (std::vector<EnemyShip*> & col : ships) {
         for (EnemyShip* ship : col) {
-            ship->moveShip(direction);
+            ship->MoveShip(direction);
         }
     }
 }

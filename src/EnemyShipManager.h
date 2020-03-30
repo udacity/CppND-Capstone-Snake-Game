@@ -26,7 +26,6 @@ public:
     std::vector<std::vector<EnemyShip*>> ships; // cols x rows
     float speed = 0.1f;
     float missileWaitTime = 1000; // in milliseconds
-    Direction direction;
     std::vector<Missile*> missiles;
     bool enemyWin = false;
     
@@ -42,6 +41,7 @@ private:
     float ref_y;
     int ref_x_max;
     int ref_y_max;
+    Direction direction;
     
     const int rows = 4;
     const int cols = 10;
@@ -57,8 +57,8 @@ private:
     const int grid_x;
     const int grid_y;
     
+    const float missileSpeed = 1.0f;
     Uint32 missile_ts;
-    float missileSpeed = 1.0f;
     std::random_device dev;
     std::mt19937 engine;    
 };

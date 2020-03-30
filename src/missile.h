@@ -16,7 +16,7 @@ public:
     
 private:
     // private member variables
-    float speed;
+    const float speed;
 };
 
 #endif

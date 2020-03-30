@@ -1,6 +1,6 @@
 #include "EnemyShip.h"
 
-void EnemyShip::populateBody() {
+void EnemyShip::PopulateBody() {
     body.clear();
     
     // relative points to top-left point
@@ -12,7 +12,7 @@ void EnemyShip::populateBody() {
     }
 }
 
-void EnemyShip::moveShip(Direction direction) {
+void EnemyShip::MoveShip(Direction direction) {
     
     int x_move;
     int y_move;
