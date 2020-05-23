@@ -57,7 +57,7 @@ void Game::PlaceFood() {
     y = random_h(engine);
     // Check that the location is not occupied by a actor item before placing
     // food.
-    if (!actor.actorCell(x, y)) {
+    if (!actor.ActorCell(x, y)) {
       food.x = x;
       food.y = y;
       return;
@@ -70,8 +70,8 @@ void Game::Update() {
 
   actor.Update();
 
-  int new_x = static_cast<int>(actor.head_x);
-  int new_y = static_cast<int>(actor.head_y);
+  int new_x = static_cast<int>(actor.body_x);
+  int new_y = static_cast<int>(actor.body_y);
 
   // Check if there's food over here
   if (food.x == new_x && food.y == new_y) {

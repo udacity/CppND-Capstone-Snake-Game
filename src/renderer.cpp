@@ -53,15 +53,7 @@ void Renderer::Render(Actor const actor, SDL_Point const &food) {
   block.y = food.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
 
-  // Render actor's body
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-  for (SDL_Point const &point : actor.body) {
-    block.x = point.x * block.w;
-    block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_renderer, &block);
-  }
-
-  // Render actor's head
+  // Render actor
   block.x = static_cast<int>(actor.body_x) * block.w;
   block.y = static_cast<int>(actor.body_y) * block.h;
   if (actor.alive) {

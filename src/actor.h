@@ -28,7 +28,9 @@ class Actor {
  private:
   int grid_width;
   int grid_height;
-  bool IsAlive(const SDL_Point& current_cell);
+  void IsAlive(const SDL_Point& current_cell);
+  void UpdatePosition();
+
 };
 
 #endif

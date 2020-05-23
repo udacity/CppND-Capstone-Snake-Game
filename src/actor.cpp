@@ -2,7 +2,8 @@
 #include <cmath>
 #include <iostream>
 
-void Actor::Update() {
+void Actor::Update() 
+{
   UpdatePosition();
 
   SDL_Point current_cell{
@@ -12,8 +13,10 @@ void Actor::Update() {
   IsAlive(current_cell);
 }
 
-void Actor::UpdatePosition() {
-  switch (direction) {
+void Actor::UpdatePosition() 
+{
+  switch (direction) 
+  {
     case Direction::kUp:
       body_y -= speed;
       break;
@@ -39,13 +42,14 @@ void Actor::UpdatePosition() {
 void Actor::IsAlive(const SDL_Point& current_cell)
 {
  // Check if the Actor has died.
-    if (current_cell.x == item.x && current_cell.y == item.y) {
+    if (current_cell.x == -1 && current_cell.y == -1) {
       alive = false;
     }
 }
 
 // Inefficient method to check if cell is occupied by Actor.
-bool Actor::ActorCell(int x, int y) {
+bool Actor::ActorCell(int x, int y) 
+{
   if (x == static_cast<int>(body_x) && y == static_cast<int>(body_y)) {
     return true;
   }
