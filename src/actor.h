@@ -16,8 +16,6 @@ class Actor {
 
   void Update();
 
-  bool ActorCell(int x, int y);
-
   SDL_Point GetActorPosition();
   bool IsAlive();
   void SetAlive(bool alive) {alive = alive;}
@@ -26,7 +24,7 @@ class Actor {
   float body_x;
   float body_y;
   bool alive{true};
-  
+
  private:
   int grid_width;
   int grid_height;

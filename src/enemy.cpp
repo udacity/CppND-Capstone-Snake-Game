@@ -34,7 +34,11 @@ void Enemy::UpdatePosition(){
 
     lck.unlock();
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-
 }
 
+SDL_Point GetEnemyPosition(){
+  SDL_Point position;
+  position.x = static_cast<int>(body_x);
+  position.y = static_cast<int>(body_y);
+  return position;
+}
