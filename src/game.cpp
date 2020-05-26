@@ -110,7 +110,7 @@ void Game::PlaceEnemies()
         direction = Enemy::Direction::kUp;
         break;
       }
-      emplace_back(std::make_unique<Enemy>(position, direction));
+      std::vector::emplace_back(std::make_unique<Enemy>(position, direction));
       return;
     }
   }
@@ -128,7 +128,7 @@ void Game::Update()
   // Check if there're enemies over here
   for(auto enemy: enemies) 
   {
-    if (enemy.GetEnemyPosition().x == new_x && enemy.GetEnemyPosition().y == new_y) actor.SetAlive(false);
+    if (enemy->GetEnemyPosition().x == new_x && enemy->GetEnemyPosition().y == new_y) actor.SetAlive(false);
   }
 
   // Check if there's food over here
