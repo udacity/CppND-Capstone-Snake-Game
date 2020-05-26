@@ -39,7 +39,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Actor const actor, SDL_Point const &food, std::vector<<std::unique_ptr<Enemy>> const &enemies) {
+void Renderer::Render(Actor const actor, SDL_Point const &food, std::vector<std::unique_ptr<Enemy>> const &enemies) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -58,9 +58,9 @@ void Renderer::Render(Actor const actor, SDL_Point const &food, std::vector<<std
   SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
   for (auto i = enemies.begin(); i != enemies.end(); ++i)
   {
-    std::unique_lock<std::mutex> lck(it->get()->mtx);
-    block.x = static_cast<int>(e.GetEnemyPosition().x) * block.w;
-    block.y = static_cast<int>(e.GetEnemyPosition().y) * block.h;
+    std::unique_lock<std::mutex> lck(i->get()->mtx);
+    block.x = static_cast<int>(i->get()->GetEnemyPosition().x) * block.w;
+    block.y = static_cast<int>(i->get()->GetEnemyPosition().y) * block.h;
     lck.unlock();
     SDL_RenderFillRect(sdl_renderer, &block);
   }
@@ -68,7 +68,7 @@ void Renderer::Render(Actor const actor, SDL_Point const &food, std::vector<<std
   // Render actor
   block.x = static_cast<int>(actor.GetActorPosition().x) * block.w;
   block.y = static_cast<int>(actor.GetActorPosition().y) * block.h;
-  if (actor.alive) {
+  if (actor.IsAlive()) {
     SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
   } else {
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
