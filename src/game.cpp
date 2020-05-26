@@ -29,7 +29,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, actor);
     Update();
-    renderer.Render(actor, food);
+    renderer.Render(actor, food, enemies);
 
     frame_end = SDL_GetTicks();
 
@@ -127,7 +127,7 @@ void Game::Update()
   int new_y = static_cast<int>(actor.GetActorPosition().y);
 
   // Check if there're enemies over here
-  for(auto const& enemy: enemies) 
+  for(auto enemy: enemies) 
   {
     if (enemy.GetEnemyPosition().x == new_x && enemy.GetEnemyPosition().y == new_y) actor.SetAlive(false);
   }

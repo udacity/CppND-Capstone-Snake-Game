@@ -23,7 +23,6 @@ class Actor {
   void SetAlive(bool alive) {alive = alive;}
   float speed{0.1f};
 
-  
  private:
   int grid_width;
   int grid_height;
