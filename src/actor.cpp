@@ -39,7 +39,7 @@ void Actor::UpdatePosition()
 
 bool Actor::IsAlive()
 {
-    retun alive;
+    return alive;
 }
 
 SDL_Point Actor::GetActorPosition(){
