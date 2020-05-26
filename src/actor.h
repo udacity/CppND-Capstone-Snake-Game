@@ -22,6 +22,7 @@ class Actor {
   bool IsAlive();
   void SetAlive(bool alive) {alive = alive;}
   float speed{0.1f};
+  Direction direction = Direction::kUp;
 
  private:
   int grid_width;
@@ -30,7 +31,6 @@ class Actor {
   float body_y;
   bool alive{true};
   void UpdatePosition();
-  Direction direction = Direction::kUp;
 };
 
 #endif

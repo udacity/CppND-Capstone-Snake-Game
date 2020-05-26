@@ -124,11 +124,11 @@ void Game::Update()
 
   int new_x = static_cast<int>(actor.GetActorPosition().x);
   int new_y = static_cast<int>(actor.GetActorPosition().y);
-
+  
   // Check if there're enemies over here
-  for(auto enemy: enemies) 
+  for(auto i = enemies.begin(); i != enemies.end(); ++i)
   {
-    if (enemy->GetEnemyPosition().x == new_x && enemy->GetEnemyPosition().y == new_y) actor.SetAlive(false);
+    if (i->get()->GetEnemyPosition().x == new_x && i->get()->GetEnemyPosition().y == new_y) actor.SetAlive(false);
   }
 
   // Check if there's food over here

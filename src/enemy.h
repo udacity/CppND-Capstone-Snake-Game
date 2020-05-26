@@ -19,13 +19,13 @@ class Enemy {
     void Start(){enemyThread = std::thread(&Enemy::UpdatePosition, this);};
     void UpdatePosition();  
     SDL_Point GetEnemyPosition();
-    
+    Direction direction;
+
  private:
   std::thread enemyThread;
   float speed{0.1f};
   float body_x;
   float body_y;
-  Direction direction;
 };
 
 #endif
