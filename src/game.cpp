@@ -110,7 +110,7 @@ void Game::PlaceEnemies()
         direction = Enemy::Direction::kUp;
         break;
       }
-      enemies.emplace_back(std::make_unique<Enemy>(position, direction));
+      enemies.emplace_back(std::make_unique<Enemy>(position, direction, this->grid_width, this->grid_height));
       return;
     }
   }
@@ -124,7 +124,7 @@ void Game::Update()
 
   int new_x = static_cast<int>(actor.GetActorPosition().x);
   int new_y = static_cast<int>(actor.GetActorPosition().y);
-  
+
   // Check if there're enemies over here
   for(auto i = enemies.begin(); i != enemies.end(); ++i)
   {

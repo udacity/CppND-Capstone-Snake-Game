@@ -10,8 +10,10 @@ class Enemy {
 
    enum class Direction { kUp, kDown, kLeft, kRight };
 
-   Enemy(SDL_Point body, Direction direction)
-      : body_x(body.x),
+   Enemy(SDL_Point body, Direction direction, int grid_width, int grid_height)
+      : grid_width(grid_width),
+        grid_height(grid_height),
+        body_x(body.x),
         body_y(body.y), 
         direction(direction) {}
    ~Enemy();
@@ -25,6 +27,8 @@ class Enemy {
     float body_y;
 
  private:
+  int grid_width;
+  int grid_height;
   std::thread enemyThread;
   float speed{0.1f};
 };
