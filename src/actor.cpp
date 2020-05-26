@@ -42,7 +42,7 @@ bool Actor::IsAlive()
     retun alive;
 }
 
-SDL_Point GetActorPosition(){
+SDL_Point Actor::GetActorPosition(){
   SDL_Point position;
   position.x = static_cast<int>(body_x);
   position.y = static_cast<int>(body_y);
