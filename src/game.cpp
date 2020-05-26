@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <mutex>
 #include "SDL.h"
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
@@ -77,8 +78,10 @@ void Game::PlaceFood()
 void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height) 
 {
   int x, y;
-  while (enemies.size() < 5) 
+  int i = 0;
+  while (i < 5) 
   {
+    std::unique_lock<std::mutex> lck(mtx);
     x = random_w(engine);
     y = random_h(engine);
 
@@ -111,8 +114,10 @@ void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height)
         break;
       }
       enemies.emplace_back(std::make_unique<Enemy>(position, direction, grid_width, grid_height));
+      i++;
       return;
     }
+    lck.unlock();
   }
 }
 
@@ -128,6 +133,7 @@ void Game::Update()
   // Check if there're enemies over here
   for(auto i = enemies.begin(); i != enemies.end(); ++i)
   {
+    i->get()->UpdatePosition();
     if (i->get()->body_x == new_x && i->get()->body_y == new_y) actor.alive = false;
   }
 

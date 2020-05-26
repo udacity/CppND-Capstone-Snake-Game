@@ -15,7 +15,7 @@ class Enemy {
         grid_height(grid_height),
         body_x(body.x),
         body_y(body.y), 
-        direction(direction) {Start();}
+        direction(direction) {}
    ~Enemy();
 
     void Start(){enemyThread = std::thread(&Enemy::UpdatePosition, this);};
