@@ -12,7 +12,7 @@ class Renderer {
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void Render(Actor const actor, SDL_Point const &food, std::vector<Enemy> const enemies);
+  void Render(Actor const actor, SDL_Point const &food, std::vector<std::unique_ptr<Enemy>> const &enemies);
   void UpdateWindowTitle(int score, int fps);
 
  private:
