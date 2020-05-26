@@ -16,7 +16,7 @@ class Enemy {
         direction(direction) {}
    ~Enemy();
 
-    void Start(){enemyThread = std::thread(&Enemy::StartRunning, this);};
+    void Start(){enemyThread = std::thread(&Enemy::UpdatePosition, this);};
     void UpdatePosition();  
     SDL_Point GetEnemyPosition();
     

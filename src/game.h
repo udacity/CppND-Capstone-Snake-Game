@@ -18,7 +18,7 @@ class Game {
  private:
   Actor actor;
   SDL_Point food;
-  vector<Enemy> enemies;
+  std::vector<Enemy> enemies;
 
   std::random_device dev;
   std::mt19937 engine;
