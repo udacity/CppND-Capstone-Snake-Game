@@ -18,18 +18,19 @@ class Actor {
 
   bool ActorCell(int x, int y);
 
-  Direction direction = Direction::kUp;
-
-  float speed{0.1f};
-  bool alive{true};
-  float body_x;
-  float body_y;
-
+  SDL_Point GetActorPosition();
+  bool IsAlive();
+  void SetAlive(bool alive) {alive = alive;}
+  
  private:
   int grid_width;
   int grid_height;
-  void IsAlive(const SDL_Point& current_cell);
+  float speed{0.1f};
+  float body_x;
+  float body_y;
+  bool alive{true};
   void UpdatePosition();
+  Direction direction = Direction::kUp;
 
 };
 

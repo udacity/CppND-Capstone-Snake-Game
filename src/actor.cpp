@@ -39,24 +39,21 @@ void Actor::UpdatePosition()
   body_y = fmod(body_y + grid_height, grid_height);
 }
 
-void Actor::IsAlive(const SDL_Point& current_cell)
+bool Actor::IsAlive(const SDL_Point& current_cell)
 {
- // Check if the Actor has died.
-    if (current_cell.x == -1 && current_cell.y == -1) {
-      alive = false;
-    }
+    retun alive;
 }
 
-// Inefficient method to check if cell is occupied by Actor.
+SDL_Point GetActorPosition(){
+  SDL_Point position;
+  position.x = body_x;
+  position.y = body_y;
+  return position;
+}
+
+
+// Inefficient method to check if cell is occupied by actor.
 bool Actor::ActorCell(int x, int y) 
 {
-  if (x == static_cast<int>(body_x) && y == static_cast<int>(body_y)) {
-    return true;
-  }
-  // for (auto const &item : body) {
-  //   if (x == item.x && y == item.y) {
-  //     return true;
-  //   }
-  // }
-  return false;
+  return (x == static_cast<int>(body_x) && y == static_cast<int>(body_y)));
 }

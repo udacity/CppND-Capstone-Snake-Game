@@ -1,6 +1,7 @@
 #include "renderer.h"
 #include <iostream>
 #include <string>
+#include <vector>
 
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
@@ -38,7 +39,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Actor const actor, SDL_Point const &food) {
+void Renderer::Render(Actor const actor, SDL_Point const &food, std::vector<Enemy> const enemies) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -53,13 +54,22 @@ void Renderer::Render(Actor const actor, SDL_Point const &food) {
   block.y = food.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
 
+  // Render enemies
+  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
+  for (const auto e: enemies)
+  {
+    block.x = static_cast<int>(e.GetEnemyPosition().x) * block.w;
+    block.y = static_cast<int>(e.GetEnemyPosition().y) * block.h;
+    SDL_RenderFillRect(sdl_renderer, &block);
+  }
+
   // Render actor
-  block.x = static_cast<int>(actor.body_x) * block.w;
-  block.y = static_cast<int>(actor.body_y) * block.h;
+  block.x = static_cast<int>(actor.GetActorPosition().x) * block.w;
+  block.y = static_cast<int>(actor.GetActorPosition().y) * block.h;
   if (actor.alive) {
     SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
   } else {
-    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   }
   SDL_RenderFillRect(sdl_renderer, &block);
 

@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 3.7)
+
+add_definitions(-std=c++17)
+
+# FIXME: Parent directory CMakeLists.txt only sets these for mingw/cygwin,
+# but we need them for VS as well.
+if(WINDOWS)
+    link_libraries(SDL2main)
+    add_definitions(-Dmain=SDL_main)
+endif()
+
+set(CXX_FLAGS "-Wall")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++17 -pthread")
+
+project(SDL2Test)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS} "C:/Program Files/mingw-w64/x86_64-8.1.0-win32-sjlj-rt_v6-rev0/mingw64/x86_64-w64-mingw32/include/SDL2" src)
+
+add_executable(DodgerGame src/main.cpp src/game.cpp src/controller.cpp src/renderer.cpp src/actor.cpp)
+
+target_link_libraries(DodgerGame -L"C:/Program Files/mingw-w64/x86_64-8.1.0-win32-sjlj-rt_v6-rev0/mingw64/x86_64-w64-mingw32/lib" -lSDL2)
+#${SDL2_LIBRARIES})
