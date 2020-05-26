@@ -20,7 +20,7 @@ class Enemy {
 
     void Start(){enemyThread = std::thread(&Enemy::UpdatePosition, this);};
     void UpdatePosition();  
-    SDL_Point GetEnemyPosition();
+
     Direction direction;
     std::mutex mtx;
     float body_x;

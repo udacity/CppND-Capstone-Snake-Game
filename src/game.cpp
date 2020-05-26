@@ -65,7 +65,7 @@ void Game::PlaceFood()
     y = random_h(engine);
     // Check that the location is not occupied by a actor item before placing
     // food.
-    if (actor.GetActorPosition().x != x || actor.GetActorPosition().y != y) 
+    if (actor.body_x != x || actor.body_y != y) 
     {
       food.x = x;
       food.y = y;
@@ -84,7 +84,7 @@ void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height)
 
     // Check that the location is not occupied by a actor item before placing
     // enemy. If it is occupied by food, it's not a problem since enemy is moving.
-    if (actor.GetActorPosition().x != x || actor.GetActorPosition().y != y) 
+    if (actor.body_x != x || actor.body_y != y) 
     {
       SDL_Point position;
       position.x = x;
@@ -122,13 +122,13 @@ void Game::Update()
 
   actor.Update();
 
-  int new_x = static_cast<int>(actor.GetActorPosition().x);
-  int new_y = static_cast<int>(actor.GetActorPosition().y);
+  int new_x = static_cast<int>(actor.body_x);
+  int new_y = static_cast<int>(actor.body_y);
 
   // Check if there're enemies over here
   for(auto i = enemies.begin(); i != enemies.end(); ++i)
   {
-    if (i->get()->GetEnemyPosition().x == new_x && i->get()->GetEnemyPosition().y == new_y) actor.SetAlive(false);
+    if (i->get()->body_x == new_x && i->get()->body_y == new_y) actor.alive = false;
   }
 
   // Check if there's food over here

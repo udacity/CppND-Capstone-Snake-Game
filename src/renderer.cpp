@@ -59,8 +59,8 @@ void Renderer::Render(Actor const actor, SDL_Point const &food, std::vector<std:
   for (auto i = enemies.begin(); i != enemies.end(); ++i)
   {
     std::unique_lock<std::mutex> lck(i->get()->mtx);
-    block.x = static_cast<int>(i->get()->GetEnemyPosition().x) * block.w;
-    block.y = static_cast<int>(i->get()->GetEnemyPosition().y) * block.h;
+    block.x = static_cast<int>(i->get()->body_x) * block.w;
+    block.y = static_cast<int>(i->get()->body_y) * block.h;
     lck.unlock();
     SDL_RenderFillRect(sdl_renderer, &block);
   }
