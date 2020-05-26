@@ -118,7 +118,7 @@ void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height)
 
 void Game::Update() 
 {
-  if (!actor.IsAlive()) return;
+  if (!actor.alive) return;
 
   actor.Update();
 
