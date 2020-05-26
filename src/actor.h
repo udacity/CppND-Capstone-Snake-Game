@@ -21,17 +21,17 @@ class Actor {
   SDL_Point GetActorPosition();
   bool IsAlive();
   void SetAlive(bool alive) {alive = alive;}
+  float speed{0.1f};
+
   
  private:
   int grid_width;
   int grid_height;
-  float speed{0.1f};
   float body_x;
   float body_y;
   bool alive{true};
   void UpdatePosition();
   Direction direction = Direction::kUp;
-
 };
 
 #endif

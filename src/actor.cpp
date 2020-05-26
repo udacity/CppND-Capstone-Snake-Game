@@ -9,8 +9,6 @@ void Actor::Update()
   SDL_Point current_cell{
       static_cast<int>(body_x),
       static_cast<int>(body_y)};  // Capture the actor's cell after updating.
-  
-  IsAlive(current_cell);
 }
 
 void Actor::UpdatePosition() 

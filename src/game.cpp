@@ -81,7 +81,7 @@ void Game::PlaceEnemies()
   {
     x = random_w(engine);
     y = random_h(engine);
-    
+
     // Check that the location is not occupied by a actor item before placing
     // enemy. If it is occupied by food, it's not a problem since enemy is moving.
     if (actor.GetActorPosition().x != x || actor.GetActorPosition().y != y) 
@@ -119,7 +119,7 @@ void Game::PlaceEnemies()
 
 void Game::Update() 
 {
-  if (!actor.alive) return;
+  if (!actor.IsAlive()) return;
 
   actor.Update();
 
