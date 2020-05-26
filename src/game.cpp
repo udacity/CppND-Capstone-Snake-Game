@@ -110,7 +110,7 @@ void Game::PlaceEnemies()
         direction = Enemy::Direction::kUp;
         break;
       }
-      std::vector::emplace_back(std::make_unique<Enemy>(position, direction));
+      enemies.emplace_back(std::make_unique<Enemy>(position, direction));
       return;
     }
   }
