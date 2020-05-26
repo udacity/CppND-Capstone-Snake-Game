@@ -9,7 +9,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       random_h(0, static_cast<int>(grid_height)) 
 {
   PlaceFood();
-  PlaceEnemies();
+  PlaceEnemies(grid_width, grid_height);
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -74,7 +74,7 @@ void Game::PlaceFood()
   }
 }
 
-void Game::PlaceEnemies() 
+void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height) 
 {
   int x, y;
   while (enemies.size() < 5) 
@@ -110,7 +110,7 @@ void Game::PlaceEnemies()
         direction = Enemy::Direction::kUp;
         break;
       }
-      enemies.emplace_back(std::make_unique<Enemy>(position, direction, this->grid_width, this->grid_height));
+      enemies.emplace_back(std::make_unique<Enemy>(position, direction, grid_width, grid_height));
       return;
     }
   }

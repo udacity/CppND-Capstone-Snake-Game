@@ -28,7 +28,7 @@ class Game {
   int score{0};
 
   void PlaceFood();
-  void PlaceEnemies();
+  void PlaceEnemies(std::size_t grid_width, std::size_t grid_height);
   void Update();
 };
 
