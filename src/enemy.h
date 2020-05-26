@@ -20,12 +20,13 @@ class Enemy {
     void UpdatePosition();  
     SDL_Point GetEnemyPosition();
     Direction direction;
+    std::mutex mtx;
+    float body_x;
+    float body_y;
 
  private:
   std::thread enemyThread;
   float speed{0.1f};
-  float body_x;
-  float body_y;
 };
 
 #endif

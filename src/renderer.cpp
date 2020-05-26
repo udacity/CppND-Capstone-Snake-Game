@@ -66,9 +66,9 @@ void Renderer::Render(Actor const actor, SDL_Point const &food, std::vector<std:
   }
 
   // Render actor
-  block.x = static_cast<int>(actor.GetActorPosition().x) * block.w;
-  block.y = static_cast<int>(actor.GetActorPosition().y) * block.h;
-  if (actor.IsAlive()) {
+  block.x = static_cast<int>(actor.body_x) * block.w;
+  block.y = static_cast<int>(actor.body_y) * block.h;
+  if (actor.alive) {
     SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
   } else {
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
