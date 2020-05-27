@@ -23,6 +23,11 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   int frame_count = 0;
   bool running = true;
 
+  for(auto i = enemies.begin(); i != enemies.end(); ++i)
+  {
+        i->get()->UpdatePosition();
+  }
+  
   while (running) 
   {
     frame_start = SDL_GetTicks();
@@ -54,6 +59,8 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     {
       SDL_Delay(target_frame_duration - frame_duration);
     }
+
+    if (!actor.alive) running = false;
   }
 }
 
@@ -134,7 +141,11 @@ void Game::Update()
   for(auto i = enemies.begin(); i != enemies.end(); ++i)
   {
     i->get()->UpdatePosition();
-    if (i->get()->body_x == new_x && i->get()->body_y == new_y) actor.alive = false;
+    if (i->get()->body_x == new_x && i->get()->body_y == new_y) 
+    {
+      actor.alive = false;
+      break;
+    }
   }
 
   // Check if there's food over here
