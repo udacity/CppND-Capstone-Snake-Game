@@ -88,7 +88,7 @@ void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height)
 {
   int x, y;
   int i = 0;
-  while (enemies.size() < 5) 
+  while (enemies.size() < 3) 
   {
     x = random_w(engine);
     y = random_h(engine);

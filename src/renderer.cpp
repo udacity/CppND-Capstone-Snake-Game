@@ -58,10 +58,10 @@ void Renderer::Render(Actor const actor, SDL_Point const &food, std::vector<std:
   SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
   for (auto i = enemies.begin(); i != enemies.end(); ++i)
   {
-    //std::unique_lock<std::mutex> lck(i->get()->mtx);
+    std::unique_lock<std::mutex> lck(i->get()->mtx);
     block.x = static_cast<int>(i->get()->body_x) * block.w;
     block.y = static_cast<int>(i->get()->body_y) * block.h;
-    //lck.unlock();
+    lck.unlock();
     SDL_RenderFillRect(sdl_renderer, &block);
   }
 
