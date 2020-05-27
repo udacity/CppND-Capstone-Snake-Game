@@ -141,7 +141,7 @@ void Game::Update()
   for(auto i = enemies.begin(); i != enemies.end(); ++i)
   {
     i->get()->UpdatePosition();
-    if (i->get()->body_x == new_x && i->get()->body_y == new_y) 
+    if (static_cast<int>(i->get()->body_x) == new_x && static_cast<int>(i->get()->body_y) == new_y) 
     {
       actor.alive = false;
       break;
