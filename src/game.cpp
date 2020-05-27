@@ -152,7 +152,7 @@ void Game::Update()
   }
 
   // Check if there's food over here
-  if (food.x == actor.body_x && food.y == actor.body_y) 
+  if (static_cast<int>(food.x) == new_x && static_cast<int>(food.y) == new_y) 
   {
     score++;
     PlaceFood();
