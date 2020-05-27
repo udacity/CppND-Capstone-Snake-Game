@@ -123,7 +123,6 @@ void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height)
         break;
       }
       enemies.emplace_back(std::make_unique<Enemy>(position, direction, grid_width, grid_height));
-      return;
     }
   }
 }
