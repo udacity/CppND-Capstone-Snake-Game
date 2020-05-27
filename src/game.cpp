@@ -1,6 +1,8 @@
 #include "game.h"
 #include <iostream>
 #include <mutex>
+#include <stdio.h>
+#include <stdlib.h>
 #include "SDL.h"
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
@@ -116,7 +118,7 @@ void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height)
         direction = Enemy::Direction::kDown;
         break;
       
-      default:
+      case 1:
         direction = Enemy::Direction::kUp;
         break;
       }
