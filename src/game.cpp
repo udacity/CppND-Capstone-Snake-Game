@@ -90,7 +90,6 @@ void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height)
   int i = 0;
   while (enemies.size() < 5) 
   {
-    std::unique_lock<std::mutex> lck(mtx);
     x = random_w(engine);
     y = random_h(engine);
 
@@ -126,7 +125,6 @@ void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height)
       enemies.emplace_back(std::make_unique<Enemy>(position, direction, grid_width, grid_height));
       return;
     }
-    lck.unlock();
   }
 }
 
