@@ -103,7 +103,8 @@ void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height)
       position.y = y;
       
       Enemy::Direction direction;
-      int rand_direction = rand() % 4; // based on the recommendation from https://www.bitdegree.org/learn/random-number-generator-cpp
+      std::uniform_int_distribution<int> d{1,4};
+      int rand_direction = d(engine);
       switch (rand_direction)
       {
       case 0:
