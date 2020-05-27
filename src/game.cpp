@@ -103,22 +103,22 @@ void Game::PlaceEnemies(std::size_t grid_width, std::size_t grid_height)
       position.y = y;
       
       Enemy::Direction direction;
-      int rand_direction = 1 + (rand() % 4); // based on the recommendation from https://www.bitdegree.org/learn/random-number-generator-cpp
+      int rand_direction = rand() % 4; // based on the recommendation from https://www.bitdegree.org/learn/random-number-generator-cpp
       switch (rand_direction)
       {
-      case 2:
+      case 0:
         direction = Enemy::Direction::kLeft;
         break;
 
-      case 3:
+      case 1:
         direction = Enemy::Direction::kRight;
         break;
 
-      case 4:
+      case 2:
         direction = Enemy::Direction::kDown;
         break;
       
-      case 1:
+      case 3:
         direction = Enemy::Direction::kUp;
         break;
       }
