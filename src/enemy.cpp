@@ -8,7 +8,7 @@ Enemy::~Enemy(){
 
 // move enemy back and forth
 void Enemy::UpdatePosition(){
-    std::unique_lock<std::mutex> lck(mtx);
+    //std::unique_lock<std::mutex> lck(mtx);
     
     switch (direction) 
     {
@@ -32,6 +32,6 @@ void Enemy::UpdatePosition(){
     body_x = fmod(body_x + grid_width, grid_width);
     body_y = fmod(body_y + grid_height, grid_height);
 
-    lck.unlock();
+    //lck.unlock();
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
