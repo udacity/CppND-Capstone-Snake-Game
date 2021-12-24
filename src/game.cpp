@@ -2,16 +2,19 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t grid_width, std::size_t grid_height)
-    : snake(grid_width, grid_height),
+Game::Game(std::size_t width, std::size_t height, std::size_t cols, std::size_t rows)
+    : renderer(width, height, cols, rows),
+      controller(Controller()),
+      runner(cols / 2, rows - 2),
       engine(dev()),
-      random_w(0, static_cast<int>(grid_width - 1)),
-      random_h(0, static_cast<int>(grid_height - 1)) {
-  PlaceFood();
+      random_x(0, static_cast<int>(cols - 1)),
+      random_y(0, static_cast<int>(rows - 1))
+{
+  GenerateObstacles();
 }
 
-void Game::Run(Controller const &controller, Renderer &renderer,
-               std::size_t target_frame_duration) {
+void Game::Run(std::size_t target_frame_duration)
+{
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
   Uint32 frame_end;
@@ -23,9 +26,9 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller.HandleInput(running, snake);
+    controller.HandleInput(running, this);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(runner, obstacles);
 
     frame_end = SDL_GetTicks();
 
@@ -36,7 +39,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer.UpdateWindowTitle(score, frame_count);
+      renderer.UpdateWindowTitle(GetScore(), frame_count);
       frame_count = 0;
       title_timestamp = frame_end;
     }
@@ -50,38 +53,48 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
-void Game::PlaceFood() {
-  int x, y;
-  while (true) {
-    x = random_w(engine);
-    y = random_h(engine);
-    // Check that the location is not occupied by a snake item before placing
-    // food.
-    if (!snake.SnakeCell(x, y)) {
-      food.x = x;
-      food.y = y;
-      return;
-    }
-  }
+void Game::CleanObstacles()
+{
+    auto part = std::partition(obstacles.begin(), obstacles.end(),
+        [&](const Obstacle &ob) { return ob.active && ob.GetY() <= renderer.Rows(); });
+    obstacles.erase(part, obstacles.end());
+}
+
+void Game::GenerateObstacles()
+{
+  /*
+  0.9 percent chance that nothing gets generated
+  0.05 percent coin
+  0.05 percent 
+  0.05 
+  */
 }
 
 void Game::Update() {
-  if (!snake.alive) return;
+  if (!runner.Active()) return;
 
-  snake.Update();
+  runner.Update();
 
-  int new_x = static_cast<int>(snake.head_x);
-  int new_y = static_cast<int>(snake.head_y);
-
-  // Check if there's food over here
-  if (food.x == new_x && food.y == new_y) {
-    score++;
-    PlaceFood();
-    // Grow snake and increase speed.
-    snake.GrowBody();
-    snake.speed += 0.02;
+  for (Obstacle & ob : obstacles)
+  {
+    if (ob.Collide(runner, renderer))
+    {
+      ob.HitRunner(runner);
+    }
+    ob.Update();
   }
+
+  CleanObstacles();
+  GenerateObstacle();
 }
 
-int Game::GetScore() const { return score; }
-int Game::GetSize() const { return snake.size; }
+int Game::Score() const { return runner.Coin(); }
+
+void Game::ShiftRunner(int delta)
+{
+  float target = runner.GetX() + delta;
+  if (0 <= target && target <= renderer.Cols())
+  {
+    runner.SetX(target);
+  }
+}
