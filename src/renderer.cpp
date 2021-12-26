@@ -42,7 +42,7 @@ Renderer::~Renderer()
   SDL_Quit();
 }
 
-void Renderer::Render(Runner &runner, std::vector<std::unique_ptr<Obstacle> > &obstacles)
+void Renderer::Render(Runner &runner, ObstacleVector &obstacles)
 {
   SDL_Rect block;
   block.w = screen_width / cols;
