@@ -2,6 +2,8 @@
 #include <iostream>
 #include <algorithm>
 #include "SDL.h"
+#include "controller.h"
+#include "renderer.h"
 
 Game::Game(std::size_t cols, std::size_t rows)
     : cols(cols),
@@ -58,7 +60,7 @@ void Game::Run(const Controller &controller, Renderer &renderer,
 void Game::CleanObstacles()
 {
     auto part = std::partition(obstacles.begin(), obstacles.end(),
-        [&](const ObstaclePtr &ob) { return ob->IsActive() && ob->GetY() <= rows; });
+        [&](const ObstaclePtr &ob) { return ob->GetActive() && ob->GetY() <= rows; });
     obstacles.erase(part, obstacles.end());
 }
 
@@ -87,7 +89,7 @@ void Game::GenerateObstacles()
 }
 
 void Game::Update() {
-  if (!runner.IsActive()) return;
+  if (!runner.GetActive()) return;
 
   runner.Update();
 

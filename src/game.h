@@ -5,12 +5,14 @@
 #include <memory>
 #include <random>
 #include "SDL.h"
-#include "controller.h"
-#include "renderer.h"
-#include "obstacle.h"
 #include "runner.h"
+#include "obstacle.h"
 
-class Game {
+class Controller;
+class Renderer;
+
+class Game
+{
 public:
   Game(std::size_t cols, std::size_t rows);
   void Run(const Controller &controller, Renderer &renderer,

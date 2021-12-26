@@ -1,9 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "runner.h"
-
-class Game;
+class Runner;
 
 class Controller
 {

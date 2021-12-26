@@ -1,4 +1,5 @@
 #include "obstacle.h"
+#include "runner.h"
 
 // -------------------- OBSTACLE --------------------
 
@@ -8,15 +9,7 @@ Obstacle::~Obstacle() {}
 
 void Obstacle::Update()
 {
-    switch (direction) {
-        case Direction::kUp:
-        head_y -= speed;
-        break;
-
-        case Direction::kDown:
-        head_y += speed;
-        break;
-    }
+  y += speed;
 }
 
 void Obstacle::HitRunner(Runner &runner)
@@ -28,10 +21,10 @@ void Obstacle::HitRunner(Runner &runner)
 // TODO: Add colours
 
 // #0E9594
-Shield::Shield(float x):
-    Obstacle(x),
-    color(14, 149, 148, 255)
-{}
+Shield::Shield(float x): Obstacle(x)
+{
+      colour = RBGA(14, 149, 148, 255);
+}
 
 Shield::~Shield() {}
 
@@ -44,10 +37,10 @@ void Shield::HitRunner(Runner &runner)
 // -------------------- COIN --------------------
 
 // #FCBA04
-Coin::Coin(float x): 
-    Obstacle(x),
-    color(252, 186, 4, 244)
-{}
+Coin::Coin(float x): Obstacle(x)
+{
+      colour = RBGA(252, 186, 4, 244);
+}
 
 Coin::~Coin() {}
 
@@ -60,17 +53,17 @@ void Coin::HitRunner(Runner &runner)
 // -------------------- ROCK --------------------
 
 // #7B2D26
-Rock::Rock(float x): 
-    Obstacle(x),
-    color(123, 45, 38, 255)
-{}
+Rock::Rock(float x): Obstacle(x)
+{
+    colour = RBGA(123, 45, 38, 255);
+}
 
 Rock::~Rock() {}
 
 void Rock::HitRunner(Runner &runner)
 {
     Obstacle::HitRunner(runner);
-    if (!runner.IsShielded())
+    if (!runner.GetShielded())
     {
         runner.SetActive(false);        
     }

@@ -2,9 +2,8 @@
 #define RENDERER_H
 
 #include <vector>
+#include <memory>
 #include "SDL.h"
-#include "runner.h"
-#include "obstacle.h"
 
 class Runner;
 class Obstacle;
@@ -15,7 +14,7 @@ class Renderer {
            const std::size_t cols, const std::size_t rows);
   ~Renderer();
 
-  void Render(Runner &runner, ObstacleVector &obstacles);
+  void Render(Runner &runner, std::vector<std::unique_ptr<Obstacle> > &obstacles);
   void UpdateWindowTitle(const int score, const int fps);
 
  private:

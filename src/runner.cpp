@@ -7,14 +7,14 @@ std::chrono::milliseconds Runner::shieldDuration(2000);
 Runner::Runner(float x, float y):
 	Object(x, y)
 {
-	Active(true);
+	SetActive(true);
 }
 
 Runner::~Runner() {}
 
 void Runner::SetActive(bool _active)
 {
-  Object::Active(_active);
+  Object::SetActive(_active);
   if (active)
   {
     colour = RBGA{255, 173, 211, 255}; // #FFADD3
@@ -27,8 +27,8 @@ void Runner::SetActive(bool _active)
 
 void Runner::SetShielded(bool _shielded)
 {
-  shielded = _shield;
-  if (_shielded)
+  shielded = _shielded;
+  if (shielded)
   {
     startShield = std::chrono::steady_clock::now();
     colour = RBGA{14, 129, 148, 255}; // #0E9594

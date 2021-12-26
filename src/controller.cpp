@@ -1,6 +1,7 @@
 #include "controller.h"
 #include <iostream>
 #include "SDL.h"
+#include "runner.h"
 
 void Controller::HandleInput(bool &running, Runner &runner) const
 {

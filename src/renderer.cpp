@@ -1,6 +1,8 @@
 #include "renderer.h"
 #include <iostream>
 #include <string>
+#include "runner.h"
+#include "obstacle.h"
 
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
@@ -40,7 +42,7 @@ Renderer::~Renderer()
   SDL_Quit();
 }
 
-void Renderer::Render(Runner &runner, ObstacleVector &obstacles)
+void Renderer::Render(Runner &runner, std::vector<std::unique_ptr<Obstacle> > &obstacles)
 {
   SDL_Rect block;
   block.w = screen_width / cols;

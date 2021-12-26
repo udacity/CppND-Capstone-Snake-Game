@@ -6,8 +6,12 @@
 struct RBGA
 {
     int r, b, g, a;
-  	RBGA();
-    RBGA(int _r, int _b, int _g, int _a);
+  	RBGA(): RBGA(255,255,255,255) {}
+  	RBGA(int r, int b, int g, int a):
+  		r{r}, b{b}, g{g}, a{a}
+  	{}
+
+  	~RBGA() {}
 };
 
 class Object
@@ -23,7 +27,7 @@ public:
     void SetX(float _x) { x = _x; }
     void SetY(float _y) { y = _y; }
     
-    bool IsActive() const { return active; }
+    bool GetActive() const { return active; }
     virtual void SetActive(bool _active) { active = _active; }
 
     virtual void Update() = 0;

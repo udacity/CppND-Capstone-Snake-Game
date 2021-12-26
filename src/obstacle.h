@@ -1,9 +1,10 @@
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
 
-#include "object.h"
-#include "runner.h"
 #include <memory>
+#include "object.h"
+
+class Runner;
 
 class Obstacle : public Object
 {
