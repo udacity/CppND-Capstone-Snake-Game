@@ -7,9 +7,10 @@ int main() {
   constexpr std::size_t kFramesPerSecond{60};
   constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};
   constexpr std::size_t kScreenWidth{200};
-  constexpr std::size_t kScreenHeight{640};
+  constexpr std::size_t kScreenHeight{400};
   constexpr std::size_t kGridCols{10}; // x
-  constexpr std::size_t kGridRows{32}; // y
+  constexpr std::size_t kGridRows{20}; // y
+  // grid sizes = 20 x 20
 
   Controller controller;
   Renderer renderer(kScreenWidth, kScreenHeight, kGridCols, kGridRows);

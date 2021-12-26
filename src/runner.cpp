@@ -1,11 +1,11 @@
 #include "runner.h"
 #include <cmath>
 #include <iostream>
-
-std::chrono::milliseconds Runner::shieldDuration(2000);
+#include "game.h"
 
 Runner::Runner(float x, float y):
-	Object(x, y)
+	Object(x, y),
+  shieldTimer(2000)
 {
 	SetActive(true);
 }
@@ -30,7 +30,7 @@ void Runner::SetShielded(bool _shielded)
   shielded = _shielded;
   if (shielded)
   {
-    startShield = std::chrono::steady_clock::now();
+    shieldTimer.Start();
     colour = RBGA{14, 129, 148, 255}; // #0E9594
   }
   else
@@ -41,9 +41,7 @@ void Runner::SetShielded(bool _shielded)
 
 void Runner::Update()
 {
-  std::chrono::time_point<std::chrono::steady_clock> currentTime;
-  std::chrono::milliseconds delta = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startShield);
-  if (delta > Runner::shieldDuration)
+  if (shieldTimer.DurationPassed())
   {
     SetShielded(false);
   }

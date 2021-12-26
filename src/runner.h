@@ -2,10 +2,9 @@
 #define RUNNER_H
 
 #include <vector>
-#include <chrono>
 #include "SDL.h"
 #include "object.h"
-
+#include "utility.h"
 class Runner : public Object
 {
 public:
@@ -26,9 +25,7 @@ public:
 private:
   int  purse{0};
   bool shielded{false};
-  std::chrono::time_point<std::chrono::steady_clock> startShield;
-
-  static std::chrono::milliseconds shieldDuration;
+  TimeChecker shieldTimer;
 };
 
 #endif

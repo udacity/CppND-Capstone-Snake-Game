@@ -3,14 +3,13 @@
 
 #include <vector>
 #include <memory>
-#include <random>
 #include "SDL.h"
 #include "runner.h"
 #include "obstacle.h"
+#include "utility.h"
 
 class Controller;
 class Renderer;
-
 class Game
 {
 public:
@@ -23,12 +22,13 @@ public:
 private:
   const std::size_t cols, rows;
   Runner         runner;
-  ObstacleVector obstacles;
 
-  std::random_device dev;
-  std::mt19937 engine;
-  std::uniform_int_distribution<int> random_x;
-  std::uniform_int_distribution<int> random_type;
+  Random<int> random_x;
+  Random<int> random_type;
+  Random<int> random_time;
+  
+  ObstacleVector obstacles;
+  TimeChecker    obTimer;
 
   void GenerateObstacles();
   void CleanObstacles();

@@ -7,11 +7,12 @@
 
 Game::Game(std::size_t cols, std::size_t rows)
     : cols(cols),
-	  rows(rows),
-	  runner(cols / 2, rows - 2),
-      engine(dev()),
+      rows(rows),
+	    runner(cols / 2, rows - 2),
       random_x(0, static_cast<int>(cols - 1)),
-      random_type(0, 100)
+      random_type(0, 10),
+      random_time(2000, 3000),
+      obTimer(TimeChecker())
 {
   GenerateObstacles();
 }
@@ -67,28 +68,29 @@ void Game::CleanObstacles()
 void Game::GenerateObstacles()
 {
   /*
-  [0, 50) nothing happens
-  [50, 85) rock
-  [85, 90) shield
-  [90, 100]  coin
+  [0, 5] rock
+  [6, 8] shield
+  [9, 10]  coin
   */
-  int type = random_type(engine);
-  float x = static_cast<float>(random_x(engine));
-  if (50 <= type && type < 85)
+  int type = random_type();
+  float x = static_cast<float>(random_x());
+
+  if (0 <= type && type <= 5)
   {
     obstacles.emplace_back(std::make_unique<Rock>(x));
   }
-  else if (85 <= type && type < 90)
+  else if (6 <= type && type <= 8)
   {
     obstacles.emplace_back(std::make_unique<Shield>(x));
   }
-  else if (90 <= type)
+  else if (9 <= type)
   {
     obstacles.emplace_back(std::make_unique<Coin>(x));
   }
 }
 
-void Game::Update() {
+void Game::Update()
+{
   if (!runner.GetActive()) return;
 
   runner.Update();
@@ -103,7 +105,12 @@ void Game::Update() {
   }
 
   CleanObstacles();
-  GenerateObstacles();
+  if (!obTimer.GetActive() || obTimer.DurationPassed())
+  {
+    GenerateObstacles();
+    obTimer.SetDuration(random_time());
+    obTimer.Start();
+  }
 }
 
 int Game::GetScore() const { return runner.GetCoin(); }
