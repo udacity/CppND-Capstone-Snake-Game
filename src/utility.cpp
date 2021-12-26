@@ -1,26 +1,31 @@
 #include "utility.h"
 
-std::random_device  Random::dev;
-std::mt19937        Random::engine = Random::dev();
+// -------------------- RANDOM --------------------
 
-template <typename T>
-Random::Random(T start, T end)
+template<class T> std::random_device  Random<T>::dev;
+template<class T> std::mt19937        Random<T>::engine = Random::dev();
+
+template<class T>
+Random<T>::Random(T start, T end)
 {
     SetInterval(start, end);
 }
 
-template <typename T>
-void Random::SetInterval(T _start, T _end)
+template<class T>
+void Random<T>::SetInterval(T _start, T _end)
 {
     start = _start;
     end   = _end;
     distribution = std::uniform_int_distribution<T>(start, end);
 }
 
-template <typename T>
-void Random::operator() {
+template<class T>
+T Random<T>::operator() ()
+{
     return distribution(engine);
 }
+
+// -------------------- TIME CHECKER --------------------
 
 TimeChecker::TimeChecker():
     active(false),
@@ -41,7 +46,7 @@ void TimeChecker::Start()
 
 void TimeChecker::SetDuration(int ms)
 {
-    duration = ms;
+    duration{ms};
 }
 
 bool TimeChecker::DurationPassed()

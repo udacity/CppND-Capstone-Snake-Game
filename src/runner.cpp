@@ -1,11 +1,10 @@
 #include "runner.h"
 #include <cmath>
 #include <iostream>
-#include "game.h"
 
 Runner::Runner(float x, float y):
 	Object(x, y),
-  shieldTimer(2000)
+	shieldTimer(2000)
 {
 	SetActive(true);
 }

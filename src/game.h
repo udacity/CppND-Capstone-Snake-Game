@@ -10,6 +10,7 @@
 
 class Controller;
 class Renderer;
+
 class Game
 {
 public:

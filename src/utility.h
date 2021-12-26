@@ -1,7 +1,10 @@
+#ifndef UTILITY_H
+#define UTILITY_H
+
 #include <chrono>
 #include <random>
 
-template <typename T>
+template <class T>
 class Random
 {
   static std::random_device dev;
@@ -13,7 +16,7 @@ class Random
 public:
   Random(T start, T end);
   void SetInterval(T _start, T _end);
-  void operator();
+  T operator()();
 };
 
 class TimeChecker
@@ -30,3 +33,5 @@ public:
   bool DurationPassed();
   bool GetActive() { return active; }
 };
+
+#endif
