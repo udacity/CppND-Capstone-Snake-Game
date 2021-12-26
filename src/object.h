@@ -23,13 +23,13 @@ public:
     bool  Active() { return active; }
     virtual void Active(bool _active) { active = _active; }
 
+    virtual void Update() = 0;
+    virtual bool Collide(Renderer &renderer, Object &obj);
+
 protected:
     float x, y;
     RBGA colour;
     bool  active{true};
-    
-    virtual void Update() = 0;
-    virtual bool Collide(Renderer &renderer, Object &obj);
 };
 
 

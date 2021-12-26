@@ -40,14 +40,14 @@ Renderer::~Renderer()
   SDL_Quit();
 }
 
-void Renderer::Render(Runner &runner, std::vector<Obstacle> &obstacles)
+void Renderer::Render(Runner &runner, ObstacleVector &obstacles)
 {
   SDL_Rect block;
   block.w = screen_width / cols;
   block.h = screen_height / rows;
 
   // Clear screen
-  SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
+  SDL_SetRenderDrawColor(sdl_renderer, 241, 222, 222, 255); // #F1DEDE
   SDL_RenderClear(sdl_renderer);
 
   // Render runner
@@ -58,11 +58,11 @@ void Renderer::Render(Runner &runner, std::vector<Obstacle> &obstacles)
   SDL_RenderFillRect(sdl_renderer, &block);
 
   // Render obstacles
-  for (Obstacle &ob : obstacles)
+  for (ObstacleItr &ob : obstacles)
   {
-    RBGA &colour = ob.getColour();
-    block.x = static_cast<int>(ob.getX()) * block.w;
-    block.y = static_cast<int>(ob.getY()) * block.h;
+    RBGA &colour = ob->getColour();
+    block.x = static_cast<int>(ob->getX()) * block.w;
+    block.y = static_cast<int>(ob->getY()) * block.h;
     SDL_SetRenderDrawColor(sdl_renderer, colour.r, colour.b, colour.g, colour.a);
     SDL_RenderFillRect(sdl_renderer, &block);
   }

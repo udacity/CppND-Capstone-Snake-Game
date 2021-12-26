@@ -9,20 +9,22 @@
 class Runner : public Object
 {
 public:
-  void IncrementCoin() { purse++; }
+  void Update();
+  
   int  Coin() { return purse; }
-
-  void Shielded(bool _shield) { shielded = _shield; }
+  void IncrementCoin() { purse++; }
+  
   bool Shielded() { return shielded; }
-
-  virtual void Active(bool _active);
-
-  void MoveLeft();
-  void MoveRight();
+  void Shielded(bool _shield);
+  
+  void Active(bool _active);
   
 private:
   int  purse{0};
   bool shielded{false};
+  std::chrono::time_point<std::chrono::steady_clock> startShield;
+
+  static std::chrono::milliseconds shieldDuration(2000);
 };
 
 #endif

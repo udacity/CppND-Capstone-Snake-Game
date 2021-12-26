@@ -6,28 +6,29 @@
 
 class Obstacle : public Object
 {
-protected:
+public:
     virtual void Update();
-    virtual bool HitRunner(Runner &runner);
+    virtual bool HitRunner(Runner &runner) = 0;
 
+protected:
     float speed{0.1f};
 };
 
 class Shield : public Obstacle
 {
-protected:
+public:
     bool HitRunner(Runner &runner);
 };
 
 class Coin : public Obstacle
 {
-protected:
+public:
     bool HitRunner(Runner &runner);
 };
 
 class Rock : public Obstacle
 {
-protected:
+public:
     bool HitRunner(Runner &runner);
 };
 

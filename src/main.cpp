@@ -4,9 +4,9 @@
 int main() {
   constexpr std::size_t kFramesPerSecond{60};
   constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};
-  constexpr std::size_t kScreenWidth{640};
+  constexpr std::size_t kScreenWidth{200};
   constexpr std::size_t kScreenHeight{640};
-  constexpr std::size_t kGridCols{32}; // x
+  constexpr std::size_t kGridCols{10}; // x
   constexpr std::size_t kGridRows{32}; // y
 
   Game game(kScreenWidth, kScreenHeight, kGridCols, kGridRows);

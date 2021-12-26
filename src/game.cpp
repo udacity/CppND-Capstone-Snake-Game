@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <chrono>
 #include "SDL.h"
 
 Game::Game(std::size_t width, std::size_t height, std::size_t cols, std::size_t rows)
@@ -8,7 +9,7 @@ Game::Game(std::size_t width, std::size_t height, std::size_t cols, std::size_t 
       runner(cols / 2, rows - 2),
       engine(dev()),
       random_x(0, static_cast<int>(cols - 1)),
-      random_y(0, static_cast<int>(rows - 1))
+      random_type(0, 100)
 {
   GenerateObstacles();
 }
@@ -56,18 +57,33 @@ void Game::Run(std::size_t target_frame_duration)
 void Game::CleanObstacles()
 {
     auto part = std::partition(obstacles.begin(), obstacles.end(),
-        [&](const Obstacle &ob) { return ob.active && ob.GetY() <= renderer.Rows(); });
+        [&](const ObstacleItr &ob) { return ob->active && ob->GetY() <= renderer.Rows(); });
     obstacles.erase(part, obstacles.end());
 }
 
 void Game::GenerateObstacles()
 {
   /*
-  0.9 percent chance that nothing gets generated
-  0.05 percent coin
-  0.05 percent 
-  0.05 
+  [0, 50) nothing happens
+  [50, 85) rock
+  [85, 90) shield
+  [90, 100]  coin
   */
+  int type = random_type(engine());
+  int x = random_x(engine());
+  int y = 0;
+  if (50 <= type && type < 85)
+  {
+    obstacles.emplace_back(std::make_unique<Rock>(x, y));
+  }
+  else if (85 <= type && type < 90)
+  {
+    obstacles.emplace_back(std::make_unique<Shield>(x, y));
+  }
+  else if (90 <= type)
+  {
+    obstacles.emplace_back(std::make_unique<Coin>(x, y));
+  }
 }
 
 void Game::Update() {
@@ -75,13 +91,13 @@ void Game::Update() {
 
   runner.Update();
 
-  for (Obstacle & ob : obstacles)
+  for (ObstacleItr &ob : obstacles)
   {
-    if (ob.Collide(runner, renderer))
+    if (ob->Collide(runner))
     {
-      ob.HitRunner(runner);
+      ob->HitRunner(runner);
     }
-    ob.Update();
+    ob->Update();
   }
 
   CleanObstacles();
