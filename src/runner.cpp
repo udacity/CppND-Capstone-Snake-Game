@@ -2,25 +2,40 @@
 #include <cmath>
 #include <iostream>
 
-void Runner::Active(bool _active)
+std::chrono::milliseconds Runner::shieldDuration(2000);
+
+Runner::Runner(float x, float y):
+	Object(x, y)
+{
+	Active(true);
+}
+
+Runner::~Runner() {}
+
+void Runner::SetActive(bool _active)
 {
   Object::Active(_active);
-  if (!active)
-  {
-    colour = RBGA{255, 73, 158, 255}; // #FF499E
-  }
-  else
+  if (active)
   {
     colour = RBGA{255, 173, 211, 255}; // #FFADD3
   }
+  else
+  {
+    colour = RBGA{255, 73, 158, 255}; // #FF499E
+  }
 }
 
-void Runner::Shielded(bool _shielded)
+void Runner::SetShielded(bool _shielded)
 {
   shielded = _shield;
   if (_shielded)
   {
     startShield = std::chrono::steady_clock::now();
+    colour = RBGA{14, 129, 148, 255}; // #0E9594
+  }
+  else
+  {
+    colour = RBGA{255, 173, 211, 255}; // #FFADD3
   }
 }
 
@@ -30,6 +45,15 @@ void Runner::Update()
   std::chrono::milliseconds delta = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startShield);
   if (delta > Runner::shieldDuration)
   {
-    Shielded(false);
+    SetShielded(false);
+  }
+}
+
+void Runner::ShiftX(float delta)
+{
+  float target = x + delta;
+  if (0 <= target)
+  {
+    SetX(target);
   }
 }

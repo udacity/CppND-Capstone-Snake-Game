@@ -3,33 +3,50 @@
 
 #include "object.h"
 #include "runner.h"
+#include <memory>
 
 class Obstacle : public Object
 {
 public:
+	Obstacle(float x);
+    ~Obstacle();
+    
     virtual void Update();
-    virtual bool HitRunner(Runner &runner) = 0;
+    virtual void HitRunner(Runner &runner) = 0;
 
 protected:
     float speed{0.1f};
 };
 
+typedef std::unique_ptr<Obstacle> ObstaclePtr;
+typedef std::vector<ObstaclePtr>  ObstacleVector;
+typedef ObstacleVector::iterator  ObstacleItr;
+
 class Shield : public Obstacle
 {
 public:
-    bool HitRunner(Runner &runner);
+	Shield(float x);
+    ~Shield();
+    
+    void HitRunner(Runner &runner) override;
 };
 
 class Coin : public Obstacle
 {
 public:
-    bool HitRunner(Runner &runner);
+	Coin(float x);
+    ~Coin();
+    
+    void HitRunner(Runner &runner) override;
 };
 
 class Rock : public Obstacle
 {
 public:
-    bool HitRunner(Runner &runner);
+	Rock(float x);
+    ~Rock();
+    
+    void HitRunner(Runner &runner) override;
 };
 
 #endif

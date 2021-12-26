@@ -51,18 +51,19 @@ void Renderer::Render(Runner &runner, ObstacleVector &obstacles)
   SDL_RenderClear(sdl_renderer);
 
   // Render runner
-  RBGA &colour = runner.getColour();
-  block.x = static_cast<int>(runner.getX()) * block.w;
-  block.y = static_cast<int>(runner.getY()) * block.h;
+  const RBGA &colour = runner.GetColour();
+  block.x = static_cast<int>(runner.GetX()) * block.w;
+  block.y = static_cast<int>(runner.GetY()) * block.h;
   SDL_SetRenderDrawColor(sdl_renderer, colour.r, colour.b, colour.g, colour.a);
   SDL_RenderFillRect(sdl_renderer, &block);
 
   // Render obstacles
-  for (ObstacleItr &ob : obstacles)
+  for (ObstacleItr ob = obstacles.begin(); ob != obstacles.end(); ob++)
   {
-    RBGA &colour = ob->getColour();
-    block.x = static_cast<int>(ob->getX()) * block.w;
-    block.y = static_cast<int>(ob->getY()) * block.h;
+    ObstaclePtr &ptr = *ob;
+    const RBGA &colour = ptr->GetColour();
+    block.x = static_cast<int>(ptr->GetX()) * block.w;
+    block.y = static_cast<int>(ptr->GetY()) * block.h;
     SDL_SetRenderDrawColor(sdl_renderer, colour.r, colour.b, colour.g, colour.a);
     SDL_RenderFillRect(sdl_renderer, &block);
   }

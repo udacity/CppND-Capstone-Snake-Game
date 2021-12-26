@@ -2,11 +2,13 @@
 #define CONTROLLER_H
 
 #include "runner.h"
-#include "game.h"
 
-class Controller {
+class Game;
+
+class Controller
+{
 public:
-  void HandleInput(bool &running, Game &game) const;
+  void HandleInput(bool &running, Runner &runner) const;
 };
 
 #endif

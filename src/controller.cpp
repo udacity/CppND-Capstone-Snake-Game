@@ -2,7 +2,8 @@
 #include <iostream>
 #include "SDL.h"
 
-void Controller::HandleInput(bool &running, Game &game) const {
+void Controller::HandleInput(bool &running, Runner &runner) const
+{
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT)
@@ -13,11 +14,11 @@ void Controller::HandleInput(bool &running, Game &game) const {
     {
       switch (e.key.keysym.sym) {
         case SDLK_LEFT:
-          game.ShiftRunner(-1);
+          runner.ShiftX(-1);
           break;
 
         case SDLK_RIGHT:
-          game.ShiftRunner(1);
+          runner.ShiftX(1);
           break;
       }
     }

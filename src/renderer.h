@@ -6,21 +6,17 @@
 #include "runner.h"
 #include "obstacle.h"
 
+class Runner;
+class Obstacle;
+
 class Renderer {
  public:
   Renderer(const std::size_t screen_width, const std::size_t screen_height,
            const std::size_t cols, const std::size_t rows);
   ~Renderer();
 
-  void Render(Runner &runner, std::vector<Obstacle> &obstacles);
-  void UpdateWindowTitle(int score, int fps);
-
-  std::size_t ScreenWidth() { return screen_width; }
-  std::size_t ScreenHeight() { return screen_height; }
-  std::size_t Cols() { return cols; }
-  std::size_t Rows() { return rows; }
-  std::size_t ObjectWidth() { return screen_width / cols; }
-  std::size_t ObjectHeight() { return screen_height / rows; }
+  void Render(Runner &runner, ObstacleVector &obstacles);
+  void UpdateWindowTitle(const int score, const int fps);
 
  private:
   SDL_Window *sdl_window;
