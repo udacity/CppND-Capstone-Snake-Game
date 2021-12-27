@@ -2,14 +2,15 @@
 
 // -------------------- RANDOM --------------------
 
-template<class T> std::random_device  Random<T>::dev;
-template<class T> std::mt19937        Random<T>::engine = Random::dev();
-
 template<class T>
-Random<T>::Random(T start, T end)
+Random<T>::Random(T start, T end):
+	engine(dev())
 {
     SetInterval(start, end);
 }
+
+template<class T>
+Random<T>::~Random() {}
 
 template<class T>
 void Random<T>::SetInterval(T _start, T _end)
@@ -24,6 +25,9 @@ T Random<T>::operator() ()
 {
     return distribution(engine);
 }
+
+template class Random<int>;
+
 
 // -------------------- TIME CHECKER --------------------
 
@@ -46,7 +50,7 @@ void TimeChecker::Start()
 
 void TimeChecker::SetDuration(int ms)
 {
-    duration{ms};
+    duration = std::chrono::milliseconds(ms);
 }
 
 bool TimeChecker::DurationPassed()

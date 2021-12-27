@@ -4,14 +4,15 @@
 #include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
+#include "utility.h"
 
 Game::Game(std::size_t cols, std::size_t rows)
     : cols(cols),
       rows(rows),
-	    runner(cols / 2, rows - 2),
+	  runner(cols / 2, rows - 2),
       random_x(0, static_cast<int>(cols - 1)),
       random_type(0, 10),
-      random_time(2000, 3000),
+      random_time(1000, 2500),
       obTimer(TimeChecker())
 {
   GenerateObstacles();
@@ -26,7 +27,7 @@ void Game::Run(const Controller &controller, Renderer &renderer,
   Uint32 frame_duration;
   int frame_count = 0;
   bool running = true;
-
+  
   while (running) {
     frame_start = SDL_GetTicks();
 

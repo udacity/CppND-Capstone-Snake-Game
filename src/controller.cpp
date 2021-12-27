@@ -11,7 +11,7 @@ void Controller::HandleInput(bool &running, Runner &runner) const
     {
       running = false;
     }
-    else if (e.type == SDL_KEYDOWN)
+    else if (e.type == SDL_KEYDOWN && runner.GetActive())
     {
       switch (e.key.keysym.sym) {
         case SDLK_LEFT:

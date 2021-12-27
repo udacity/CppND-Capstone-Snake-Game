@@ -1,5 +1,6 @@
 #include "obstacle.h"
 #include "runner.h"
+#include <iostream>
 
 // -------------------- OBSTACLE --------------------
 
@@ -32,6 +33,7 @@ void Shield::HitRunner(Runner &runner)
 {
     Obstacle::HitRunner(runner);
     runner.SetShielded(true);
+    std::cout << "Runner has received Shield!" << std::endl;
 }
 
 // -------------------- COIN --------------------
@@ -48,6 +50,7 @@ void Coin::HitRunner(Runner &runner)
 {
     Obstacle::HitRunner(runner);
     runner.IncrementCoin();
+    std::cout << "Runner has received Coin!" << std::endl;
 }
 
 // -------------------- ROCK --------------------
@@ -63,8 +66,14 @@ Rock::~Rock() {}
 void Rock::HitRunner(Runner &runner)
 {
     Obstacle::HitRunner(runner);
-    if (!runner.GetShielded())
+    if (runner.GetShielded())
     {
-        runner.SetActive(false);        
+        runner.SetShielded(false);
+        std::cout << "Runner has hit rock! Shield lost!" << std::endl;
+    }
+    else
+    {
+        runner.SetActive(false);
+        std::cout << "Runner has hit rock! Game Over!" << std::endl;
     }
 }

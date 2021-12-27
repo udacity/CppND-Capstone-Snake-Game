@@ -4,7 +4,7 @@
 
 Runner::Runner(float x, float y):
 	Object(x, y),
-	shieldTimer(2000)
+	shieldTimer(5000)
 {
 	SetActive(true);
 }
@@ -16,11 +16,11 @@ void Runner::SetActive(bool _active)
   Object::SetActive(_active);
   if (active)
   {
-    colour = RBGA{255, 173, 211, 255}; // #FFADD3
+    colour = RBGA{255, 73, 158, 255}; // #FF499E
   }
   else
   {
-    colour = RBGA{255, 73, 158, 255}; // #FF499E
+    colour = RBGA{255, 173, 211, 255}; // #FFADD3
   }
 }
 
@@ -34,7 +34,7 @@ void Runner::SetShielded(bool _shielded)
   }
   else
   {
-    colour = RBGA{255, 173, 211, 255}; // #FFADD3
+    colour = RBGA{255, 73, 158, 255}; // #FF499E
   }
 }
 

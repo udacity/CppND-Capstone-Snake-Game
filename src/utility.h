@@ -7,14 +7,14 @@
 template <class T>
 class Random
 {
-  static std::random_device dev;
-  static std::mt19937 engine;
-
+  std::random_device  dev;
+  std::mt19937        engine;
   std::uniform_int_distribution<T> distribution;
   T start, end;
 
 public:
   Random(T start, T end);
+  ~Random();
   void SetInterval(T _start, T _end);
   T operator()();
 };
