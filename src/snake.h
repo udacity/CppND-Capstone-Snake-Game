@@ -3,16 +3,25 @@
 
 #include <vector>
 #include "SDL.h"
-
-class Snake {
- public:
-  enum class Direction { kUp, kDown, kLeft, kRight };
+#include "settings.h"
+class Snake
+{
+public:
+  enum class Direction
+  {
+    kUp,
+    kDown,
+    kLeft,
+    kRight
+  };
 
   Snake(int grid_width, int grid_height)
       : gridWidth_(grid_width),
         gridHeight_(grid_height),
         headX_(grid_width / 2),
         headY_(grid_height / 2) {}
+
+  Snake() : Snake(SnakeGame::kGridWidth, SnakeGame::kGridHeight) {}
 
   void Update();
 
@@ -23,16 +32,16 @@ class Snake {
 
   float speed_{0.1F};
   unsigned int size_{1U};
-  bool alive_{true};
+  bool isAlive_{true};
   float headX_;
   float headY_;
   std::vector<SDL_Point> body_;
 
- private:
+private:
   void UpdateHead();
   void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
 
-  bool growing_{false};
+  bool isGrowing_{false};
   int gridWidth_;
   int gridHeight_;
 };
