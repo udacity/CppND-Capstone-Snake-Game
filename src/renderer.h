@@ -15,13 +15,13 @@ class Renderer {
   void UpdateWindowTitle(int score, int fps);
 
  private:
-  SDL_Window *sdl_window;
-  SDL_Renderer *sdl_renderer;
+  SDL_Window *sdlWindow_;
+  SDL_Renderer *sdlRenderer_;
 
-  const std::size_t screen_width;
-  const std::size_t screen_height;
-  const std::size_t grid_width;
-  const std::size_t grid_height;
+  const std::size_t screenWidth_;
+  const std::size_t screenHeight_;
+  const std::size_t gridWidth_;
+  const std::size_t gridHeight_;
 };
 
 #endif
