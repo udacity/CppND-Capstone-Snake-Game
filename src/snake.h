@@ -24,6 +24,11 @@ namespace SnakeGame
           headY_(grid_height / 2) {}
 
     Snake() : Snake(SnakeGame::kGridWidth, SnakeGame::kGridHeight) {}
+    ~Snake() = default;
+    Snake(const Snake &other) = delete;
+    Snake(Snake &&other) = delete;
+    Snake &operator=(const Snake &other) = delete;
+    Snake &operator=(Snake &&other) = delete;
 
     void Update();
 
