@@ -5,7 +5,7 @@
 
 void Controller::ChangeDirection(Snake &snake, Snake::Direction input,
                                  Snake::Direction opposite) const {
-  if (snake.direction != opposite || snake.size == 1) snake.direction = input;
+  if (snake.direction_ != opposite || snake.size_ == 1) snake.direction_ = input;
   return;
 }
 
