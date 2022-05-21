@@ -18,7 +18,7 @@ namespace SnakeGame
     Renderer(Renderer &&other) = delete;
     Renderer &operator=(Renderer &&other) = delete;
 
-    void Render(Snake const snake, SDL_Point const &food);
+    void Render(Snake const &snake, SDL_Point const &food);
     void UpdateWindowTitle(int score, int fps);
 
   private:
