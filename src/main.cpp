@@ -6,9 +6,9 @@
 
 int main()
 {
-  Renderer renderer(SnakeGame::kScreenWidth, SnakeGame::kScreenHeight, SnakeGame::kGridWidth, SnakeGame::kGridHeight);
-  Controller controller;
-  Game game(SnakeGame::kGridWidth, SnakeGame::kGridHeight);
+  SnakeGame::Renderer renderer(SnakeGame::kScreenWidth, SnakeGame::kScreenHeight, SnakeGame::kGridWidth, SnakeGame::kGridHeight);
+  SnakeGame::Controller controller;
+  SnakeGame::Game game(SnakeGame::kGridWidth, SnakeGame::kGridHeight);
   game.Run(controller, renderer, SnakeGame::kMsPerFrame);
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";
