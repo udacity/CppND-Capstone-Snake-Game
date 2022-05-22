@@ -8,11 +8,8 @@ namespace SnakeGame
   Renderer::Renderer(const std::size_t screen_width,
                      const std::size_t screen_height,
                      const std::size_t grid_width, const std::size_t grid_height)
-      : screenWidth_(screen_width),
-        screenHeight_(screen_height),
-        gridWidth_(grid_width),
-        gridHeight_(grid_height)
-  {
+      : width_(screen_width / grid_width),
+        height_(screen_height / grid_width) {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -48,18 +45,13 @@ namespace SnakeGame
 
   void Renderer::Render(Snake const &snake, SDL_Point const &food)
   {
-    SDL_Rect block;
-    block.w = screenWidth_ / gridWidth_;
-    block.h = screenHeight_ / gridHeight_;
-
     // Clear screen
     SDL_SetRenderDrawColor(sdlRenderer_, 0x1E, 0x1E, 0x1E, 0xFF);
     SDL_RenderClear(sdlRenderer_);
 
     // Render food
     SDL_SetRenderDrawColor(sdlRenderer_, 0xFF, 0xCC, 0x00, 0xFF);
-    block.x = food.x * block.w;
-    block.y = food.y * block.h;
+    SDL_Rect block{(food.x * width_),(food.y * height_),width_,height_};
     SDL_RenderFillRect(sdlRenderer_, &block);
 
     // Render snake's body
