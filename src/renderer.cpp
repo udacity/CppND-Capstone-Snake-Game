@@ -1,8 +1,10 @@
 #include "renderer.h"
 #include <iostream>
 #include <string>
+#include <algorithm>
 namespace SnakeGame
 {
+
   Renderer::Renderer(const std::size_t screen_width,
                      const std::size_t screen_height,
                      const std::size_t grid_width, const std::size_t grid_height)
@@ -62,22 +64,21 @@ namespace SnakeGame
 
     // Render snake's body
     SDL_SetRenderDrawColor(sdlRenderer_, 0xFF, 0xFF, 0xFF, 0xFF);
-    for (SDL_Point const &point : snake.body_)
-    {
+
+    auto updateBlock = [&](SDL_Point const &point) {
       block.x = point.x * block.w;
       block.y = point.y * block.h;
       SDL_RenderFillRect(sdlRenderer_, &block);
-    }
+    };
+
+    std::for_each(snake.body_.begin(), snake.body_.end(), updateBlock);
 
     // Render snake's head
     block.x = static_cast<int>(snake.headX_) * block.w;
     block.y = static_cast<int>(snake.headY_) * block.h;
-    if (snake.isAlive_)
-    {
+    if (snake.isAlive_) {
       SDL_SetRenderDrawColor(sdlRenderer_, 0x00, 0x7C, 0xFC, 0x00);
-    }
-    else
-    {
+    } else {
       SDL_SetRenderDrawColor(sdlRenderer_, 0xFF, 0x00, 0x00, 0xFF);
     }
     SDL_RenderFillRect(sdlRenderer_, &block);
