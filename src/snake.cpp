@@ -65,14 +65,23 @@ namespace SnakeGame
       ++size_;
     }
 
-    // Check if the snake has died.
-    for (auto const &item : body_)
-    {
-      if (current_head_cell.x == item.x && current_head_cell.y == item.y)
+    auto checkAlive = [&](SDL_Point const &point) {
+      if (current_head_cell.x == point.x && current_head_cell.y == point.y)
       {
         isAlive_ = false;
       }
-    }
+    };
+
+    // Check if the snake has died.
+    std::for_each(body_.begin(), body_.end(), checkAlive);
+
+    // for (auto const &item : body_)
+    // {
+    //   if (current_head_cell.x == item.x && current_head_cell.y == item.y)
+    //   {
+    //     isAlive_ = false;
+    //   }
+    // }
   }
 
   void Snake::GrowBody() { isGrowing_ = true; }
