@@ -12,6 +12,12 @@ namespace SnakeGame
   {
   public:
     Game(std::size_t grid_width, std::size_t grid_height);
+    ~Game() = default;
+    Game(const Game & other) = delete;
+    Game & operator=(const Game & other) = delete;
+    Game(Game && other) = delete;
+    Game & operator=(Game && other) = delete;
+
     void Run(Controller const &controller, Renderer &renderer,
              std::size_t target_frame_duration);
     int GetScore() const;

@@ -1,6 +1,7 @@
 #include "snake.h"
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 namespace SnakeGame
 {
   void Snake::Update()
@@ -65,14 +66,16 @@ namespace SnakeGame
       ++size_;
     }
 
-    // Check if the snake has died.
-    for (auto const &item : body_)
-    {
-      if (current_head_cell.x == item.x && current_head_cell.y == item.y)
+    auto checkAlive = [&](SDL_Point const &point) {
+      if (current_head_cell.x == point.x && current_head_cell.y == point.y)
       {
         isAlive_ = false;
       }
-    }
+    };
+
+    // Check if the snake has died.
+    std::for_each(body_.begin(), body_.end(), checkAlive);
+
   }
 
   void Snake::GrowBody() { isGrowing_ = true; }
@@ -84,6 +87,8 @@ namespace SnakeGame
     {
       return true;
     }
+
+    
     for (auto const &item : body_)
     {
       if ((x == item.x) &&
