@@ -46,7 +46,7 @@ namespace SnakeGame
 
   private:
     void UpdateHead();
-    void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
+    void UpdateBody(SDL_Point const &current_cell, SDL_Point const &prev_cell);
 
     bool isGrowing_{false};
     int gridWidth_;

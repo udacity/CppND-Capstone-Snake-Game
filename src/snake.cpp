@@ -50,7 +50,7 @@ namespace SnakeGame
     headY_ = fmod(headY_ + gridHeight_, gridHeight_);
   }
 
-  void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell)
+  void Snake::UpdateBody(SDL_Point const &current_head_cell, SDL_Point const &prev_head_cell)
   {
     // Add previous head location to vector
     body_.push_back(prev_head_cell);
@@ -59,9 +59,7 @@ namespace SnakeGame
     {
       // Remove the tail from the vector.
       body_.erase(body_.begin());
-    }
-    else
-    {
+    } else {
       isGrowing_ = false;
       ++size_;
     }
