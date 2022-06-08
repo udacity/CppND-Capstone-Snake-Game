@@ -43,7 +43,7 @@ namespace SnakeGame
     SDL_Quit();
   }
 
-  void Renderer::Render(Snake const &snake, SDL_Point const &food)
+  void Renderer::Render(Snake  &snake, SDL_Point  &food)
   {
     // Clear screen
     SDL_SetRenderDrawColor(sdlRenderer_, 0x1E, 0x1E, 0x1E, 0xFF);
@@ -57,9 +57,14 @@ namespace SnakeGame
     // Render snake's body
     SDL_SetRenderDrawColor(sdlRenderer_, 0xFF, 0xFF, 0xFF, 0xFF);
 
-    auto updateBlock = [&](SDL_Point const &point) {
-      block.x = point.x * block.w;
-      block.y = point.y * block.h;
+    // auto updateBlock = [&](SDL_Point const &point) {
+    //   block.x = point.x * block.w;
+    //   block.y = point.y * block.h;
+    //   SDL_RenderFillRect(sdlRenderer_, &block);
+    // };
+    auto updateBlock = [&](std::unique_ptr<SDL_Point> &point) {
+      block.x = point->x * block.w;
+      block.y = point->y * block.h;
       SDL_RenderFillRect(sdlRenderer_, &block);
     };
 

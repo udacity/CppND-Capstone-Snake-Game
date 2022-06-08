@@ -2,6 +2,7 @@
 #define SNAKE_H
 
 #include <vector>
+#include <memory>
 #include "SDL.h"
 #include "settings.h"
 namespace SnakeGame
@@ -42,11 +43,13 @@ namespace SnakeGame
     bool isAlive_{true};
     float headX_;
     float headY_;
-    std::vector<SDL_Point> body_;
+//    std::vector<SDL_Point> body_;
+
+    std::vector<std::unique_ptr<SDL_Point>>body_;
 
   private:
     void UpdateHead();
-    void UpdateBody(SDL_Point const &current_cell, SDL_Point const &prev_cell);
+    void UpdateBody(std::unique_ptr<SDL_Point> current_cell, std::unique_ptr<SDL_Point> prev_cell);
 
     bool isGrowing_{false};
     int gridWidth_;
