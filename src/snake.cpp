@@ -6,21 +6,19 @@ namespace SnakeGame
 {
   void Snake::Update()
   {
-    SDL_Point prev_cell{
-        static_cast<int>(headX_),
-        static_cast<int>(
-            headY_)}; // We first capture the head's cell before updating.
+    std::unique_ptr<SDL_Point> prev_cell = std::make_unique<SDL_Point>();
+      prev_cell->x = static_cast<int>(headX_);
+      prev_cell->y = static_cast<int>(headY_); // We first capture the head's cell before updating.
     UpdateHead();
-    SDL_Point current_cell{
-        static_cast<int>(headX_),
-        static_cast<int>(headY_)}; // Capture the head's cell after updating.
+    std::unique_ptr<SDL_Point> current_cell = std::make_unique<SDL_Point>();
+      current_cell->x = static_cast<int>(headX_);
+      current_cell->y = static_cast<int>(headY_); // Capture the head's cell after updating.
 
     // Update all of the body vector items if the snake head has moved to a new
     // cell.
-    if ((current_cell.x != prev_cell.x) ||
-        (current_cell.y != prev_cell.y))
-    {
-      UpdateBody(current_cell, prev_cell);
+    if ((current_cell->x != prev_cell->x) ||
+        (current_cell->y != prev_cell->y))    {
+      UpdateBody(std::move(current_cell), std::move(prev_cell));
     }
   }
 
@@ -50,10 +48,10 @@ namespace SnakeGame
     headY_ = fmod(headY_ + gridHeight_, gridHeight_);
   }
 
-  void Snake::UpdateBody(SDL_Point const &current_head_cell, SDL_Point const &prev_head_cell)
+  void Snake::UpdateBody(std::unique_ptr<SDL_Point> current_head_cell, std::unique_ptr<SDL_Point> prev_head_cell)
   {
     // Add previous head location to vector
-    body_.push_back(prev_head_cell);
+    body_.push_back(std::move(prev_head_cell));
 
     if (!isGrowing_)
     {
@@ -64,15 +62,15 @@ namespace SnakeGame
       ++size_;
     }
 
-    auto checkAlive = [&](SDL_Point const &point) {
-      if (current_head_cell.x == point.x && current_head_cell.y == point.y)
+    auto checkIsAlive = [&](std::unique_ptr<SDL_Point> &point) {
+      if ( (current_head_cell->x == point->x) && 
+           (current_head_cell->y == point->y) )
       {
         isAlive_ = false;
       }
     };
-
     // Check if the snake has died.
-    std::for_each(body_.begin(), body_.end(), checkAlive);
+    std::for_each(body_.begin(), body_.end(), checkIsAlive);
 
   }
 
@@ -89,8 +87,8 @@ namespace SnakeGame
     
     for (auto const &item : body_)
     {
-      if ((x == item.x) &&
-          (y == item.y))
+      if ((x == item->x) &&
+          (y == item->y))
       {
         return true;
       }
