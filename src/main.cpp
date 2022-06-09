@@ -3,9 +3,12 @@
 #include "game.h"
 #include "renderer.h"
 #include "settings.h"
+#include "configfileparser.h"
 
 int main()
 {
+  std::cout << "screen from file " << SnakeGame::GetScreenHeight() << "\n";
+
   SnakeGame::Renderer renderer(SnakeGame::kScreenWidth, SnakeGame::kScreenHeight, SnakeGame::kGridWidth, SnakeGame::kGridHeight);
   SnakeGame::Controller controller;
   SnakeGame::Game game(SnakeGame::kGridWidth, SnakeGame::kGridHeight);

@@ -28,30 +28,30 @@ T ReadAndParse(const std::string & file, const std::string & searchkey) {
 std::size_t GridHeight(std::string const & filename) {
     const auto result = ReadAndParse<std::size_t>(filename,kGridHeightName);
 
-    return ((0U != result) ? result : kGridHeight );
+    return ((0U != result) ? result : SnakeGame::kGridHeight );
 }
 
 std::size_t GetScreenWidth(std::string const & filename) {
-    const auto result =  ReadAndParse<std::size_t>(filename,kScreenWidthName);
+    const auto result = ReadAndParse<std::size_t>(filename,kScreenWidthName);
 
-    return ((0U != result) ? result : kScreenWidth );
+    return ((0U != result) ? result : SnakeGame::kScreenWidth );
 
 }
 
 std::size_t GetScreenHeight(std::string const & filename) {
-    const auto result =  ReadAndParse<std::size_t>(filename,kScreenHeightName);
+    const auto result = ReadAndParse<std::size_t>(filename,kScreenHeightName);
 
-    return ((0U != result) ? result : kScreenHeight );
+    return ((0U != result) ? result : SnakeGame::kScreenHeight );
 }
 
 std::size_t GetGridWidth(std::string const & filename) {
-    const auto result =  ReadAndParse<std::size_t>(filename,kGridWidthName);
+    const auto result = ReadAndParse<std::size_t>(filename,kGridWidthName);
 
-    return ((0U != result) ? result : kGridWidth );
+    return ((0U != result) ? result : SnakeGame::kGridWidth );
 }
 
 std::size_t GetNoOfSnakes(std::string const & filename) {
-    const auto result =  ReadAndParse<std::size_t>(filename,kGridHeightName);
+    const auto result = ReadAndParse<std::size_t>(filename,kGridHeightName);
 
     return ((0U != result) ? result : 1U );
 }
