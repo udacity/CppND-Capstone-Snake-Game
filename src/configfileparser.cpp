@@ -25,7 +25,7 @@ T ReadAndParse(const std::string & file, const std::string & searchkey) {
   return static_cast<T>(0); 
 }
 
-std::size_t GridHeight(std::string const & filename) {
+std::size_t GetGridHeight(std::string const & filename) {
     const auto result = ReadAndParse<std::size_t>(filename,kGridHeightName);
 
     return ((0U != result) ? result : SnakeGame::kGridHeight );
@@ -51,7 +51,7 @@ std::size_t GetGridWidth(std::string const & filename) {
 }
 
 std::size_t GetNoOfSnakes(std::string const & filename) {
-    const auto result = ReadAndParse<std::size_t>(filename,kGridHeightName);
+    const auto result = ReadAndParse<std::size_t>(filename,kNoSnakes);
 
     return ((0U != result) ? result : 1U );
 }
