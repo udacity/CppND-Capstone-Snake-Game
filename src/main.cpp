@@ -7,15 +7,9 @@
 
 int main()
 {
-  std::cout << "screen from file " << SnakeGame::GetScreenHeight() << "\n";
-  std::cout << "GetScreenWidth from file " << SnakeGame::GetScreenWidth() << "\n";
-  std::cout << "GetGridHeight from file " << SnakeGame::GetGridHeight() << "\n";
-  std::cout << "GetGridWidth from file " << SnakeGame::GetGridWidth() << "\n";
-  std::cout << "GetNoOfSnakes from file " << SnakeGame::GetNoOfSnakes() << "\n";
-
-  SnakeGame::Renderer renderer(SnakeGame::kScreenWidth, SnakeGame::kScreenHeight, SnakeGame::kGridWidth, SnakeGame::kGridHeight);
+  SnakeGame::Renderer renderer(SnakeGame::GetScreenWidth(), SnakeGame::GetScreenHeight(), SnakeGame::GetGridWidth(), SnakeGame::GetGridHeight());
   SnakeGame::Controller controller;
-  SnakeGame::Game game(SnakeGame::kGridWidth, SnakeGame::kGridHeight);
+  SnakeGame::Game game(SnakeGame::GetGridWidth(), SnakeGame::GetGridHeight());
   game.Run(controller, renderer, SnakeGame::kMsPerFrame);
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";
