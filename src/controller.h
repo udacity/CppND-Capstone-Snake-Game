@@ -9,9 +9,6 @@ namespace SnakeGame
     public:
         bool HandleInput(Snake &snake) const;
 
-    private:
-        void ChangeDirection(Snake &snake, const Snake::Direction input,
-                             const Snake::Direction opposite) const;
     };
 }
 #endif

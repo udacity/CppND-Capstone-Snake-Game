@@ -36,6 +36,7 @@ namespace SnakeGame
     void GrowBody();
     bool SnakeCell(int x, int y);
 
+    void ChangeDirection(const Direction input, const Direction opposite);    
     Direction direction_{Direction::kUp};
 
     float speed_{0.1F};
