@@ -3,12 +3,12 @@
 
 namespace SnakeGame
 {
-    constexpr std::size_t kFramesPerSecond{60};
-    constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};
-    constexpr std::size_t kScreenWidth{640};
-    constexpr std::size_t kScreenHeight{640};
-    constexpr std::size_t kGridWidth{32};
-    constexpr std::size_t kGridHeight{32};
+    constexpr std::size_t kFramesPerSecond{60U};
+    constexpr std::size_t kMsPerFrame{1000U / kFramesPerSecond};
+    constexpr std::size_t kScreenWidth{640U};
+    constexpr std::size_t kScreenHeight{640U};
+    constexpr std::size_t kGridWidth{32U};
+    constexpr std::size_t kGridHeight{32U};
 
 }
 
