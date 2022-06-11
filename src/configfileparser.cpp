@@ -3,6 +3,7 @@
 #include "configfileparser.h"
 #include "settings.h"
 
+#include <iostream>
 namespace SnakeGame {
 
 template<typename T>
@@ -21,6 +22,8 @@ T ReadAndParse(const std::string & file, const std::string & searchkey) {
         }
       }
     }
+  }  else {
+      std::cerr << "could not open file " << file << std::endl;
   }
   return static_cast<T>(0); 
 }
@@ -54,6 +57,16 @@ std::size_t GetNoOfSnakes(std::string const & filename) {
     const auto result = ReadAndParse<std::size_t>(filename,kNoSnakes);
 
     return ((0U != result) ? result : 1U );
+}
+
+std::size_t GetFps(std::string const & filename) {
+    const auto result = ReadAndParse<std::size_t>(filename,kFramesPerSecondName);
+
+    return ((0U != result) ? result : SnakeGame::kFramesPerSecond);
+}
+
+std::size_t GetMsPerFrame(std::string const & filename) {
+    return (1000U / GetFps(filename));
 }
 
 }
