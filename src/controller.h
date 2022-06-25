@@ -4,14 +4,29 @@
 #include "snake.h"
 namespace SnakeGame
 {
-    class Controller
+    class ControllerBase {
+    public:
+        ControllerBase() = default;
+        virtual ~ControllerBase() = default;
+        ControllerBase(const ControllerBase & other) = default;
+        ControllerBase(ControllerBase && other) = default;
+        ControllerBase& operator=(const ControllerBase & other) = default;
+        ControllerBase& operator=(ControllerBase && other) = default;
+
+        virtual bool HandleInput(Snake &snake) const = 0;
+
+    };
+
+    class Controller : public ControllerBase
     {
     public:
-        bool HandleInput(Snake &snake) const;
+        bool HandleInput(Snake &snake) const override;
 
-    private:
-        void ChangeDirection(Snake &snake, const Snake::Direction input,
-                             const Snake::Direction opposite) const;
+    };
+
+    class VirtualController : public ControllerBase {
+    public:
+        bool HandleInput(Snake &snake) const override;
     };
 }
 #endif
