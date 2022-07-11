@@ -44,7 +44,10 @@ namespace SnakeGame
     bool isAlive_{true};
     float headX_;
     float headY_;
+    int gridWidth_;
+    int gridHeight_;    
 //    std::vector<SDL_Point> body_;
+
 
     std::vector<std::unique_ptr<SDL_Point>>body_;
 
@@ -53,8 +56,7 @@ namespace SnakeGame
     void UpdateBody(std::unique_ptr<SDL_Point> current_cell, std::unique_ptr<SDL_Point> prev_cell);
 
     bool isGrowing_{false};
-    int gridWidth_;
-    int gridHeight_;
+
   };
 }
 #endif

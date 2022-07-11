@@ -1,6 +1,8 @@
 #include "game.h"
 //#include <iostream>
 #include "SDL.h"
+
+#include "route_planner.h"
 namespace SnakeGame
 {
   Game::Game(std::size_t grid_width, std::size_t grid_height)
@@ -21,10 +23,16 @@ namespace SnakeGame
     Uint32 frame_duration{0};
     int frame_count{0};
     bool isRunning{true};
-
+    auto planner = RoutePlanner();
+    
     while (isRunning)
     {
       frame_start = SDL_GetTicks();
+
+      if (snake_.isAlive_) {
+        planner.updateFood(food_);
+        planner.run(snake_);
+      }
 
       // Input, Update, Render - the main game loop.
       isRunning = controller.HandleInput(snake_);

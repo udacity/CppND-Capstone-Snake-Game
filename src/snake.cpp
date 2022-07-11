@@ -82,6 +82,22 @@ namespace SnakeGame
 
   }
 
+// bool Snake::verifyNeighbours(Snake const & snake, Point const & neighbour) {
+
+//     bool isValid{true};
+//     auto checkIsValid = [&](std::unique_ptr<SDL_Point> &point) {
+//       if ( (neighbour.x_ == point->x) && 
+//            (neighbour.y_ == point->y) )
+//       {
+//         isValid = false;
+//       }
+//     };
+//     // Check if the snake has died.
+//     std::for_each(snake.body_.begin(), snake.body_.end(), checkIsValid); 
+//     return isValid;
+// }
+
+
   void Snake::GrowBody() { isGrowing_ = true; }
 
   // Inefficient method to check if cell is occupied by snake.
