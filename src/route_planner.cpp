@@ -38,81 +38,42 @@ void RoutePlanner::run(Snake & snake) {
     std::cout << " head.x " << snake.headX_ << " head.y " << snake.headY_ << " gridHeight_ " << snake.gridHeight_ << "  gridWidth_ " << snake.gridWidth_ << "\n";
 
     // calculate manhattandistance from snake head to food
-    Point start{snake.headX_,snake.headY_};
-    auto distance = calculateDistance(start,food_);
+    const Point start{snake.headX_,snake.headY_};
+    const auto distance = calculateDistance(start,food_);
     std::cout << "manhattan distance " << distance << "\n";
 
     // find neighbours and calculate their manhattan distance
-    // => neighbours werden anhand der aktuellen Geschwindigkeit berechnet
-    std::vector<RoutePlanner::Neighbour> neighbours;
+    neighbours_.clear();
 
-    // std::vector<std::unique_ptr<RoutePlanner::Neighbour>> neighbours_new;
-    // neighbours_new.emplace_back(findNeighbour_new(snake,Snake::Direction::kUp));
-    // neighbours_new.emplace_back(findNeighbour_new(snake,Snake::Direction::kDown));
-    // neighbours_new.emplace_back(findNeighbour_new(snake,Snake::Direction::kLeft));
-    // neighbours_new.emplace_back(findNeighbour_new(snake,Snake::Direction::kRight));
+    addNeighbours(snake);
 
- 
-    neighbours.emplace_back(findNeighbour(snake,Snake::Direction::kUp));
-    neighbours.emplace_back(findNeighbour(snake,Snake::Direction::kDown));
-    neighbours.emplace_back(findNeighbour(snake,Snake::Direction::kLeft));
-    neighbours.emplace_back(findNeighbour(snake,Snake::Direction::kRight));
-
-    std::cout << " neighbours dir ";
-    printDir(neighbours[0].direction_);
-    std::cout << " dist " << neighbours[0].distance_ << "\n";
-    std::cout << " neighbours dir "; 
-    printDir(neighbours[1].direction_);
-    std::cout << " dist " << neighbours[1].distance_ << "\n";
-    std::cout << " neighbours dir ";
-    printDir(neighbours[2].direction_);
-    std::cout << " dist " << neighbours[2].distance_ << "\n";
-    std::cout << " neighbours dir ";
-    printDir(neighbours[3].direction_);
-    std::cout << " dist " << neighbours[3].distance_ << "\n";
-
-    // calculate the direction of the neighbour with the shortest manhattan distance 
-    std::sort(neighbours.begin(), neighbours.end(), [](RoutePlanner::Neighbour a, RoutePlanner::Neighbour b) {
-        return a.distance_ < b.distance_;
-    });
+    const auto probableWinner = std::find_if(neighbours_.cbegin(),neighbours_.cend(), 
+                            [&](std::unique_ptr<RoutePlanner::Neighbour> const & neighbour) {return verifyDirection(snake,neighbour->direction_);});
     
-    // what would be the distance of the current direction
-    float probableDistance{0.f};
-    bool currentDirValid{true};
-    for (const auto i : neighbours) {
-        if (i.direction_ == snake.direction_) {
-            probableDistance = i.distance_;
-            currentDirValid = i.valid_;
-            break;
-        }
-    }
-    
-    // go
-    for (const auto tmp : neighbours) {
-        if ((tmp.valid_) && (verifyDirection(snake,tmp.direction_))) {
-            printDir(tmp.direction_);
-            std::cout << "\n";
-            std::cout << "current dir ";
-            printDir(snake.direction_);
-            std::cout << "\n";
-            if ((probableDistance <= (tmp.distance_+ (snake.speed_/(snake.body_.size()!=0?snake.body_.size():1)))) && (tmp.direction_ != snake.direction_) && currentDirValid) {
+    if (neighbours_.end() != probableWinner) {
+
+        const auto probableNeighbourIntheSameDirection = std::find_if(neighbours_.cbegin(),neighbours_.cend(), 
+                                [&](std::unique_ptr<RoutePlanner::Neighbour> const & neighbour) {return neighbour->direction_ == snake.direction_;});
+
+        if (neighbours_.end() != probableNeighbourIntheSameDirection) {
+            // add some salt
+            const auto distance = (*probableWinner)->distance_ + (snake.speed_/(snake.body_.size()!=0?snake.body_.size():1));
+            if ( ((*probableNeighbourIntheSameDirection)->distance_ <= distance) && ((*probableWinner)->direction_ != snake.direction_) ) {
                 std::cout << "we keep our direction.\n";                
                 controlTest(snake, snake.direction_);     
             } else {
-                controlTest(snake, tmp.direction_);     
+                std::cout << " winner direction ";
+                printDir((*probableWinner)->direction_);
+                std::cout << "\n";
+                controlTest(snake, (*probableWinner)->direction_);     
             }
-
-            break;
+        } else {
+            std::cout << "no same direction\n";
+            controlTest(snake, (*probableWinner)->direction_);     
         }
+    } else {
+        std::cout << "no winner\n";
     }
-
-   
-    // if (distance > neighbours_[0].distance_) {
-    //     controlTest(snake, neighbours[0].direction_);        
-    // } else {
-    //     controlTest(snake, snake.direction_);
-    // }
-//    std::cout << " neighbours shortest dir " << int(neighbours[0].direction_) << " dist " << neighbours[0].distance_ << "\n";
 
 }
 
@@ -160,88 +121,62 @@ bool RoutePlanner::verifyDirection(Snake & snake,  Snake::Direction const & inpu
     return true;    
 }
 
-std::unique_ptr<RoutePlanner::Neighbour> RoutePlanner::findNeighbour_new(Snake const & snake, Snake::Direction const direction) {
+void RoutePlanner::addNeighbours(Snake const & snake) {
+
+    // lets find neighbours in all direction    
+    findNeighbour(snake,Snake::Direction::kUp);
+    findNeighbour(snake,Snake::Direction::kDown);
+    findNeighbour(snake,Snake::Direction::kLeft);
+    findNeighbour(snake,Snake::Direction::kRight);
+
+    // what happens if we don't find any..
+    // nothing we will continue in the same direction - we might die ...
+
+    // calculate the direction of the neighbour with the shortest manhattan distance 
+    std::sort(neighbours_.begin(), neighbours_.end(), [](std::unique_ptr<RoutePlanner::Neighbour> & a, std::unique_ptr<RoutePlanner::Neighbour> &b) {
+        return a->distance_ < b->distance_;
+    });
+
+}
+//std::unique_ptr<RoutePlanner::Neighbour> RoutePlanner::findNeighbour(Snake const & snake, Snake::Direction const direction) {
+void RoutePlanner::findNeighbour(Snake const & snake, Snake::Direction const direction) {
     switch (direction) {
         case Snake::Direction::kLeft:
         {
-            auto nbr = Point{(snake.headX_ - snake.speed_) <= 0.0f ? 32.0F: (snake.headX_ - snake.speed_) ,snake.headY_};
-            return std::make_unique<RoutePlanner::Neighbour>(calculateDistance(nbr,food_),Snake::Direction::kLeft);
+            auto neighbour = Point{(snake.headX_ - snake.speed_) <= 0.0f ? 32.0F: (snake.headX_ - snake.speed_) ,snake.headY_};
+            if (verifyNeighbours(snake,neighbour)) {
+                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_),Snake::Direction::kLeft));
+            }
         }
         break;
         case Snake::Direction::kRight:
         {
-            auto nbr =  Point{(snake.headX_ + snake.speed_) >= 32.0f ? 0.0F: (snake.headX_ + snake.speed_) ,snake.headY_};
-            return std::make_unique<RoutePlanner::Neighbour>(calculateDistance(nbr,food_),Snake::Direction::kRight);
+            auto neighbour =  Point{(snake.headX_ + snake.speed_) >= 32.0f ? 0.0F: (snake.headX_ + snake.speed_) ,snake.headY_};
+            if (verifyNeighbours(snake,neighbour)) {
+                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_),Snake::Direction::kRight));
+            }
         }
         break;
         case Snake::Direction::kUp:
         {
-            auto nbr =  Point{snake.headX_,(snake.headY_ - snake.speed_) <= 0.0f ? 32.0F: (snake.headY_ - snake.speed_)};
-            return std::make_unique<RoutePlanner::Neighbour>(calculateDistance(nbr,food_),Snake::Direction::kUp);
+            auto neighbour =  Point{snake.headX_,(snake.headY_ - snake.speed_) <= 0.0f ? 32.0F: (snake.headY_ - snake.speed_)};
+            if (verifyNeighbours(snake,neighbour)) {
+                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_),Snake::Direction::kUp));
+            }
         }
         break;
         case Snake::Direction::kDown:
         {
-            auto nbr =  Point{snake.headX_,(snake.headY_ + snake.speed_) >= 32.0f ? 0.0F: (snake.headY_ + snake.speed_)};
-            return std::make_unique<RoutePlanner::Neighbour>(calculateDistance(nbr,food_),Snake::Direction::kDown);
+            auto neighbour =  Point{snake.headX_,(snake.headY_ + snake.speed_) >= 32.0f ? 0.0F: (snake.headY_ + snake.speed_)};
+            if (verifyNeighbours(snake,neighbour)) {
+                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_),Snake::Direction::kDown));
+            }
         }
         break;
     }
-
-    auto start = Point{snake.headX_,snake.headY_};
-    
-    return std::make_unique<RoutePlanner::Neighbour>(calculateDistance(start,food_),Snake::Direction::kUp);
 }
 
-RoutePlanner::Neighbour RoutePlanner::findNeighbour(Snake const & snake, Snake::Direction const direction) {
-    switch (direction) {
-        case Snake::Direction::kLeft:
-        {
-            auto nbr = Point{(snake.headX_ - snake.speed_) <= 0.0f ? 32.0F: (snake.headX_ - snake.speed_) ,snake.headY_};
-            auto valid = verifyNeighbours(snake,nbr);
-            if (!verifyNeighbours(snake,nbr)) {
-                std::cout << "LEFT neighbour will touch body\n";
-            }
-            return Neighbour{calculateDistance(nbr,food_),Snake::Direction::kLeft,valid};
-        }
-        break;
-        case Snake::Direction::kRight:
-        {
-            auto nbr =  Point{(snake.headX_ + snake.speed_) >= 32.0f ? 0.0F: (snake.headX_ + snake.speed_) ,snake.headY_};
-            auto valid = verifyNeighbours(snake,nbr);
-            if (! verifyNeighbours(snake,nbr)) {
-                std::cout << "RIGHT neighbour will touch body\n";
-            }
-            return Neighbour{calculateDistance(nbr,food_),Snake::Direction::kRight,valid};
-        }
-        break;
-        case Snake::Direction::kUp:
-        {
-            auto nbr =  Point{snake.headX_,(snake.headY_ - snake.speed_) <= 0.0f ? 32.0F: (snake.headY_ - snake.speed_)};
-            auto valid = verifyNeighbours(snake,nbr);
-            if (!verifyNeighbours(snake,nbr)) {
-                std::cout << "UP neighbour will touch body\n";
-            }
-            return Neighbour{calculateDistance(nbr,food_),Snake::Direction::kUp,valid};
-        }
-        break;
-        case Snake::Direction::kDown:
-        {
-            auto nbr =  Point{snake.headX_,(snake.headY_ + snake.speed_) >= 32.0f ? 0.0F: (snake.headY_ + snake.speed_)};
-            auto valid = verifyNeighbours(snake,nbr);
-            if (!verifyNeighbours(snake,nbr)) {
-                std::cout << "DOWN neighbour will touch body\n";
-            }
-            return Neighbour{calculateDistance(nbr,food_),Snake::Direction::kDown,valid};
-        }
-        break;
-    }
-
-    auto start = Point{snake.headX_,snake.headY_};
-    
-    return Neighbour{calculateDistance(start,food_),Snake::Direction::kUp};
-}
-
+// verification if neighbour would touch body
 bool RoutePlanner::verifyNeighbours(Snake const & snake, Point const & neighbour) {
 
     bool isValid{true};

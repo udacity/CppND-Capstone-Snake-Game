@@ -22,11 +22,9 @@ public:
     };
 
     struct Neighbour {
-        Neighbour(float const dist, Snake::Direction const direction) : distance_(dist),direction_(direction),valid_(true) {}
-        Neighbour(float const dist, Snake::Direction const direction,bool valid) : distance_(dist),direction_(direction),valid_(valid) {}
+        Neighbour(float const dist, Snake::Direction const direction) : distance_(dist),direction_(direction) {}
         float distance_;
         Snake::Direction direction_;
-        bool valid_;
     };
 
     void run(Snake & snake);
@@ -35,14 +33,15 @@ public:
 
 private:
     float calculateDistance(Point const & start, Point const & destination);
-    Neighbour findNeighbour(Snake const & snake, Snake::Direction const direction);
-    std::unique_ptr<RoutePlanner::Neighbour> findNeighbour_new(Snake const & snake, Snake::Direction const direction);
+    void findNeighbour(Snake const & snake, Snake::Direction const direction);
     bool verifyDirection(Snake & snake,  Snake::Direction const & input);
     void controlTest(Snake & snake, Snake::Direction const & input);
     bool verifyNeighbours(Snake const & snake, Point const & neighbour);
+    void addNeighbours(Snake const & snake);
+    
     Point food_{0.f,0.f};
 
-    std::vector<Neighbour> neighbours_;
+    std::vector<std::unique_ptr<RoutePlanner::Neighbour>> neighbours_{};
 
 };
 
