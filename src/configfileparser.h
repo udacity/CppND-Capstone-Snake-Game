@@ -13,6 +13,7 @@ const std::string kGridWidthName{"GridWidth"};
 const std::string kGridHeightName{"GridHeight"};
 const std::string kNoSnakes{"NumOfSnakes"};
 const std::string kFramesPerSecondName("FramesPerSecond");
+const std::string kDemoMode("DemoMode");
 
 std::size_t GetGridHeight(std::string const & filename = kDefaultFileName);
 std::size_t GetScreenWidth(std::string const & filename = kDefaultFileName);
@@ -21,6 +22,7 @@ std::size_t GetGridWidth(std::string const & filename = kDefaultFileName);
 std::size_t GetNoOfSnakes(std::string const & filename = kDefaultFileName);
 std::size_t GetFps(std::string const & filename = kDefaultFileName);
 std::size_t GetMsPerFrame(std::string const & filename = kDefaultFileName);
+bool GetDemoMode(std::string const & filename = kDemoMode);
 
 }
 
