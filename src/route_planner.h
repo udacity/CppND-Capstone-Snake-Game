@@ -28,7 +28,6 @@ public:
     };
 
     void run(Snake & snake);
-
     void updateFood(SDL_Point const & food);
 
 private:

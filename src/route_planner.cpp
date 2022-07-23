@@ -15,32 +15,26 @@ void printDir(Snake::Direction const & input) {
     switch (input) 
     {
         case Snake::Direction::kUp:
-            std::cout << "  oben";
+            std::cout << "  up";
         break;
         case Snake::Direction::kDown:
-            std::cout << "  unten";
+            std::cout << "  down";
         break;
         case Snake::Direction::kLeft:
-            std::cout << "  links";
+            std::cout << "  left";
         break;
         case Snake::Direction::kRight:
-            std::cout << "  rechts";
+            std::cout << "  right";
         break;
     };
 
 }
 
 void RoutePlanner::run(Snake & snake) {
-    // get food coordinates
-    std::cout << " food_.x " << food_.x_ << " food_.y " << food_.y_ << "\n";
-
-    // get snake head coordinates
-    std::cout << " head.x " << snake.headX_ << " head.y " << snake.headY_ << " gridHeight_ " << snake.gridHeight_ << "  gridWidth_ " << snake.gridWidth_ << "\n";
 
     // calculate manhattandistance from snake head to food
     const Point start{snake.headX_,snake.headY_};
     const auto distance = calculateDistance(start,food_);
-    std::cout << "manhattan distance " << distance << "\n";
 
     // find neighbours and calculate their manhattan distance
     neighbours_.clear();
@@ -59,20 +53,21 @@ void RoutePlanner::run(Snake & snake) {
             // add some salt
             const auto distance = (*probableWinner)->distance_ + (snake.speed_/(snake.body_.size()!=0?snake.body_.size():1));
             if ( ((*probableNeighbourIntheSameDirection)->distance_ <= distance) && ((*probableWinner)->direction_ != snake.direction_) ) {
-                std::cout << "we keep our direction.\n";                
+                // std::cout << "we keep our direction.\n";                
                 controlTest(snake, snake.direction_);     
             } else {
-                std::cout << " winner direction ";
-                printDir((*probableWinner)->direction_);
-                std::cout << "\n";
+                // 
+                // std::cout << " winner direction ";
+                // printDir((*probableWinner)->direction_);
+                // std::cout << "\n";
                 controlTest(snake, (*probableWinner)->direction_);     
             }
         } else {
-            std::cout << "no same direction\n";
+            // std::cout << "no same direction\n";
             controlTest(snake, (*probableWinner)->direction_);     
         }
     } else {
-        std::cout << "no winner\n";
+        // std::cout << "no winner\n";
     }
 
 }
@@ -98,6 +93,7 @@ void RoutePlanner::controlTest(Snake & snake, Snake::Direction const & input) {
         break;
     };
 }
+
 bool RoutePlanner::verifyDirection(Snake & snake,  Snake::Direction const & input) {
     switch (input) 
     {
