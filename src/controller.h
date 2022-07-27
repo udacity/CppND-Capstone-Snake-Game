@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include "snake.h"
+//#include "route_planner.h"
 namespace SnakeGame
 {
     class ControllerBase {
@@ -27,6 +28,9 @@ namespace SnakeGame
     class VirtualController : public ControllerBase {
     public:
         bool HandleInput(Snake &snake) const override;
+    private:
+        // RoutePlanner routePlanner_{};        
+    
     };
 }
 #endif

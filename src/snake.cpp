@@ -23,6 +23,7 @@ namespace SnakeGame
   }
 
   void Snake::ChangeDirection(const Snake::Direction input, const Snake::Direction opposite) {
+
     if ((opposite != direction_) || 
         (1U == size_))
     {
