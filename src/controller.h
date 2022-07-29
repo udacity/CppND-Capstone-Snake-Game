@@ -2,7 +2,9 @@
 #define CONTROLLER_H
 
 #include "snake.h"
-//#include "route_planner.h"
+#include "route_planner.h"
+
+#include "SDL.h"
 namespace SnakeGame
 {
     class ControllerBase {
@@ -14,22 +16,22 @@ namespace SnakeGame
         ControllerBase& operator=(const ControllerBase & other) = default;
         ControllerBase& operator=(ControllerBase && other) = default;
 
-        virtual bool HandleInput(Snake &snake) const = 0;
+        virtual bool HandleInput(Snake &snake, SDL_Point const & food)  = 0;
 
     };
 
     class Controller : public ControllerBase
     {
     public:
-        bool HandleInput(Snake &snake) const override;
+        bool HandleInput(Snake &snake, SDL_Point const & food)  override;
 
     };
 
     class VirtualController : public ControllerBase {
     public:
-        bool HandleInput(Snake &snake) const override;
+        bool HandleInput(Snake &snake, SDL_Point const & food)  override;
     private:
-        // RoutePlanner routePlanner_{};        
+        RoutePlanner routePlanner_{};        
     
     };
 }

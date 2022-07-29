@@ -30,8 +30,9 @@ void printDir(Snake::Direction const & input) {
 
 }
 
-void RoutePlanner::run(Snake & snake) {
+void RoutePlanner::run(Snake & snake,SDL_Point const & food) {
 
+    updateFood(food);
     // calculate manhattandistance from snake head to food
     const Point start{snake.headX_,snake.headY_};
     const auto distance = calculateDistance(start,food_);

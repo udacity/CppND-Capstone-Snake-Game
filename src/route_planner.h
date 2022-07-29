@@ -27,7 +27,7 @@ public:
         Snake::Direction direction_;
     };
 
-    void run(Snake & snake);
+    void run(Snake & snake, SDL_Point const & food);
     void updateFood(SDL_Point const & food);
 
 private:

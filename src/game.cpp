@@ -24,33 +24,23 @@ namespace SnakeGame
     Uint32 frame_duration{0};
     int frame_count{0};
     bool isRunning{true};
-    auto planner = RoutePlanner();
+//    auto planner = RoutePlanner();
     
     while (isRunning)
     {
       frame_start = SDL_GetTicks();
 
       if (demoMode_) {
-//        std::cout << "demo \n";
-
+        VirtualController vitcontroller{};
         if (snake_.isAlive_) {
-          // std::cout << "isalive " << &snake_ << "\n";
-          planner.updateFood(food_);
-          planner.run(snake_);
-        } 
-
-        SDL_Event e;
-        while (SDL_PollEvent(&e))
-        {
-          if (e.type == SDL_QUIT) {
-            isRunning =  false;
-          }        
+          isRunning = vitcontroller.HandleInput(snake_,food_);
         }
       } else {
-        // Input, Update, Render - the main game loop.
-        isRunning = controller.HandleInput(snake_);
+        Controller testcontroller{};
+        isRunning = testcontroller.HandleInput(snake_,food_);
       }
 
+      // Input, Update, Render - the main game loop.
       Update();
       renderer.Render(snake_, food_);
 
