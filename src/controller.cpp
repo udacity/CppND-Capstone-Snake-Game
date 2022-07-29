@@ -5,7 +5,7 @@
 
 namespace SnakeGame
 {
-  bool Controller::HandleInput(Snake &snake) const
+  bool Controller::HandleInput(Snake &snake, SDL_Point const & food) 
   {
     SDL_Event e;
     while (SDL_PollEvent(&e))
@@ -40,6 +40,22 @@ namespace SnakeGame
         }
       }
     }
+    return true;
+  }
+
+  bool VirtualController::HandleInput(Snake &snake, SDL_Point const & food)
+  {
+    SDL_Event e;
+    while (SDL_PollEvent(&e))
+    {
+      if (e.type == SDL_QUIT)
+      {
+        return false;
+      }
+    }
+
+    routePlanner_.run(snake,food);
+
     return true;
   }
 

@@ -23,6 +23,7 @@ namespace SnakeGame
   }
 
   void Snake::ChangeDirection(const Snake::Direction input, const Snake::Direction opposite) {
+
     if ((opposite != direction_) || 
         (1U == size_))
     {
@@ -81,6 +82,22 @@ namespace SnakeGame
     std::for_each(body_.begin(), body_.end(), checkIsAlive);
 
   }
+
+// bool Snake::verifyNeighbours(Snake const & snake, Point const & neighbour) {
+
+//     bool isValid{true};
+//     auto checkIsValid = [&](std::unique_ptr<SDL_Point> &point) {
+//       if ( (neighbour.x_ == point->x) && 
+//            (neighbour.y_ == point->y) )
+//       {
+//         isValid = false;
+//       }
+//     };
+//     // Check if the snake has died.
+//     std::for_each(snake.body_.begin(), snake.body_.end(), checkIsValid); 
+//     return isValid;
+// }
+
 
   void Snake::GrowBody() { isGrowing_ = true; }
 

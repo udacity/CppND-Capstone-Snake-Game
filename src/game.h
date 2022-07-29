@@ -11,7 +11,7 @@ namespace SnakeGame
   class Game
   {
   public:
-    Game(std::size_t grid_width, std::size_t grid_height);
+    Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode);
     void Run(Controller const &controller, Renderer &renderer,
              std::size_t target_frame_duration);
     int GetScore() const;
@@ -28,6 +28,7 @@ namespace SnakeGame
     std::uniform_int_distribution<int> randomHeight_;
 
     int score_{0};
+    bool demoMode_{false};
 
     void PlaceFood();
     void Update();

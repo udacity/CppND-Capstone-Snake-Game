@@ -69,4 +69,10 @@ std::size_t GetMsPerFrame(std::string const & filename) {
     return (1000U / GetFps(filename));
 }
 
+bool GetDemoMode(std::string const & filename) {
+    const auto result = ReadAndParse<std::size_t>(filename,kDemoMode);
+
+    return ((0U != result) ? true : false );
+}
+
 }

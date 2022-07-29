@@ -1,13 +1,16 @@
 #include "game.h"
-//#include <iostream>
+#include <iostream>
 #include "SDL.h"
+
+#include "route_planner.h"
 namespace SnakeGame
 {
-  Game::Game(std::size_t grid_width, std::size_t grid_height)
+  Game::Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode)
       : snake_(grid_width, grid_height),
         randEngine_(randDev_()),
         randomWidth_(0, static_cast<int>(grid_width - 1)),
-        randomHeight_(0, static_cast<int>(grid_height - 1))
+        randomHeight_(0, static_cast<int>(grid_height - 1)),
+        demoMode_(demo_mode)
   {
     PlaceFood();
   }
@@ -21,13 +24,23 @@ namespace SnakeGame
     Uint32 frame_duration{0};
     int frame_count{0};
     bool isRunning{true};
-
+//    auto planner = RoutePlanner();
+    
     while (isRunning)
     {
       frame_start = SDL_GetTicks();
 
+      if (demoMode_) {
+        VirtualController vitcontroller{};
+        if (snake_.isAlive_) {
+          isRunning = vitcontroller.HandleInput(snake_,food_);
+        }
+      } else {
+        Controller testcontroller{};
+        isRunning = testcontroller.HandleInput(snake_,food_);
+      }
+
       // Input, Update, Render - the main game loop.
-      isRunning = controller.HandleInput(snake_);
       Update();
       renderer.Render(snake_, food_);
 
