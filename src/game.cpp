@@ -24,7 +24,6 @@ namespace SnakeGame
     Uint32 frame_duration{0};
     int frame_count{0};
     bool isRunning{true};
-//    auto planner = RoutePlanner();
     
     while (isRunning)
     {

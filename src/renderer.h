@@ -21,6 +21,9 @@ namespace SnakeGame
     void Render(Snake  &snake, SDL_Point  &food);
     void UpdateWindowTitle(int score, int fps);
 
+    void RenderFood(SDL_Point const &food) const;
+    void RenderSnake(Snake & snake) const ;
+
   private:
     SDL_Window *sdlWindow_{nullptr};
     SDL_Renderer *sdlRenderer_{nullptr};
