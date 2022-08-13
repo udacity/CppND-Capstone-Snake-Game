@@ -6,6 +6,7 @@
 #include "controller.h"
 #include "renderer.h"
 #include "snake.h"
+#include "player.h"
 namespace SnakeGame
 {
   class Game
@@ -18,7 +19,8 @@ namespace SnakeGame
     int GetSize() const;
 
   private:
-    Snake snake_;
+//    Snake snake_;
+    Player player_;
     //  Snake snake_computer;
     SDL_Point food_;
 

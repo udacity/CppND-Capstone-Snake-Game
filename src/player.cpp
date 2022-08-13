@@ -1,5 +1,4 @@
 #include "player.h"
-
 namespace SnakeGame {
 
 Player::Player(int grid_width, int grid_height, bool isPlayerVirtual) : 
@@ -12,12 +11,9 @@ Player::Player(int grid_width, int grid_height, bool isPlayerVirtual) :
     }
 }
 
-void Player::run(void) {
+bool Player::run(SDL_Point const & food) {
 
-    // if (snake_->isAlive_) {
-    //     controller_->HandleInput(snake_,food_);
-    // }
-
+    return controller_->HandleInput(snake_.get(),food);
 
 }
 }

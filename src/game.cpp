@@ -1,12 +1,12 @@
 #include "game.h"
-#include <iostream>
 #include "SDL.h"
 
 #include "route_planner.h"
 namespace SnakeGame
 {
   Game::Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode)
-      : snake_(grid_width, grid_height),
+      : //snake_(grid_width, grid_height),
+        player_(grid_width, grid_height, demo_mode),
         randEngine_(randDev_()),
         randomWidth_(0, static_cast<int>(grid_width - 1)),
         randomHeight_(0, static_cast<int>(grid_height - 1)),
@@ -29,19 +29,21 @@ namespace SnakeGame
     {
       frame_start = SDL_GetTicks();
 
-      if (demoMode_) {
-        VirtualController vitcontroller{};
-        if (snake_.isAlive_) {
-          isRunning = vitcontroller.HandleInput(snake_,food_);
-        }
-      } else {
-        Controller testcontroller{};
-        isRunning = testcontroller.HandleInput(snake_,food_);
-      }
+      isRunning = player_.run(food_);
+
+      // if (demoMode_) {
+      //   VirtualController vitcontroller{};
+      //   if (snake_.isAlive_) {
+      //     isRunning = vitcontroller.HandleInput(snake_,food_);
+      //   }
+      // } else {
+      //   Controller testcontroller{};
+      //   isRunning = testcontroller.HandleInput(snake_,food_);
+      // }
 
       // Input, Update, Render - the main game loop.
       Update();
-      renderer.Render(snake_, food_);
+      renderer.Render(player_.GetSnake(), food_);
 
       frame_end = SDL_GetTicks();
 
@@ -77,7 +79,7 @@ namespace SnakeGame
       const auto y = randomHeight_(randEngine_);
       // Check that the location is not occupied by a snake item before placing
       // food_.
-      if (!snake_.SnakeCell(x, y))
+      if (!player_.GetSnake()->SnakeCell(x, y))
       {
         food_.x = x;
         food_.y = y;
@@ -88,15 +90,16 @@ namespace SnakeGame
 
   void Game::Update()
   {
-    if (!snake_.isAlive_)
+    
+    if (!player_.GetSnake()->isAlive_)
     {
       return;
     }
 
-    snake_.Update();
+    player_.GetSnake()->Update();
 
-    int new_x = static_cast<int>(snake_.headX_);
-    int new_y = static_cast<int>(snake_.headY_);
+    int new_x = static_cast<int>(player_.GetSnake()->headX_);
+    int new_y = static_cast<int>(player_.GetSnake()->headY_);
 
     // Check if there's food_ over here
     if (food_.x == new_x && food_.y == new_y)
@@ -104,11 +107,11 @@ namespace SnakeGame
       ++score_;
       PlaceFood();
       // Grow snake_ and increase speed.
-      snake_.GrowBody();
-      snake_.speed_ += 0.02F;
+      player_.GetSnake()->GrowBody();
+      player_.GetSnake()->speed_ += 0.02F;
     }
   }
 
   int Game::GetScore() const { return score_; }
-  int Game::GetSize() const { return snake_.size_; }
+  int Game::GetSize() const { return player_.GetSnake()->size_; }
 }

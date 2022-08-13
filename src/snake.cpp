@@ -1,7 +1,6 @@
 #include "snake.h"
 #include <random>
 #include <cmath>
-#include <iostream>
 #include <algorithm>
 namespace SnakeGame
 {
@@ -21,6 +20,7 @@ Snake::Snake(int grid_width, int grid_height)
 
   void Snake::Update()
   {
+
     std::unique_ptr<SDL_Point> prev_cell = std::make_unique<SDL_Point>();
       prev_cell->x = static_cast<int>(headX_);
       prev_cell->y = static_cast<int>(headY_); // We first capture the head's cell before updating.

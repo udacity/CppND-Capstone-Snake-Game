@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "controller.h"
-
+#include "SDL.h"
 #include "snake.h"
 
 namespace SnakeGame {
@@ -19,7 +19,9 @@ public:
     Player & operator=(Player const & other) = delete;
     Player & operator=(Player && other) = delete;
 
-    void run();
+    bool run(SDL_Point const & food);
+
+    Snake * GetSnake() const {return snake_.get();}
 
 private:
 
