@@ -19,11 +19,12 @@ namespace SnakeGame
     Renderer &operator=(Renderer &&other) = delete;
 
     void Render(Snake  *snake, SDL_Point  &food);
-    void UpdateWindowTitle(int score, int fps);
+//    void UpdateWindowTitle(int score, int fps);
+    void UpdateWindowTitle(std::string const & title);
 
     void RenderFood(SDL_Point const &food) const;
-    void RenderSnake(Snake & snake) const ;
-
+    void RenderEnd();
+    void RenderStart();
     void RenderSnake(Snake * snake) const;   
 
   private:

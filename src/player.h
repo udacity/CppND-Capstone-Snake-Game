@@ -19,14 +19,25 @@ public:
     Player & operator=(Player const & other) = delete;
     Player & operator=(Player && other) = delete;
 
-    bool run(SDL_Point const & food);
+    void run(SDL_Point const & food);
+
+    bool CheckSnakeEatsFood(SDL_Point const & food);
+    bool IsSnakeRunning() const {return running_;};
 
     Snake * GetSnake() const {return snake_.get();}
 
-private:
+    int GetScore() {return score_;};
 
-std::unique_ptr<ControllerBase> controller_;  // every player owns a controller
-std::unique_ptr<Snake> snake_;  // every player controls its own snake
+private:
+    std::unique_ptr<ControllerBase> controller_;  // every player owns a controller
+    std::unique_ptr<Snake> snake_;  // every player controls its own snake
+    bool running_{true};
+
+    int score_{0};
+
+    void Grow();
+
+
 
 };
 
