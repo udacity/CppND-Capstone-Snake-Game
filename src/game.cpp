@@ -3,6 +3,7 @@
 #include <string>
 #include "route_planner.h"
 #include <iostream>
+#include <algorithm>
 namespace SnakeGame
 {
   Game::Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode)
@@ -141,6 +142,14 @@ namespace SnakeGame
 
   }
 
-  int Game::GetScore() const { return score_; }
+  int Game::GetScore() const { 
+
+    int winnerScore{0};
+    for (auto &player : players_) {
+      winnerScore = (winnerScore > player->GetScore()) ? winnerScore : player->GetScore();
+    }
+
+    return winnerScore; 
+  }
   int Game::GetSize() const { return players_[0]->GetSnake()->size_; }
 }

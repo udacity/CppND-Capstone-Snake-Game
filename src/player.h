@@ -15,9 +15,9 @@ public:
     Player() : Player(static_cast<int>(SnakeGame::kGridWidth), static_cast<int>(SnakeGame::kGridHeight), true) {};
     ~Player() = default;
     Player(Player const & other) = delete;
-    Player(Player && other) = delete;
+    Player(Player && other);
     Player & operator=(Player const & other) = delete;
-    Player & operator=(Player && other) = delete;
+    Player & operator=(Player && other);
 
     void run(SDL_Point const & food);
 
@@ -26,7 +26,7 @@ public:
 
     Snake * GetSnake() const {return snake_.get();}
 
-    int GetScore() {return score_;};
+    int GetScore() const {return score_;} ;
 
 private:
     std::unique_ptr<ControllerBase> controller_;  // every player owns a controller
