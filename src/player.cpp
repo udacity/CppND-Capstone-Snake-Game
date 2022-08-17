@@ -13,33 +13,6 @@ Player::Player(int grid_width, int grid_height, bool isPlayerVirtual) :
     }
 }
 
-Player::Player(Player && other) {
-
-    this->controller_ = std::move(other.controller_);
-    this->snake_ = std::move(other.snake_);
-    this->running_ = other.running_;
-    this->score_ = other.score_;
-    other.controller_ = nullptr;
-    other.snake_ = nullptr;
-    other.running_ = false;
-    other.score_ = 0;
-}
-
-
-Player& Player::operator=(Player && other) {
-    
-    if (this == &other) {
-  	    return *this;
-    }
-
-    this->controller_ = std::move(other.controller_);
-    this->snake_ = std::move(other.snake_);
-    this->running_ = other.running_;
-    this->score_ = other.score_;
-    return *this;
-}
-
-
 void Player::run(SDL_Point const & food) {
     running_ = controller_->HandleInput(snake_.get(),food);
 }

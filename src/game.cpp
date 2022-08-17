@@ -151,5 +151,12 @@ namespace SnakeGame
 
     return winnerScore; 
   }
-  int Game::GetSize() const { return players_[0]->GetSnake()->size_; }
+  int Game::GetSize() const {
+    int winnerSize{0};
+    for (auto &player : players_) {
+      winnerSize = (winnerSize > player->GetSnake()->size_) ? winnerSize : player->GetSnake()->size_;
+    }
+
+    return winnerSize; 
+  }
 }
