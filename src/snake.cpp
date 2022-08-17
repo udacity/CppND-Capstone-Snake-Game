@@ -1,11 +1,26 @@
 #include "snake.h"
+#include <random>
 #include <cmath>
-#include <iostream>
 #include <algorithm>
 namespace SnakeGame
 {
+ 
+Snake::Snake(int grid_width, int grid_height)
+        : gridWidth_(grid_width),
+          gridHeight_(grid_height) {
+
+  std::random_device randDev;
+  std::mt19937 randEngine{randDev()};
+  std::uniform_int_distribution<int> randomWidth{0, static_cast<int>(grid_width - 1)};
+  std::uniform_int_distribution<int> randomHeight{0, static_cast<int>(grid_height - 1)};
+
+  headX_ = static_cast<float>(randomWidth(randEngine));
+  headY_ = static_cast<float>(randomHeight(randEngine));
+}
+
   void Snake::Update()
   {
+
     std::unique_ptr<SDL_Point> prev_cell = std::make_unique<SDL_Point>();
       prev_cell->x = static_cast<int>(headX_);
       prev_cell->y = static_cast<int>(headY_); // We first capture the head's cell before updating.

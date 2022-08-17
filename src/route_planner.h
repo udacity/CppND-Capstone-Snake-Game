@@ -27,16 +27,16 @@ public:
         Snake::Direction direction_;
     };
 
-    void run(Snake & snake, SDL_Point const & food);
+    void run(Snake * snake, SDL_Point const & food);
     void updateFood(SDL_Point const & food);
 
 private:
     float calculateDistance(Point const & start, Point const & destination);
-    void findNeighbour(Snake const & snake, Snake::Direction const direction);
-    bool verifyDirection(Snake & snake,  Snake::Direction const & input);
-    void controlTest(Snake & snake, Snake::Direction const & input);
-    bool verifyNeighbours(Snake const & snake, Point const & neighbour);
-    void addNeighbours(Snake const & snake);
+    void findNeighbour(Snake const * snake, Snake::Direction const direction);
+    bool verifyDirection(Snake * snake,  Snake::Direction const & input);
+    void controlTest(Snake * snake, Snake::Direction const & input);
+    bool verifyNeighbours(Snake const * snake, Point const & neighbour);
+    void addNeighbours(Snake const * snake);
     
     Point food_{0.f,0.f};
 

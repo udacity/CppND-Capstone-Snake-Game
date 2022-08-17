@@ -1,17 +1,18 @@
 #include "game.h"
-#include <iostream>
 #include "SDL.h"
-
+#include <string>
 #include "route_planner.h"
+#include <iostream>
+#include <algorithm>
 namespace SnakeGame
 {
   Game::Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode)
-      : snake_(grid_width, grid_height),
-        randEngine_(randDev_()),
+      : randEngine_(randDev_()),
         randomWidth_(0, static_cast<int>(grid_width - 1)),
-        randomHeight_(0, static_cast<int>(grid_height - 1)),
-        demoMode_(demo_mode)
+        randomHeight_(0, static_cast<int>(grid_height - 1))
   {
+    players_.emplace_back(std::make_unique<Player>(grid_width,grid_height,demo_mode));
+
     PlaceFood();
   }
 
@@ -24,25 +25,39 @@ namespace SnakeGame
     Uint32 frame_duration{0};
     int frame_count{0};
     bool isRunning{true};
-//    auto planner = RoutePlanner();
     
     while (isRunning)
     {
       frame_start = SDL_GetTicks();
 
-      if (demoMode_) {
-        VirtualController vitcontroller{};
-        if (snake_.isAlive_) {
-          isRunning = vitcontroller.HandleInput(snake_,food_);
-        }
-      } else {
-        Controller testcontroller{};
-        isRunning = testcontroller.HandleInput(snake_,food_);
+      auto runPlayer = [&](std::unique_ptr<Player>const &player) {
+        player->run(food_);
+      };
+
+      std::for_each(players_.cbegin(),players_.cend(),runPlayer);
+
+      auto checkPlayerTerminated = [&](std::unique_ptr<Player> const &player) {
+        return (false == player->IsSnakeRunning());
+      };
+
+      if (std::any_of(players_.cbegin(),players_.cend(),checkPlayerTerminated)) {
+        isRunning = false;
       }
+
 
       // Input, Update, Render - the main game loop.
       Update();
-      renderer.Render(snake_, food_);
+
+      renderer.RenderStart();
+      renderer.RenderFood(food_);
+
+      auto renderPlayer = [&](std::unique_ptr<Player>const &player) {
+        renderer.RenderSnake(player->GetSnake());
+      };
+      std::for_each(players_.cbegin(),players_.cend(),renderPlayer);
+
+      renderer.RenderEnd();
+//      renderer.Render(players_[0]->GetSnake(), food_);
 
       frame_end = SDL_GetTicks();
 
@@ -54,7 +69,20 @@ namespace SnakeGame
       // After every second, update the window title.
       if (frame_end - title_timestamp >= 1000U)
       {
-        renderer.UpdateWindowTitle(score_, frame_count);
+        struct TitleOutput {
+          void operator()(std::unique_ptr<Player> const & player) {
+            ++i;
+            title_ += std::to_string(i);
+            title_ += " Score: ";
+            title_ += std::to_string(player->GetScore());
+            title_ += " ";
+          }
+          std::string title_{"Player: "};
+          int i{0};
+        };
+        TitleOutput output = std::for_each(players_.cbegin(),players_.cend(),TitleOutput());
+
+        renderer.UpdateWindowTitle(output.title_);
         frame_count = 0;
         title_timestamp = frame_end;
       }
@@ -71,15 +99,18 @@ namespace SnakeGame
 
   void Game::PlaceFood()
   {
-    //  int x, y;
     while (true)
     {
       const auto x = randomWidth_(randEngine_);
       const auto y = randomHeight_(randEngine_);
       // Check that the location is not occupied by a snake item before placing
       // food_.
-      if (!snake_.SnakeCell(x, y))
-      {
+
+      auto checkFoodIsOccupied = [&](std::unique_ptr<Player> const &player) {
+        return (true == player->GetSnake()->SnakeCell(x, y));
+      };
+
+      if (std::none_of(players_.cbegin(),players_.cend(),checkFoodIsOccupied)) {
         food_.x = x;
         food_.y = y;
         return;
@@ -89,27 +120,43 @@ namespace SnakeGame
 
   void Game::Update()
   {
-    if (!snake_.isAlive_)
-    {
+    auto checkAnyPlayerisDead = [&](std::unique_ptr<Player> const &player) {
+      return (false == player->GetSnake()->isAlive_);
+    };
+
+    if (std::any_of(players_.cbegin(),players_.cend(),checkAnyPlayerisDead)) {
       return;
     }
 
-    snake_.Update();
+    std::for_each(players_.cbegin(),players_.cend(),[&](std::unique_ptr<Player> const &player) {
+      player->GetSnake()->Update();
+    });
 
-    int new_x = static_cast<int>(snake_.headX_);
-    int new_y = static_cast<int>(snake_.headY_);
+    auto CheckPlayersEatFood = [&](std::unique_ptr<Player> const &player) {
+      return (true == player->CheckSnakeEatsFood(food_));
+    };
 
-    // Check if there's food_ over here
-    if (food_.x == new_x && food_.y == new_y)
-    {
-      ++score_;
+    if (std::any_of(players_.cbegin(),players_.cend(),CheckPlayersEatFood)) {
       PlaceFood();
-      // Grow snake_ and increase speed.
-      snake_.GrowBody();
-      snake_.speed_ += 0.02F;
     }
+
   }
 
-  int Game::GetScore() const { return score_; }
-  int Game::GetSize() const { return snake_.size_; }
+  int Game::GetScore() const { 
+
+    int winnerScore{0};
+    for (auto &player : players_) {
+      winnerScore = (winnerScore > player->GetScore()) ? winnerScore : player->GetScore();
+    }
+
+    return winnerScore; 
+  }
+  int Game::GetSize() const {
+    int winnerSize{0};
+    for (auto &player : players_) {
+      winnerSize = (winnerSize > player->GetSnake()->size_) ? winnerSize : player->GetSnake()->size_;
+    }
+
+    return winnerSize; 
+  }
 }

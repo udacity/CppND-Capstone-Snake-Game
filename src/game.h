@@ -2,10 +2,13 @@
 #define GAME_H
 
 #include <random>
+#include <vector>
+#include <memory>
 #include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
 #include "snake.h"
+#include "player.h"
 namespace SnakeGame
 {
   class Game
@@ -18,8 +21,7 @@ namespace SnakeGame
     int GetSize() const;
 
   private:
-    Snake snake_;
-    //  Snake snake_computer;
+    std::vector<std::unique_ptr<Player>> players_;  // owned
     SDL_Point food_;
 
     std::random_device randDev_;
@@ -28,7 +30,6 @@ namespace SnakeGame
     std::uniform_int_distribution<int> randomHeight_;
 
     int score_{0};
-    bool demoMode_{false};
 
     void PlaceFood();
     void Update();
