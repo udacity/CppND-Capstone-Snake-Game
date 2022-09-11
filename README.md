@@ -1,12 +1,14 @@
-# CPPND: Capstone Snake Game Example
+# CPP nanodegree: Capstone - Snake extended
 
-This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
+This is a clone from the starter repo for the (Capstone project)[https://github.com/udacity/CppND-Capstone-Snake-Game] in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213).  
 
-<img src="snake_game.gif"/>
+The starter repo was refactored and extended with the following new features:  
 
-The Capstone Project gives you a chance to integrate what you've learned throughout this program. This project will become an important part of your portfolio to share with current and future colleagues and employers.
+- a configuration file (e.g. change size of food, snake and the size of the game area)
+- a demonstration mode (automatically play of the computer without any interaction of a human player)
+- one-to-one battle (human vs computer)
 
-In this project, you can build your own C++ application or extend this Snake game, following the principles you have learned throughout this Nanodegree Program. This project will demonstrate that you can independently create applications using a wide range of C++ features.
+<img src="snake_game.gif"/>  
 
 ## Dependencies for Running Locally
 * cmake >= 3.7
@@ -28,8 +30,19 @@ In this project, you can build your own C++ application or extend this Snake gam
 1. Clone this repo.
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
-4. Run it: `./SnakeGame`.
+4. Adapt the deployed (configuration file)[https://github.com/Sepphod/CppND-Capstone-Snake-Game/blob/master/src/snake.cfg].
+5. Run it: `./SnakeGame`../src/snake.cfg. If no config file is provided default values will be used. The default values can be found in (settings.h)[https://github.com/Sepphod/CppND-Capstone-Snake-Game/blob/master/src/settings.h]
 
+```plantuml
+@startuml
+class Car
+
+Driver - Car : drives >
+Car *- Wheel : have 4 >
+Car -- Person : < owns
+
+@enduml
+```
 
 ## CC Attribution-ShareAlike 4.0 International
 
