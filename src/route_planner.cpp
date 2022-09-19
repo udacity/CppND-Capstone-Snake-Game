@@ -11,25 +11,6 @@
 
 namespace SnakeGame {
 
-// void printDir(Snake::Direction const & input) {
-//     switch (input) 
-//     {
-//         case Snake::Direction::kUp:
-//             std::cout << "  up";
-//         break;
-//         case Snake::Direction::kDown:
-//             std::cout << "  down";
-//         break;
-//         case Snake::Direction::kLeft:
-//             std::cout << "  left";
-//         break;
-//         case Snake::Direction::kRight:
-//             std::cout << "  right";
-//         break;
-//     };
-
-// }
-
 void RoutePlanner::run(Snake * snake,SDL_Point const & food) {
 
     updateFood(food);

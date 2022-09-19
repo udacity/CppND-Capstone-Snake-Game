@@ -15,7 +15,7 @@ namespace SnakeGame
   {
   public:
     Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode);
-    void Run(Controller const &controller, Renderer &renderer,
+    void Run(Renderer &renderer,
              std::size_t target_frame_duration);
     int GetScore() const;
     int GetSize() const;

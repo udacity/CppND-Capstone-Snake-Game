@@ -1,0 +1,67 @@
+@startuml
+start
+package "main" {
+
+    if (more than 3 CLI arguments) then
+        :print error message;
+        stop
+    else
+        if (no CLI argument) then
+            :use default filename for config file;
+        else
+            :get filename from CLI argument;
+        endif
+    endif
+    package Renderer::instantiation {
+        :SDL_Init();
+        :SDL_CreateWindow();
+        :SDL_CreateRenderer();
+    }
+    package Game::instantiation {
+        package Player::instantiation {
+            :create Player;
+            if (demoMode) then
+                :create VirtualController;
+            else
+                :create Controller;
+            endif            
+        }
+        :add player to list of players;
+        :PlaceFood();
+    }
+    package Game::run {
+        while (isRunning?)
+            repeat 
+                package Player::run {
+                    :Controller::HandleInput();
+                }
+            repeat while (more player available?) 
+            repeat 
+                if (player is terminated?) then
+                    :isRunning is false;
+                endif
+            repeat while ( (more player available?) || (any player is terminated?) ) 
+            repeat
+                package Snake::update {
+                    :Move Head to new position;
+                    :follow body to new position;
+                }
+            repeat while (more player available?) 
+            repeat                
+                if (player has catched food) then
+                    :place new food;
+                endif
+            repeat while ( (more player available?) || (any player has catched food?) ) 
+            :start renderer;
+            :render food;
+            repeat                
+                :render snake for every player;
+            repeat while (more player available?)
+            :update window title with current game statistics;
+            :calculate current SDL_Delay;        
+        endwhile
+
+    }
+    stop
+}
+@enduml

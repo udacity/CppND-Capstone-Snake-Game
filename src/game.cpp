@@ -16,7 +16,7 @@ namespace SnakeGame
     PlaceFood();
   }
 
-  void Game::Run(Controller const &controller, Renderer &renderer,
+  void Game::Run(Renderer &renderer,
                  std::size_t target_frame_duration)
   {
     Uint32 title_timestamp{SDL_GetTicks()};

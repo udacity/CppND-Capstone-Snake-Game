@@ -33,16 +33,8 @@ The starter repo was refactored and extended with the following new features:
 4. Adapt the deployed (configuration file)[https://github.com/Sepphod/CppND-Capstone-Snake-Game/blob/master/src/snake.cfg].
 5. Run it: `./SnakeGame`../src/snake.cfg. If no config file is provided default values will be used. The default values can be found in (settings.h)[https://github.com/Sepphod/CppND-Capstone-Snake-Game/blob/master/src/settings.h]
 
-```plantuml
-@startuml
-class Car
+## SW design
 
-Driver - Car : drives >
-Car *- Wheel : have 4 >
-Car -- Person : < owns
-
-@enduml
-```
 
 ## CC Attribution-ShareAlike 4.0 International
 
