@@ -35,6 +35,7 @@ The starter repo was refactored and extended with the following new features:
 
 ## SW design
 
+![class design](./doc/images/class.svg)
 
 ## CC Attribution-ShareAlike 4.0 International
 
