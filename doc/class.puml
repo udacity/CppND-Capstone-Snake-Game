@@ -1,0 +1,134 @@
+@startuml
+package RoutePlanner {
+class RoutePlanner {
+    + RoutePlanner()
+    + void run(Snake * snake, SDL_Point const & food)
+    + void updateFood(SDL_Point const & food)
+    - float calculateDistance(Point const & start, Point const & destination)
+    - void findNeighbour(Snake const * snake, Snake::Direction const direction)
+    - bool verifyDirection(Snake * snake,  Snake::Direction const & input)
+    - void controlTest(Snake * snake, Snake::Direction const & input)
+    - bool verifyNeighbours(Snake const * snake, Point const & neighbour)
+    - void addNeighbours(Snake const * snake)
+    - Point food_
+    - std::vector<std::unique_ptr<RoutePlanner::Neighbour>> neighbours_
+}
+
+class Point {
+    + float x_
+    + float y_
+}
+class Neighbour {
+    + Neighbour(float const dist, Snake::Direction const direction)
+    + float distance_
+    + Snake::Direction direction_
+}
+RoutePlanner "1" *-- "1" Point
+RoutePlanner "1" *-- "*" Neighbour
+}
+
+package Control {
+abstract class ControllerBase {
+    + ControllerBase();
+    + virtual bool HandleInput(Snake *snake, SDL_Point const & food) = 0
+}
+class Controller {
+    + bool HandleInput(Snake *snake, SDL_Point const & food)  override
+}
+class VirtualController {
+    + bool HandleInput(Snake *snake, SDL_Point const & food)  override
+    - RoutePlanner routePlanner_
+}
+ControllerBase <|-- Controller
+ControllerBase <|-- VirtualController
+
+} 
+
+class Game {
+    + Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode)
+    + void Run(Controller const &controller, Renderer &renderer,std::size_t target_frame_duration)
+    + int GetScore() const
+    + int GetSize() const
+    - std::vector<std::unique_ptr<Player>> players_
+    - SDL_Point food_
+    - std::random_device randDev_
+    - std::mt19937 randEngine_
+    - std::uniform_int_distribution<int> randomWidth_
+    - std::uniform_int_distribution<int> randomHeight_
+    - int score_
+    - void PlaceFood()
+    - void Update()
+}
+
+class SDL_Point {
+}
+
+class Player {
+    + Player(int grid_width, int grid_height, bool isPlayerVirtual)
+    + Player()
+    + void run(SDL_Point const & food)
+    + bool CheckSnakeEatsFood(SDL_Point const & food)
+    + bool IsSnakeRunning() const
+    + Snake * GetSnake() const
+    + int GetScore() const 
+    - std::unique_ptr<ControllerBase> controller_
+    - std::unique_ptr<Snake> snake_
+    - bool running_
+    - int score_
+    - void Grow()
+}
+
+class Snake {
+    + Snake(int grid_width, int grid_height)
+    + Snake() 
+    + void Update()
+    + void GrowBody()
+    + bool SnakeCell(int x, int y)
+    + void ChangeDirection(const Direction input, const Direction opposite)
+    + Direction direction_
+    + float speed_
+    + unsigned int size_
+    + bool isAlive_
+    + float headX_
+    + float headY_
+    + int gridWidth_
+    + int gridHeight_
+    + std::vector<std::unique_ptr<SDL_Point>>body_
+    - void UpdateHead()
+    - void UpdateBody(std::unique_ptr<SDL_Point> current_cell, std::unique_ptr<SDL_Point> prev_cell)
+    - bool isGrowing_
+}
+
+class Renderer {
+    + Renderer(const std::size_t screen_width, const std::size_t screen_height,\nconst std::size_t grid_width, const std::size_t grid_height)
+    + void Render(Snake  *snake, SDL_Point  &food)
+    + void UpdateWindowTitle(std::string const & title)
+    + void RenderFood(SDL_Point const &food) const
+    + void RenderEnd()
+    + void RenderStart()
+    + void RenderSnake(Snake * snake) const
+    - SDL_Window *sdlWindow_
+    - SDL_Renderer *sdlRenderer_
+    - const int width_
+    - const int height_
+}
+
+class Configfileparser {
++ GetGridHeight()
++ GetScreenWidth()
++ GetScreenHeight()
++ GetGridWidth()
++ GetNoOfSnakes()
++ GetFps()
++ GetMsPerFrame()
++ GetDemoMode()
+}
+
+VirtualController "1" *-- "1" RoutePlanner
+Game "1" *-- "1" SDL_Point
+Game "1" *-- "*" Player
+Player "1" *-- "1" Snake
+Player "1" *-- "1" ControllerBase
+Snake "1" *-- "*" SDL_Point
+
+@enduml

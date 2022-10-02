@@ -1,0 +1,63 @@
+@startuml
+start
+if (SDL_PollEvent() == SDL_QUIT) then
+    :return false;
+    stop
+endif 
+package RoutePlanner::run {
+    :Calculate manahttan-distance from current position to food;
+    :clear list of old neighbours;
+    repeat 
+        :calculate position of candidate ;
+        :verify candidate;
+        if (candidate == valid) then
+            :add to list of neighbours;
+        endif
+        :sort list of neighbours with lowest distance at first;
+        note left
+            every 4 directions (top, bottom, left, right)
+            are checked if there is a possible neighbour 
+            are available
+            If the field is already occupied by a snake 
+            this neighbour would be invalid
+        end note
+    repeat while (all 4 directions are checked)
+    package GetProbableWinner {
+        repeat
+            :check if moving to neighbour would be ok;
+            if (neighbour is OK) then
+                :break;
+            endif
+            note left
+                The snake should not move
+                in the contrary direction 
+                to avoid to eat itself ;)
+                the direction of the first
+                valid neighbour will be used.
+            end note
+        repeat while ( (any neighbours available?) || (moving to neighbour would be ok?) )
+    }
+    if (there is a probable winner) then
+        :get the neighbour in the current direction;
+        if (there is a neighbour in the same direction?) then
+            :compare the distance of the probable\nwinner with the distance of the neighbour\nin the same direction;
+            if (probable winner is closer to the food) then
+                :change direction to probable winner;
+            else
+                :don't change direction;
+                note right
+                    The neighbour in the same direction 
+                    would be the best choice. we already 
+                    move in that direction.
+                end note
+            endif
+        else
+            :change direction to probable winner;
+        endif
+    else
+        :don't change the current direction;
+    endif
+}
+:return true;
+stop
+@enduml
