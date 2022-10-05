@@ -68,8 +68,8 @@ The implementation follows the rule of 5. Behaviour is encapsulated in dedicated
 
 The game is started via the commandline. The main function verifies the provided parameters. Afterwards the one object of the type ___Renderer__ and one object of the type ___Game___ are instantiated.  
 Within the constructor the configured number of ___Player___ are instantiated. Depending on a input parameter the constructor of ___Player___ instantiates either a ___VirtualController___ or a ___Controller___. At last action in the constructor of Game the food is placed randomly somewhere in the game area.
-After all initialization the main function calls ___Game.run()___. Which is a classic `while`-loop. It will be executed as long as all available ___Player___ are `alive` or you terminate the application (typically by pressing `CMD or CTRL - C`). A Player `dies` if it touches itself or another player.  
-At first within the `while`-loop the control inputs for all ___Player___ will be evaluated. The control inputs lead to a new position for the ___Snake___s. Which will be evaluated if any snake will eats itself. This will negate the while loop and the game will stop.  
+After all initialization the main function calls ___Game.run()___. Which is a classic `while`-loop. It will be executed as long as you terminate the application (typically by pressing `CMD or CTRL - C`). A Player `dies` if it touches itself or another player.  
+At first within the `while`-loop the control inputs for all ___Player___ will be evaluated. The control inputs lead to a new position for the ___Snake___s. Which will be evaluated if any snake will eats itself. This will stop the game. The while-loop is still executed. But any input from a controller won't be accepted. 
 Than the food and the ___Snake___ of every ___Player___ are rendered. At the end of any game cycle the game statistics are updated and the display delay are calculated.
 
 ![dynamic](./doc/images/main_activity.svg)
