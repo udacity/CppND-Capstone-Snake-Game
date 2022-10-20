@@ -1,10 +1,12 @@
 #include "player.h"
+#include <iostream>
 namespace SnakeGame {
-
-Player::Player(int grid_width, int grid_height, bool isPlayerVirtual) : 
+ 
+Player::Player(int grid_width, int grid_height, bool isPlayerVirtual,Channel<Message> & chan) : 
                     snake_(std::make_unique<Snake>(grid_width,grid_height)),
                     running_(true),
-                    score_(0U)
+                    score_(0U),
+                    chan_(chan)
 {
     if (isPlayerVirtual) {
         controller_ = std::make_unique<VirtualController>();
@@ -13,8 +15,14 @@ Player::Player(int grid_width, int grid_height, bool isPlayerVirtual) :
     }
 }
 
+Player::~Player() {   
+}
+
 void Player::run(SDL_Point const & food) {
-    running_ = controller_->HandleInput(snake_.get(),food);
+    
+    Message msg = chan_.waitForStart();
+    std::cout << "msg rcv " << (int)(msg.direction) << std::endl;
+    running_ = controller_->HandleInput(snake_.get(),food,msg.direction);
 }
 
 bool Player::CheckSnakeEatsFood(SDL_Point const & food) {

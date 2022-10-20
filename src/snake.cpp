@@ -37,7 +37,7 @@ Snake::Snake(int grid_width, int grid_height)
     }
   }
 
-  void Snake::ChangeDirection(const Snake::Direction input, const Snake::Direction opposite) {
+  void Snake::ChangeDirection(const Direction input, const Direction opposite) {
 
     if ((opposite != direction_) || 
         (1U == size_))
@@ -64,6 +64,8 @@ Snake::Snake(int grid_width, int grid_height)
 
     case Direction::kRight:
       headX_ += speed_;
+      break;
+    case Direction::kQuit:
       break;
     }
 

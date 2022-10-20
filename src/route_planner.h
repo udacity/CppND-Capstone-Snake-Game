@@ -22,9 +22,9 @@ public:
     };
 
     struct Neighbour {
-        Neighbour(float const dist, Snake::Direction const direction) : distance_(dist),direction_(direction) {}
+        Neighbour(float const dist, Direction const direction) : distance_(dist),direction_(direction) {}
         float distance_;
-        Snake::Direction direction_;
+        Direction direction_;
     };
 
     void run(Snake * snake, SDL_Point const & food);
@@ -32,9 +32,9 @@ public:
 
 private:
     float calculateDistance(Point const & start, Point const & destination);
-    void findNeighbour(Snake const * snake, Snake::Direction const direction);
-    bool verifyDirection(Snake * snake,  Snake::Direction const & input);
-    void controlTest(Snake * snake, Snake::Direction const & input);
+    void findNeighbour(Snake const * snake, Direction const direction);
+    bool verifyDirection(Snake * snake,  Direction const & input);
+    void controlTest(Snake * snake, Direction const & input);
     bool verifyNeighbours(Snake const * snake, Point const & neighbour);
     void addNeighbours(Snake const * snake);
     

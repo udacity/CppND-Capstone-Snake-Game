@@ -4,6 +4,7 @@
 #include "route_planner.h"
 #include <iostream>
 #include <algorithm>
+
 namespace SnakeGame
 {
   Game::Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode)
@@ -11,7 +12,7 @@ namespace SnakeGame
         randomWidth_(0, static_cast<int>(grid_width - 1)),
         randomHeight_(0, static_cast<int>(grid_height - 1))
   {
-    players_.emplace_back(std::make_unique<Player>(grid_width,grid_height,demo_mode));
+    players_.emplace_back(std::make_shared<Player>(grid_width,grid_height,demo_mode,chan_));
 
     PlaceFood();
   }
@@ -30,17 +31,25 @@ namespace SnakeGame
     {
       frame_start = SDL_GetTicks();
 
-      auto runPlayer = [&](std::unique_ptr<Player>const &player) {
-        player->run(food_);
-      };
+      SpawnPlayers();
 
-      std::for_each(players_.cbegin(),players_.cend(),runPlayer);
+      auto direction = VerifySDLEvent();
+      Message msg{direction};
+      StartControl(msg);
 
-      auto checkPlayerTerminated = [&](std::unique_ptr<Player> const &player) {
+      WaitForPlayers();
+
+      // auto runPlayer = [&](std::shared_ptr<Player>&player) {
+      //   player->run(food_);
+      // };
+
+      // std::for_each(players_.begin(),players_.end(),runPlayer);
+
+      auto checkPlayerTerminated = [&](std::shared_ptr<Player>  &player) {
         return (false == player->IsSnakeRunning());
       };
 
-      if (std::any_of(players_.cbegin(),players_.cend(),checkPlayerTerminated)) {
+      if (std::any_of(players_.begin(),players_.end(),checkPlayerTerminated)) {
         isRunning = false;
       }
 
@@ -51,7 +60,7 @@ namespace SnakeGame
       renderer.RenderStart();
       renderer.RenderFood(food_);
 
-      auto renderPlayer = [&](std::unique_ptr<Player>const &player) {
+      auto renderPlayer = [&](std::shared_ptr<Player>const &player) {
         renderer.RenderSnake(player->GetSnake());
       };
       std::for_each(players_.cbegin(),players_.cend(),renderPlayer);
@@ -70,7 +79,7 @@ namespace SnakeGame
       if (frame_end - title_timestamp >= 1000U)
       {
         struct TitleOutput {
-          void operator()(std::unique_ptr<Player> const & player) {
+          void operator()(std::shared_ptr<Player> const & player) {
             ++i;
             title_ += std::to_string(i);
             title_ += " Score: ";
@@ -106,7 +115,7 @@ namespace SnakeGame
       // Check that the location is not occupied by a snake item before placing
       // food_.
 
-      auto checkFoodIsOccupied = [&](std::unique_ptr<Player> const &player) {
+      auto checkFoodIsOccupied = [&](std::shared_ptr<Player> const &player) {
         return (true == player->GetSnake()->SnakeCell(x, y));
       };
 
@@ -120,7 +129,7 @@ namespace SnakeGame
 
   void Game::Update()
   {
-    auto checkAnyPlayerisDead = [&](std::unique_ptr<Player> const &player) {
+    auto checkAnyPlayerisDead = [&](std::shared_ptr<Player> const &player) {
       return (false == player->GetSnake()->isAlive_);
     };
 
@@ -128,11 +137,11 @@ namespace SnakeGame
       return;
     }
 
-    std::for_each(players_.cbegin(),players_.cend(),[&](std::unique_ptr<Player> const &player) {
+    std::for_each(players_.cbegin(),players_.cend(),[&](std::shared_ptr<Player> const &player) {
       player->GetSnake()->Update();
     });
 
-    auto CheckPlayersEatFood = [&](std::unique_ptr<Player> const &player) {
+    auto CheckPlayersEatFood = [&](std::shared_ptr<Player> const &player) {
       return (true == player->CheckSnakeEatsFood(food_));
     };
 
@@ -151,6 +160,7 @@ namespace SnakeGame
 
     return winnerScore; 
   }
+
   int Game::GetSize() const {
     int winnerSize{0};
     for (auto &player : players_) {
@@ -159,4 +169,49 @@ namespace SnakeGame
 
     return winnerSize; 
   }
+
+  void Game::SpawnPlayers() {
+    std::for_each(players_.begin(),players_.end(),[&](std::shared_ptr<Player> player){
+        threads_.emplace_back(std::thread(&Player::run,player,food_));
+    });    
+  }
+
+  void Game::StartControl(Message &msg) {
+    chan_.start(msg);
+    std::cout << "we are waiting until all work are done\n";        
+  }
+
+  void Game::WaitForPlayers() {
+    std::for_each(threads_.begin(), threads_.end(), [](std::thread &t) {
+        t.join();
+    });
+    std::cout << "done\n";        
+    threads_.clear();    
+  }
+
+  SnakeGame::Direction Game::VerifySDLEvent() {
+    SDL_Event e;
+    while (SDL_PollEvent(&e))
+    {
+      if (SDL_QUIT == e.type) {
+        return Direction::kQuit;
+      }
+      else if (e.type == SDL_KEYDOWN)
+      {
+        switch (e.key.keysym.sym)
+        {
+        case SDLK_UP:
+          return Direction::kUp;
+        case SDLK_DOWN:
+          return Direction::kDown;
+        case SDLK_LEFT:
+          return Direction::kLeft;
+        case SDLK_RIGHT:
+          return Direction::kRight;
+        }    
+      }
+    }
+    return Direction::kQuit;
+  }
+
 }

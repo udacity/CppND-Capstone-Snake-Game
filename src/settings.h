@@ -10,6 +10,20 @@ namespace SnakeGame
     constexpr std::size_t kGridWidth{32U};
     constexpr std::size_t kGridHeight{32U};
 
+  enum class Direction
+  {
+    kUp,
+    kDown,
+    kLeft,
+    kRight,
+    kQuit
+  };
+  
+struct Message {
+    SnakeGame::Direction direction;
+};  
+  
+
 }
 
 #endif
