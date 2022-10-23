@@ -7,16 +7,12 @@
 #include "settings.h"
 namespace SnakeGame
 {
+
+
   class Snake
   {
   public:
-    enum class Direction
-    {
-      kUp,
-      kDown,
-      kLeft,
-      kRight
-    };
+
 
     Snake(int grid_width, int grid_height);
 

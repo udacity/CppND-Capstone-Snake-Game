@@ -51,47 +51,51 @@ void RoutePlanner::run(Snake * snake,SDL_Point const & food) {
 
 }
 
-void RoutePlanner::controlTest(Snake * snake, Snake::Direction const & input) {
+void RoutePlanner::controlTest(Snake * snake, Direction const & input) {
     switch (input) 
     {
-        case Snake::Direction::kUp:
-          snake->ChangeDirection(Snake::Direction::kUp,
-                          Snake::Direction::kDown);
+        case Direction::kUp:
+          snake->ChangeDirection(Direction::kUp,
+                          Direction::kDown);
         break;
-        case Snake::Direction::kDown:
-          snake->ChangeDirection(Snake::Direction::kDown,
-                          Snake::Direction::kUp);
+        case Direction::kDown:
+          snake->ChangeDirection(Direction::kDown,
+                          Direction::kUp);
         break;
-        case Snake::Direction::kLeft:
-          snake->ChangeDirection(Snake::Direction::kLeft,
-                          Snake::Direction::kRight);
+        case Direction::kLeft:
+          snake->ChangeDirection(Direction::kLeft,
+                          Direction::kRight);
         break;
-        case Snake::Direction::kRight:
-          snake->ChangeDirection(Snake::Direction::kRight,
-                          Snake::Direction::kLeft);
+        case Direction::kRight:
+          snake->ChangeDirection(Direction::kRight,
+                          Direction::kLeft);
+        break;
+        case Direction::kQuit:
         break;
     };
 }
 
-bool RoutePlanner::verifyDirection(Snake * snake,  Snake::Direction const & input) {
+bool RoutePlanner::verifyDirection(Snake * snake,   Direction const & input) {
     switch (input) 
     {
-        case Snake::Direction::kUp:
-            if (snake->direction_ == Snake::Direction::kDown)
+        case  Direction::kUp:
+            if (snake->direction_ ==  Direction::kDown)
                 return false;
         break;
-        case Snake::Direction::kDown:
-            if (snake->direction_ == Snake::Direction::kUp)
+        case  Direction::kDown:
+            if (snake->direction_ ==  Direction::kUp)
                 return false;
         break;
-        case Snake::Direction::kLeft:
-            if (snake->direction_ == Snake::Direction::kRight)
+        case  Direction::kLeft:
+            if (snake->direction_ ==  Direction::kRight)
                 return false;
         break;
-        case Snake::Direction::kRight:
-            if (snake->direction_ == Snake::Direction::kLeft)
+        case  Direction::kRight:
+            if (snake->direction_ ==  Direction::kLeft)
                 return false;
         break;
+        case Direction::kQuit:
+            return false;
     };
     return true;    
 }
@@ -99,10 +103,10 @@ bool RoutePlanner::verifyDirection(Snake * snake,  Snake::Direction const & inpu
 void RoutePlanner::addNeighbours(Snake const * snake) {
 
     // lets find neighbours in all direction    
-    findNeighbour(snake,Snake::Direction::kUp);
-    findNeighbour(snake,Snake::Direction::kDown);
-    findNeighbour(snake,Snake::Direction::kLeft);
-    findNeighbour(snake,Snake::Direction::kRight);
+    findNeighbour(snake, Direction::kUp);
+    findNeighbour(snake, Direction::kDown);
+    findNeighbour(snake, Direction::kLeft);
+    findNeighbour(snake, Direction::kRight);
 
     // what happens if we don't find any..
     // nothing we will continue in the same direction - we might die ...
@@ -113,40 +117,42 @@ void RoutePlanner::addNeighbours(Snake const * snake) {
     });
 
 }
-//std::unique_ptr<RoutePlanner::Neighbour> RoutePlanner::findNeighbour(Snake const & snake, Snake::Direction const direction) {
-void RoutePlanner::findNeighbour(Snake const * snake, Snake::Direction const direction) {
+//std::unique_ptr<RoutePlanner::Neighbour> RoutePlanner::findNeighbour(Snake const & snake,  Direction const direction) {
+void RoutePlanner::findNeighbour(Snake const * snake,  Direction const direction) {
     switch (direction) {
-        case Snake::Direction::kLeft:
+        case  Direction::kLeft:
         {
             auto neighbour = Point{(snake->headX_ - snake->speed_) <= 0.0f ? 32.0F: (snake->headX_ - snake->speed_) ,snake->headY_};
             if (verifyNeighbours(snake,neighbour)) {
-                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_),Snake::Direction::kLeft));
+                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_), Direction::kLeft));
             }
         }
         break;
-        case Snake::Direction::kRight:
+        case  Direction::kRight:
         {
             auto neighbour =  Point{(snake->headX_ + snake->speed_) >= 32.0f ? 0.0F: (snake->headX_ + snake->speed_) ,snake->headY_};
             if (verifyNeighbours(snake,neighbour)) {
-                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_),Snake::Direction::kRight));
+                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_), Direction::kRight));
             }
         }
         break;
-        case Snake::Direction::kUp:
+        case  Direction::kUp:
         {
             auto neighbour =  Point{snake->headX_,(snake->headY_ - snake->speed_) <= 0.0f ? 32.0F: (snake->headY_ - snake->speed_)};
             if (verifyNeighbours(snake,neighbour)) {
-                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_),Snake::Direction::kUp));
+                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_), Direction::kUp));
             }
         }
         break;
-        case Snake::Direction::kDown:
+        case  Direction::kDown:
         {
             auto neighbour =  Point{snake->headX_,(snake->headY_ + snake->speed_) >= 32.0f ? 0.0F: (snake->headY_ + snake->speed_)};
             if (verifyNeighbours(snake,neighbour)) {
-                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_),Snake::Direction::kDown));
+                 neighbours_.emplace_back(std::make_unique<RoutePlanner::Neighbour>(calculateDistance(neighbour,food_), Direction::kDown));
             }
         }
+        break;
+        case Direction::kQuit:
         break;
     }
 }

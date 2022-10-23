@@ -3,6 +3,26 @@
 #include "renderer.h"
 #include "configfileparser.h"
 
+class Vehicle
+{
+public:
+    Vehicle() : _id(0) {}
+    void addID(int id) { _id = id; }
+    void printID()
+    {
+        std::cout << "Vehicle ID=" << _id << std::endl;
+    }
+
+private:
+    int _id;
+};
+
+void printHello()
+{
+    // perform work
+    std::cout << "Hello from Worker thread #" << std::this_thread::get_id() << " \n";
+}
+
 int main(int const argc, char const*const* argv)
 {
 

@@ -16,20 +16,20 @@ namespace SnakeGame
         ControllerBase& operator=(const ControllerBase & other) = default;
         ControllerBase& operator=(ControllerBase && other) = default;
 
-        virtual bool HandleInput(Snake *snake, SDL_Point const & food)  = 0;
+        virtual bool HandleInput(Snake *snake, SDL_Point const & food, KeyStroke & pressedkey)  = 0;
 
     };
 
     class Controller : public ControllerBase
     {
     public:
-        bool HandleInput(Snake *snake, SDL_Point const & food)  override;
+        bool HandleInput(Snake *snake, SDL_Point const & food, KeyStroke & pressedkey)  override;
 
     };
 
     class VirtualController : public ControllerBase {
     public:
-        bool HandleInput(Snake *snake, SDL_Point const & food)  override;
+        bool HandleInput(Snake *snake, SDL_Point const & food, KeyStroke & pressedkey)  override;
     private:
         RoutePlanner routePlanner_{};        
     

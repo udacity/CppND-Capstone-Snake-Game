@@ -1,60 +1,46 @@
 #include "controller.h"
-#include "SDL.h"
 #include "snake.h"
 
 namespace SnakeGame
 {
-    bool Controller::HandleInput(Snake *snake, SDL_Point const & food) 
+    bool Controller::HandleInput(Snake *snake, SDL_Point const & food, KeyStroke & pressedkey) 
   {
-
-    SDL_Event e;
-    while (SDL_PollEvent(&e))
+    switch (pressedkey)
     {
-      if (e.type == SDL_QUIT)
-      {
-        return false;
-      }
-      else if (e.type == SDL_KEYDOWN)
-      {
-        switch (e.key.keysym.sym)
-        {
-        case SDLK_UP:
-          snake->ChangeDirection(Snake::Direction::kUp,
-                          Snake::Direction::kDown);
-          break;
+    case KeyStroke::keyUp:
+      snake->ChangeDirection(Direction::kUp,
+                      Direction::kDown);
+      return true;
 
-        case SDLK_DOWN:
-          snake->ChangeDirection(Snake::Direction::kDown,
-                          Snake::Direction::kUp);
-          break;
+    case KeyStroke::keyDown:
+      snake->ChangeDirection(Direction::kDown,
+                      Direction::kUp);
+      return true;
 
-        case SDLK_LEFT:
-          snake->ChangeDirection(Snake::Direction::kLeft,
-                          Snake::Direction::kRight);
-          break;
+    case KeyStroke::keyLeft:
+      snake->ChangeDirection(Direction::kLeft,
+                      Direction::kRight);
+      return true;
 
-        case SDLK_RIGHT:
-          snake->ChangeDirection(Snake::Direction::kRight,
-                          Snake::Direction::kLeft);
-          break;
-        }
-      }
+    case KeyStroke::keyRight:
+      snake->ChangeDirection(Direction::kRight,
+                      Direction::kLeft);
+      return true;
+    case KeyStroke::keyQuit:
+      return false;
+    case KeyStroke::none:
+      return true;
     }
     return true;
   }
 
-  bool VirtualController::HandleInput(Snake *snake, SDL_Point const & food)
+  bool VirtualController::HandleInput(Snake *snake, SDL_Point const & food,KeyStroke & pressedkey)
   {
 
-    SDL_Event e;
-    while (SDL_PollEvent(&e))
-    {
-      if (e.type == SDL_QUIT)
-      {
-        return false;
-      }
+    if (KeyStroke::keyQuit == pressedkey){
+      return false;
     }
-
+  
     routePlanner_.run(snake,food);
 
     return true;
