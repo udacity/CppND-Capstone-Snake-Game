@@ -11,7 +11,6 @@ namespace SnakeGame
         randomHeight_(0, static_cast<int>(grid_height - 1))
   {
 
-
     for (std::size_t i{0}; i < num_of_players; ++i) {
       bool isDemoMode{(0 == i) && (false == demo_mode) ? false : true};
       players_.emplace_back(std::make_shared<Player>(grid_width,grid_height,isDemoMode,chan_));
