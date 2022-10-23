@@ -21,9 +21,6 @@ Player::~Player() {
 void Player::run(SDL_Point const & food) {
     
     Message msg = chan_.waitForStart();
-    if (KeyStroke::keyQuit == msg.pressedKey_) {
-        std::cout << "msg rcv " << (int)(msg.pressedKey_) << std::endl;
-    }
     running_ = controller_->HandleInput(snake_.get(),food,msg.pressedKey_);
 }
 

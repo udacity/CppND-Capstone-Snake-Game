@@ -45,7 +45,7 @@ namespace SnakeGame
       if (std::any_of(players_.begin(),players_.end(),checkPlayerTerminated)) {
         isRunning = false;
       }
-s
+
       // Input, Update, Render - the main game loop.
       Update();
 
