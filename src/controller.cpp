@@ -3,51 +3,43 @@
 
 namespace SnakeGame
 {
-    bool Controller::HandleInput(Snake *snake, SDL_Point const & food, Direction &direction) 
+    bool Controller::HandleInput(Snake *snake, SDL_Point const & food, KeyStroke & pressedkey) 
   {
+    switch (pressedkey)
+    {
+    case KeyStroke::keyUp:
+      snake->ChangeDirection(Direction::kUp,
+                      Direction::kDown);
+      return true;
 
-    // SDL_Event e;
-    // while (SDL_PollEvent(&e))
-    // {
-      switch (direction)
-      {
-      case Direction::kUp:
-        snake->ChangeDirection(Direction::kUp,
-                        Direction::kDown);
-        break;
+    case KeyStroke::keyDown:
+      snake->ChangeDirection(Direction::kDown,
+                      Direction::kUp);
+      return true;
 
-      case Direction::kDown:
-        snake->ChangeDirection(Direction::kDown,
-                        Direction::kUp);
-        break;
+    case KeyStroke::keyLeft:
+      snake->ChangeDirection(Direction::kLeft,
+                      Direction::kRight);
+      return true;
 
-      case Direction::kLeft:
-        snake->ChangeDirection(Direction::kLeft,
-                        Direction::kRight);
-        break;
-
-      case Direction::kRight:
-        snake->ChangeDirection(Direction::kRight,
-                        Direction::kLeft);
-        break;
-      case Direction::kQuit:
-        return false;
-      }
-    // }
+    case KeyStroke::keyRight:
+      snake->ChangeDirection(Direction::kRight,
+                      Direction::kLeft);
+      return true;
+    case KeyStroke::keyQuit:
+      return false;
+    case KeyStroke::none:
+      return true;
+    }
     return true;
   }
 
-  bool VirtualController::HandleInput(Snake *snake, SDL_Point const & food, Direction &direction)
+  bool VirtualController::HandleInput(Snake *snake, SDL_Point const & food,KeyStroke & pressedkey)
   {
 
-    // SDL_Event e;
-    // while (SDL_PollEvent(&e))
-    // {
-    if (Direction::kQuit == direction)
-    {
+    if (KeyStroke::keyQuit == pressedkey){
       return false;
     }
-    // }
   
     routePlanner_.run(snake,food);
 

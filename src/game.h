@@ -44,7 +44,7 @@ namespace SnakeGame
     void SpawnPlayers();
     void StartControl(Message &msg);
     void WaitForPlayers();
-    SnakeGame::Direction VerifySDLEvent();
+    SnakeGame::KeyStroke VerifySDLEvent();
   };
 }
 #endif

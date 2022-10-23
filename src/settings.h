@@ -18,9 +18,18 @@ namespace SnakeGame
     kRight,
     kQuit
   };
+
+  enum class KeyStroke {
+    none,
+    keyUp,
+    keyDown,
+    keyLeft,
+    keyRight,
+    keyQuit
+  };
   
 struct Message {
-    SnakeGame::Direction direction;
+    SnakeGame::KeyStroke pressedKey_;
 };  
   
 

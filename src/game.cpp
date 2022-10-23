@@ -33,17 +33,10 @@ namespace SnakeGame
 
       SpawnPlayers();
 
-      auto direction = VerifySDLEvent();
-      Message msg{direction};
+      Message msg{VerifySDLEvent()};
       StartControl(msg);
 
       WaitForPlayers();
-
-      // auto runPlayer = [&](std::shared_ptr<Player>&player) {
-      //   player->run(food_);
-      // };
-
-      // std::for_each(players_.begin(),players_.end(),runPlayer);
 
       auto checkPlayerTerminated = [&](std::shared_ptr<Player>  &player) {
         return (false == player->IsSnakeRunning());
@@ -52,8 +45,7 @@ namespace SnakeGame
       if (std::any_of(players_.begin(),players_.end(),checkPlayerTerminated)) {
         isRunning = false;
       }
-
-
+s
       // Input, Update, Render - the main game loop.
       Update();
 
@@ -178,40 +170,40 @@ namespace SnakeGame
 
   void Game::StartControl(Message &msg) {
     chan_.start(msg);
-    std::cout << "we are waiting until all work are done\n";        
+//    std::cout << "we are waiting until all work are done\n";        
   }
 
   void Game::WaitForPlayers() {
     std::for_each(threads_.begin(), threads_.end(), [](std::thread &t) {
         t.join();
     });
-    std::cout << "done\n";        
     threads_.clear();    
   }
 
-  SnakeGame::Direction Game::VerifySDLEvent() {
+  SnakeGame::KeyStroke Game::VerifySDLEvent() {
     SDL_Event e;
     while (SDL_PollEvent(&e))
     {
       if (SDL_QUIT == e.type) {
-        return Direction::kQuit;
+        std::cout << "quit\n";
+        return KeyStroke::keyQuit;
       }
       else if (e.type == SDL_KEYDOWN)
       {
         switch (e.key.keysym.sym)
         {
         case SDLK_UP:
-          return Direction::kUp;
+          return KeyStroke::keyUp;
         case SDLK_DOWN:
-          return Direction::kDown;
+          return KeyStroke::keyDown;
         case SDLK_LEFT:
-          return Direction::kLeft;
+          return KeyStroke::keyLeft;
         case SDLK_RIGHT:
-          return Direction::kRight;
+          return KeyStroke::keyRight;
         }    
       }
     }
-    return Direction::kQuit;
+    return KeyStroke::none;
   }
 
 }
