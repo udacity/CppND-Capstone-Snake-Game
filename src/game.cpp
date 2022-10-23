@@ -3,6 +3,7 @@
 #include <string>
 #include "route_planner.h"
 #include <algorithm>
+#include <iostream>
 namespace SnakeGame
 {
   Game::Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode,std::size_t num_of_players)
@@ -76,15 +77,18 @@ namespace SnakeGame
         struct TitleOutput {
           void operator()(std::shared_ptr<Player> const & player) {
             ++i;
+            title_ += "Player: ";
             title_ += std::to_string(i);
             title_ += " Score: ";
             title_ += std::to_string(player->GetScore());
             title_ += " ";
           }
-          std::string title_{"Player: "};
+          std::string title_{};
           int i{0};
         };
         TitleOutput output = std::for_each(players_.cbegin(),players_.cend(),TitleOutput());
+
+        std::cout << output.title_ << "\n";
 
         renderer.UpdateWindowTitle(output.title_);
         frame_count = 0;
