@@ -2,17 +2,20 @@
 #include "SDL.h"
 #include <string>
 #include "route_planner.h"
-#include <iostream>
 #include <algorithm>
-
 namespace SnakeGame
 {
-  Game::Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode)
+  Game::Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode,std::size_t num_of_players)
       : randEngine_(randDev_()),
         randomWidth_(0, static_cast<int>(grid_width - 1)),
         randomHeight_(0, static_cast<int>(grid_height - 1))
   {
-    players_.emplace_back(std::make_shared<Player>(grid_width,grid_height,demo_mode,chan_));
+
+
+    for (std::size_t i{0}; i < num_of_players; ++i) {
+      bool isDemoMode{(0 == i) && (false == demo_mode) ? false : true};
+      players_.emplace_back(std::make_shared<Player>(grid_width,grid_height,isDemoMode,chan_));
+    }
 
     PlaceFood();
   }
@@ -46,6 +49,7 @@ namespace SnakeGame
         isRunning = false;
       }
 
+      chan_.reset();
       // Input, Update, Render - the main game loop.
       Update();
 
@@ -87,6 +91,8 @@ namespace SnakeGame
         frame_count = 0;
         title_timestamp = frame_end;
       }
+
+
 
       // If the time for this frame is too small (i.e. frame_duration is
       // smaller than the target ms_per_frame), delay the loop to
@@ -170,7 +176,6 @@ namespace SnakeGame
 
   void Game::StartControl(Message &msg) {
     chan_.start(msg);
-//    std::cout << "we are waiting until all work are done\n";        
   }
 
   void Game::WaitForPlayers() {
@@ -185,7 +190,6 @@ namespace SnakeGame
     while (SDL_PollEvent(&e))
     {
       if (SDL_QUIT == e.type) {
-        std::cout << "quit\n";
         return KeyStroke::keyQuit;
       }
       else if (e.type == SDL_KEYDOWN)
