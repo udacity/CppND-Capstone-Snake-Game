@@ -1,5 +1,4 @@
 #include "player.h"
-#include <iostream>
 namespace SnakeGame {
  
 Player::Player(int grid_width, int grid_height, bool isPlayerVirtual,Channel<Message> & chan) : 

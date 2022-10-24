@@ -15,7 +15,6 @@ public:
         std::unique_lock<std::mutex> lock(mtx_);
         cond_.wait(lock, [this]{ return !messages_.empty();});
         T msg = messages_.back();
-        messages_.pop_back();
         return msg;
     } ;
     void start(T & msg)  {

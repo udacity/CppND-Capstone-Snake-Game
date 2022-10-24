@@ -22,7 +22,7 @@ std::size_t GetGridWidth(std::string const & filename = kDefaultFileName);
 std::size_t GetNoOfSnakes(std::string const & filename = kDefaultFileName);
 std::size_t GetFps(std::string const & filename = kDefaultFileName);
 std::size_t GetMsPerFrame(std::string const & filename = kDefaultFileName);
-bool GetDemoMode(std::string const & filename = kDemoMode);
+bool GetDemoMode(std::string const & filename = kDefaultFileName);
 
 }
 

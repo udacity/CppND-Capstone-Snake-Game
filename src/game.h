@@ -19,7 +19,7 @@ namespace SnakeGame
   class Game
   {
   public:
-    Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode);
+    Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode, std::size_t num_of_players);
     void Run(Renderer &renderer,
              std::size_t target_frame_duration);
     int GetScore() const;
