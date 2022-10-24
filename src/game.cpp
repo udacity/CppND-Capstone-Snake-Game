@@ -3,7 +3,6 @@
 #include <string>
 #include "route_planner.h"
 #include <algorithm>
-#include <iostream>
 namespace SnakeGame
 {
   Game::Game(std::size_t grid_width, std::size_t grid_height, bool demo_mode,std::size_t num_of_players)
@@ -88,7 +87,6 @@ namespace SnakeGame
         };
         TitleOutput output = std::for_each(players_.cbegin(),players_.cend(),TitleOutput());
 
-        std::cout << output.title_ << "\n";
 
         renderer.UpdateWindowTitle(output.title_);
         frame_count = 0;
