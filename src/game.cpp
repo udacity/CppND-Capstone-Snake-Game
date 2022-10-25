@@ -61,7 +61,6 @@ namespace SnakeGame
       std::for_each(players_.cbegin(),players_.cend(),renderPlayer);
 
       renderer.RenderEnd();
-//      renderer.Render(players_[0]->GetSnake(), food_);
 
       frame_end = SDL_GetTicks();
 
@@ -73,27 +72,10 @@ namespace SnakeGame
       // After every second, update the window title.
       if (frame_end - title_timestamp >= 1000U)
       {
-        struct TitleOutput {
-          void operator()(std::shared_ptr<Player> const & player) {
-            ++i;
-            title_ += "Player: ";
-            title_ += std::to_string(i);
-            title_ += " Score: ";
-            title_ += std::to_string(player->GetScore());
-            title_ += " ";
-          }
-          std::string title_{};
-          int i{0};
-        };
-        TitleOutput output = std::for_each(players_.cbegin(),players_.cend(),TitleOutput());
-
-
-        renderer.UpdateWindowTitle(output.title_);
+        renderer.UpdateWindowTitle(GetScoreForPlayers());
         frame_count = 0;
         title_timestamp = frame_end;
       }
-
-
 
       // If the time for this frame is too small (i.e. frame_duration is
       // smaller than the target ms_per_frame), delay the loop to
@@ -103,6 +85,11 @@ namespace SnakeGame
         SDL_Delay(target_frame_duration - frame_duration);
       }
     }
+  }
+
+  std::string Game::GetScoreForPlayers() const{
+    TitleOutput output = std::for_each(players_.cbegin(),players_.cend(),TitleOutput());
+    return output.title_;
   }
 
   void Game::PlaceFood()

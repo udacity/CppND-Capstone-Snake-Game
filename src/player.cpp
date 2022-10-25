@@ -1,14 +1,17 @@
 #include "player.h"
+
 namespace SnakeGame {
- 
+
+
 Player::Player(int grid_width, int grid_height, bool isPlayerVirtual,Channel<Message> & chan) : 
-                    snake_(std::make_unique<Snake>(grid_width,grid_height)),
+                    snake_(std::make_unique<Snake>(grid_width,grid_height,isPlayerVirtual)),
                     running_(true),
                     score_(0U),
                     chan_(chan)
 {
     if (isPlayerVirtual) {
         controller_ = std::make_unique<VirtualController>();
+        
     } else {
         controller_ = std::make_unique<Controller>();
     }

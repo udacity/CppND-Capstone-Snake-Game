@@ -25,8 +25,22 @@ namespace SnakeGame
     int GetScore() const;
     int GetSize() const;
 
+    std::string GetScoreForPlayers() const;
+
   private:
-//    std::vector<std::unique_ptr<Player>> players_;  // owned
+        struct TitleOutput {
+          void operator()(std::shared_ptr<Player> const & player) {
+            ++i;
+            title_ += "Player: ";
+            title_ += std::to_string(i);
+            title_ += " Score: ";
+            title_ += std::to_string(player->GetScore());
+            title_ += " ";
+          }
+          std::string title_{};
+          int i{0};
+        };
+
     std::vector<std::shared_ptr<Player>> players_;  // owned
     SDL_Point food_;
 
