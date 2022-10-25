@@ -2,7 +2,6 @@
 
 #include "snake.h"
 
-
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -159,18 +158,11 @@ void RoutePlanner::findNeighbour(Snake const * snake,  Direction const direction
 
 // verification if neighbour would touch body
 bool RoutePlanner::verifyNeighbours(Snake const * snake, Point const & neighbour) {
-
-    bool isValid{true};
     auto checkIsValid = [&](std::unique_ptr<SDL_Point> const &point) {
-        if ( (static_cast<int>(neighbour.x_) == point->x) && 
-            (static_cast<int>(neighbour.y_) == point->y) )
-        {   
-            isValid = false;
-        }
+        return ( (static_cast<int>(neighbour.x_) == point->x) && 
+                 (static_cast<int>(neighbour.y_) == point->y) );
     };
-    // Check if the snake has died.
-    std::for_each(snake->body_.cbegin(), snake->body_.cend(), checkIsValid); 
-    return isValid;
+    return std::none_of(snake->body_.cbegin(), snake->body_.cend(), checkIsValid); 
 }
 
 void RoutePlanner::updateFood(SDL_Point const & food) {
