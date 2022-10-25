@@ -53,7 +53,7 @@ namespace SnakeGame
 
   void Renderer::RenderSnake(Snake * snake) const {
     // Render snake's body
-    SDL_SetRenderDrawColor(sdlRenderer_, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_SetRenderDrawColor(sdlRenderer_, snake->colour_.red_, snake->colour_.green_, snake->colour_.blue_, 0xFF);
 
     SDL_Rect block{( static_cast<int>(snake->headX_) * width_),(static_cast<int>(snake->headY_) * height_),width_,height_};
 

@@ -11,6 +11,7 @@
 
 namespace SnakeGame {
 
+
 class Player: public std::enable_shared_from_this<Player>{
 public:
     Player(int grid_width, int grid_height, bool isPlayerVirtual,Channel<Message> & chan);
@@ -31,15 +32,16 @@ public:
     int GetScore() const {return score_;} ;
     std::shared_ptr<Player> get_shared_this() { return shared_from_this(); }
 
+
 private:
     std::unique_ptr<ControllerBase> controller_;  // every player owns a controller
     std::unique_ptr<Snake> snake_;  // every player controls its own snake
     bool running_{true};
-
     int score_{0};
     Channel<Message> & chan_;
-
+    
     void Grow();
+
 
 
 
