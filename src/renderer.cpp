@@ -35,11 +35,17 @@ Renderer::Renderer(const std::size_t screen_width,
         std::cerr << "Renderer could not be created.\n";
         std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
     }
+
+    IMG_Init(IMG_INIT_PNG);
+    sdl_texture = IMG_LoadTexture(sdl_renderer, "../pause_menu.png");
 }
 
 Renderer::~Renderer()
 {
     SDL_DestroyWindow(sdl_window);
+    SDL_DestroyTexture(sdl_texture);
+    IMG_Quit();
+    SDL_DestroyRenderer(sdl_renderer);
     SDL_Quit();
 }
 
@@ -89,4 +95,10 @@ void Renderer::UpdateWindowTitle(int score, int fps)
 {
     std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
     SDL_SetWindowTitle(sdl_window, title.c_str());
+}
+
+void Renderer::UpdatePauseMenu()
+{
+    SDL_RenderCopy(sdl_renderer, sdl_texture, NULL, NULL);
+    SDL_RenderPresent(sdl_renderer);
 }

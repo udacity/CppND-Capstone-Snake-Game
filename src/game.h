@@ -8,6 +8,12 @@
 #include "snake.h"
 #include "player.h"
 
+typedef enum gameState {
+    STOPPED = 0,
+    RUNNING,
+    PAUSED,
+} GameState;
+
 class Game
 {
 public:
@@ -17,6 +23,8 @@ public:
              std::size_t target_frame_duration);
     int GetScore() const;
     int GetSize() const;
+    void SetGameState(GameState newState);
+    GameState GetCurrentState();
 
 private:
     Snake snake;
@@ -29,6 +37,7 @@ private:
     std::uniform_int_distribution<int> random_h;
 
     int score{0};
+    GameState state_{RUNNING};
 
     void PlaceFood();
     void Update();

@@ -19,14 +19,21 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     Uint32 frame_end;
     Uint32 frame_duration;
     int frame_count = 0;
-    bool running = true;
 
-    while (running)
+    while ((state_ == RUNNING) || (state_ == PAUSED))
     {
         frame_start = SDL_GetTicks();
 
         // Input, Update, Render - the main game loop.
-        controller.HandleInput(running, snake);
+        controller.HandleInput(*this, snake);
+
+        // Display the pause menu
+        if (state_ == PAUSED)
+        {
+            renderer.UpdatePauseMenu();
+            continue;
+        }
+
         Update();
         renderer.Render(snake, food);
 
@@ -102,3 +109,13 @@ Game::~Game()
 
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
+
+void Game::SetGameState(GameState newState)
+{
+    state_ = newState;
+}
+
+GameState Game::GetCurrentState()
+{
+    return state_;
+}
