@@ -30,6 +30,29 @@ In this project, you can build your own C++ application or extend this Snake gam
 3. Compile: `cmake .. && make`
 4. Run it: `./SnakeGame`.
 
+## New features
+* Enter player's name at the beginning and stored player's data, including name and score, in the file scoreboard.txt
+* Pause game when pressing ESC button, after that select 1 of 2 options: resume or exit
+
+## Satified Requirements
+1. Loop, Functions, I/O
+* The project demonstrates an understanding of C++ functions and control structures.
+  * The project code is clearly organized into functions: All the added methods is written as functions
+* The project reads data from a file and process the data, or the program writes data to a file.
+  * Project handles player's data and stores at in file scoreboard.txt
+* The project accepts user input and processes the input.
+  * User enters player's name.
+2. Object Oriented Programming
+* The project uses Object Oriented Programming techniques.
+  * Class Player represents for player object
+* Classes use appropriate access specifiers for class members.
+  * Create some set/get functions. For example: SetGameState(), GetCurrentState()
+* Class constructors utilize member initialization lists.
+  * In class Player's constructor, initialize player name
+  * In renderer.cpp:40, initialize sdl_texture
+3. Memory Management
+* The project makes use of references in function declarations.
+  * In controller.cpp:15, pass game's reference to HandleInput()
 
 ## CC Attribution-ShareAlike 4.0 International
 
