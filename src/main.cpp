@@ -2,6 +2,7 @@
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
+#undef main
 
 int main() {
   constexpr std::size_t kFramesPerSecond{60};
