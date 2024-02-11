@@ -1,5 +1,12 @@
 # CPPND: Capstone Snake Game Example
 
+## Table of Contents
+- [Introduction](#introduction)
+- [Dependencies for Running Locally](#dependencies-for-running-locally)
+- [Basic Build Instructions](#basic-build-instructions)
+- [CC Attribution-ShareAlike 4.0 International](#cc-attribution-sharealike-40-international)
+
+## Introduction
 This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
 
 <img src="snake_game.gif"/>
@@ -30,6 +37,91 @@ In this project, you can build your own C++ application or extend this Snake gam
 3. Compile: `cmake .. && make`
 4. Run it: `./SnakeGame`.
 
+## New Features Added
+11/02/2024 Rendered the snake and food on separate threads.
+
+11/02/2024 Created a food class.
+
+## Ideas for future features
+- Implement a message queue to decide when to draw a new fruit.
+- Render the snake and food on different threads.
+- Allow players to enter their names and save their high scores to a text file.
+  - Add a leaderboard.
+- Add fixed and moving obstacles to the game.
+  - Implement a hard barrier temporarily.
+- Add different types of food to the game.
+  - Have each food manged by it's own thread.
+  - A consumable that makes the snake go into "ghost" mode temporarily.
+  - A consumable linked to another consumable that becomes.
+  - A consumable that renders a sprite image.
+- Allow players to select the initial speed of the game.
+  - Add a starting dialogue.
+- Add another snake to the game that is controlled by the computer using the A* search algorithm.
+
+## Project Rubric
+
+### README (All Rubric Points REQUIRED)
+
+| Done | Success Criteria | Specifications | Evidence |
+|------|------------------|----------------|----------|
+| &#9745; | A README with instructions is included with the project | The README is included with the project and has instructions for building/running the project. If any additional libraries are needed to run the project, these are indicated with cross-platform installation instructions. You can submit your writeup as markdown or pdf. | A README has been included with instructions to build the project. |
+| &#9745; | The README indicates the new features you added to the game | The README indicates the new features you added to the game, along with the expected behavior or output of the program. | See the *New Features Added* Section.          |
+| &#9745; | The README includes information about each rubric point addressed | The README indicates which rubric points are addressed. The README also indicates where in the code (i.e. files and line numbers) that the rubric points are addressed. | See the current section. |
+
+### Compiling and Testing (All Rubric Points REQUIRED)
+
+| Done | Success Criteria | Specifications | Evidence |
+|------|------------------|----------------|----------|
+| &#9745; | The submission must compile without any errors on the Udacity project workspace. | We strongly recommend using cmake and make, as provided in the starter repos. If you choose another build system, the code must be compiled on the Udacity project workspace. | The code has been compiled on the Udacity workspace. |
+
+### Loops, Functions, I/O - meet at least 2 criteria
+
+| Done | Success Criteria | Specifications | Evidence |
+|------|------------------|----------------|----------|
+|      | The project demonstrates an understanding of C++ functions and control structures. | A variety of control structures are added to the project. The project code is clearly organized into functions. |          |
+|      | The project reads data from a file and process the data, or the program writes data to a file. | The project reads data from an external file or writes data to a file as part of the necessary operation of the program. |          |
+|      | The project accepts user input and processes the input. | In addition to controlling the snake, the game can also receive new types of input from the player. |          |
+|      | The project uses data structures and immutable variables. | The project uses arrays or vectors and uses constant variables. |          |
+
+### Object Oriented Programming - meet at least 3 criteria
+
+| Done | Success Criteria | Specifications | Evidence |
+|------|------------------|----------------|----------|
+|      | One or more classes are added to the project with appropriate access specifiers for class members. | Classes are organized with attributes to hold data and methods to perform tasks. All class data members are explicitly specified as public, protected, or private. Member data that is subject to an invariant is hidden from the user and accessed via member methods. |          |
+|      | Class constructors utilize member initialization lists. | All class members that are set to argument values are initialized through member initialization lists. |          |
+|      | Classes abstract implementation details from their interfaces. | All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change the program state in undocumented ways. |          |
+
+### Memory Management - meet at least 3 criteria
+
+| Done | Success Criteria | Specifications | Evidence |
+|------|------------------|----------------|----------|
+|      | The project makes use of references in function declarations. | At least two variables are defined as references, or two functions use pass-by-reference in the project code. |          |
+|      | The project uses destructors appropriately. | At least one class that uses unmanaged dynamically allocated memory, along with any class that otherwise needs to modify state upon the termination of an object, uses a destructor. |          |
+|      | The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate. | The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction. |          |
+|      | The project follows the Rule of 5. | For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined. |          |
+|      | The project uses move semantics to move data instead of copying it, where possible. | The project relies on the move semantics, instead of copying the object. |          |
+|      | The project uses smart pointers instead of raw pointers. | The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. |          |
+
+### Concurrency - meet at least 2 criteria
+
+| Done | Success Criteria | Specifications | Evidence |
+|------|------------------|----------------|----------|
+|      | The project uses multithreading. | The project uses multiple threads or async tasks in the execution. |          |
+|      | A promise and future is used in the project. | A promise and future is used to pass data from a worker thread to a parent thread in the project code. |          |
+|      | A mutex or lock is used in the project. | A mutex or lock (e.g. std::lock_guard or `std::unique_lock) is used to protect data that is shared across multiple threads in the project code. |          |
+|      | A condition variable is used in the project. | A std::condition_variable is used in the project code to synchronize thread execution. |          |
+
+
+## References
+
+- [The StackExchange post that inspired this project](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl)
+- [An example of a great submission](https://github.com/nihguy/cpp-snake-game/tree/master) - maybe I'll do this one day.
+- [An explanation of the game loop](https://www.informit.com/articles/article.aspx?p=2928180&seqNum=4)
+- [Another explanation of the game loop](https://gameprogrammingpatterns.com/game-loop.html)
+- [Lazy Foo SDL Tutorials](https://lazyfoo.net/tutorials/SDL/01_hello_SDL/linux/index.php)
+- [Parallel Realities SDL Tutorials](https://www.parallelrealities.co.uk/tutorials/)
+- [TwinklebearDev SDL Tutorials](https://www.willusher.io/pages/sdl2/)
+- [SDL Wiki](https://wiki.libsdl.org/SDL2/FrontPage)
 
 ## CC Attribution-ShareAlike 4.0 International
 
