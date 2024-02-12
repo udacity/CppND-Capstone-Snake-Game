@@ -38,25 +38,30 @@ In this project, you can build your own C++ application or extend this Snake gam
 4. Run it: `./SnakeGame`.
 
 ## New Features Added
-11/02/2024 Rendered the snake and food on separate threads.
-
-11/02/2024 Created a food class.
+**12/02/2024** - Added a leaderboard. The leaderboard is saved to a text file. The leaderboard is displayed at the end of the game. The leaderboard is sorted by the highest score. The leaderboard is limited to the top 10 scores. The leaderboard also displays the date and time of the game.The leaderboard also displays the current users score.
 
 ## Ideas for future features
-- Implement a message queue to decide when to draw a new fruit.
+
 - Render the snake and food on different threads.
+- Use threads to manage the game loop.
+- Have a dialog at to start a new game.
 - Allow players to enter their names and save their high scores to a text file.
-  - Add a leaderboard.
-- Add fixed and moving obstacles to the game.
+  - Add a leaderboard at the end of the game.
+- Add fixed and moving obstacles to the game:
   - Implement a hard barrier temporarily.
-- Add different types of food to the game.
-  - Have each food manged by it's own thread.
+- Add different types of food to the game:
+  - Have a parent class to track all consummables.
+  - Have each consumable managed by it's own thread. Aim to understand the benefits of just using a loop.
+  - A consumable with a message queue to decide when to draw a new consumable/change the state of a consumable for the renderer e.g. food that becomes a barrier.
   - A consumable that makes the snake go into "ghost" mode temporarily.
   - A consumable linked to another consumable that becomes.
   - A consumable that renders a sprite image.
-- Allow players to select the initial speed of the game.
+  - A moving consumable.
+- Allow players to select game settings
+  - Set the intial speed of the snake.
   - Add a starting dialogue.
 - Add another snake to the game that is controlled by the computer using the A* search algorithm.
+- Add two player mode.
 
 ## Project Rubric
 
@@ -78,24 +83,28 @@ In this project, you can build your own C++ application or extend this Snake gam
 
 | Done | Success Criteria | Specifications | Evidence |
 |------|------------------|----------------|----------|
-|      | The project demonstrates an understanding of C++ functions and control structures. | A variety of control structures are added to the project. The project code is clearly organized into functions. |          |
-|      | The project reads data from a file and process the data, or the program writes data to a file. | The project reads data from an external file or writes data to a file as part of the necessary operation of the program. |          |
+| &#9745; | The project demonstrates an understanding of C++ functions and control structures. | A variety of control structures are added to the project. The project code is clearly organized into functions. | leaderboard.cpp uses for, while and if loops. Each class has functions with clearly defined scope.         |
+| &#9745; | The project reads data from a file and process the data, or the program writes data to a file. | The project reads data from an external file or writes data to a file as part of the necessary operation of the program. | learderboard.cpp has `getRecords` and `saveRecords` methods  which read and write data to a file. |
 |      | The project accepts user input and processes the input. | In addition to controlling the snake, the game can also receive new types of input from the player. |          |
-|      | The project uses data structures and immutable variables. | The project uses arrays or vectors and uses constant variables. |          |
+| &#9745; | The project uses data structures and immutable variables. | The project uses arrays or vectors and uses constant variables. | The `Leaderboard` class keeps a vector of `Records`. |
 
 ### Object Oriented Programming - meet at least 3 criteria
 
 | Done | Success Criteria | Specifications | Evidence |
 |------|------------------|----------------|----------|
-|      | One or more classes are added to the project with appropriate access specifiers for class members. | Classes are organized with attributes to hold data and methods to perform tasks. All class data members are explicitly specified as public, protected, or private. Member data that is subject to an invariant is hidden from the user and accessed via member methods. |          |
-|      | Class constructors utilize member initialization lists. | All class members that are set to argument values are initialized through member initialization lists. |          |
-|      | Classes abstract implementation details from their interfaces. | All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change the program state in undocumented ways. |          |
+| &#9745; | One or more classes are added to the project with appropriate access specifiers for class members. | Classes are organized with attributes to hold data and methods to perform tasks. All class data members are explicitly specified as public, protected, or private. Member data that is subject to an invariant is hidden from the user and accessed via member methods. | leaderboard.cpp contains both the `Leaderboard` and `Record` classes. |
+| &#9745; | Class constructors utilize member initialization lists. | All class members that are set to argument values are initialized through member initialization lists. | The `Record` class uses an initialiser list. |
+| &#9745; | Classes abstract implementation details from their interfaces. | All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change the program state in undocumented ways. | The `Record` class's implementation is abstracted from it's interface. We can change our records without changing our `Leaderboard` class.     |
+|      | Overloaded functions allow the same function to operate on different parameters. | One function is overloaded with different signatures for the same function name. | The `Record` class has two constructors.         |
+| &#9745; | Classes follow an appropriate inheritance hierarchy. | Inheritance hierarchies are logical. On member functions in an inherited class override virtual base class functions. |          |
+|      | Template generalise functions in the project. | One function or class is declared with a template that allows it to accept a generic parameter. |          |
+
 
 ### Memory Management - meet at least 3 criteria
 
 | Done | Success Criteria | Specifications | Evidence |
 |------|------------------|----------------|----------|
-|      | The project makes use of references in function declarations. | At least two variables are defined as references, or two functions use pass-by-reference in the project code. |          |
+| &#9745; | The project makes use of references in function declarations. | At least two variables are defined as references, or two functions use pass-by-reference in the project code. | The `Record` constructor and `write` method use pass by reference.          |
 |      | The project uses destructors appropriately. | At least one class that uses unmanaged dynamically allocated memory, along with any class that otherwise needs to modify state upon the termination of an object, uses a destructor. |          |
 |      | The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate. | The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction. |          |
 |      | The project follows the Rule of 5. | For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined. |          |
