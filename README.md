@@ -38,7 +38,7 @@ In this project, you can build your own C++ application or extend this Snake gam
 4. Run it: `./SnakeGame`.
 
 ## New Features Added
-**12/02/2024** - Added a leaderboard. The leaderboard is saved to a text file. The leaderboard is displayed at the end of the game. The leaderboard is sorted by the highest score. The leaderboard is limited to the top 10 scores. The leaderboard also displays the date and time of the game.The leaderboard also displays the current users score.
+**12/02/2024** - Added a leaderboard. The leaderboard is saved to a text file. The leaderboard is displayed at the end of the game. The leaderboard is sorted by the highest score. The leaderboard is limited to the top 10 scores. The leaderboard also displays the current users score.
 
 ## Ideas for future features
 
@@ -62,6 +62,7 @@ In this project, you can build your own C++ application or extend this Snake gam
   - Add a starting dialogue.
 - Add another snake to the game that is controlled by the computer using the A* search algorithm.
 - Add two player mode.
+- Add replay functionality to the game, storing the game state at each frame (or ever n frames) and then replaying the game from the start. Admittedly, you could just record the snakes's position and the food's position and then replay the game from the start.
 
 ## Project Rubric
 
@@ -107,8 +108,8 @@ In this project, you can build your own C++ application or extend this Snake gam
 | &#9745; | The project makes use of references in function declarations. | At least two variables are defined as references, or two functions use pass-by-reference in the project code. | The `Record` constructor and `write` method use pass by reference.          |
 |      | The project uses destructors appropriately. | At least one class that uses unmanaged dynamically allocated memory, along with any class that otherwise needs to modify state upon the termination of an object, uses a destructor. |          |
 |      | The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate. | The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction. |          |
-|      | The project follows the Rule of 5. | For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined. |          |
-|      | The project uses move semantics to move data instead of copying it, where possible. | The project relies on the move semantics, instead of copying the object. |          |
+| &#9745; | The project follows the Rule of 5. | For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined. | Added the rule of 5 to the `Record` class as the move constructor will be called from the `addRecord` method |
+| &#9745; | The project uses move semantics to move data instead of copying it, where possible. | The project relies on the move semantics, instead of copying the object. |  The `Leaderboard` class uses move semantics to add r-value `Records` |
 |      | The project uses smart pointers instead of raw pointers. | The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. |          |
 
 ### Concurrency - meet at least 2 criteria

@@ -1,6 +1,6 @@
-'include <string>'
-'include <vector>'
-'include <algorithm>'
+#include <string>
+#include <vector>
+#include <algorithm>
 
 class Record {
 
@@ -10,6 +10,34 @@ class Record {
 		Record(std::istream& is) {
 			is >> name >> score;
 		}
+
+		~Record() {};
+
+		Record(const Record& other) : score(other.getScore()), name(other.getName()) {};
+
+		Record& operator = (const Record& other) {
+			if (this != &other) {
+				score = other.score;
+				name = other.name;
+			}
+			return *this
+		}
+
+		Record(Record&& other) : score(other.score), name(other.name) {
+			other.score = 0;
+			other.name = "";
+		}
+
+		Record& operator = (Record&& other) {
+			if (this != &other) {
+				score = other.score;
+				name = other.name;
+				other.score = 0;
+				other.name = "";
+			}
+			return *this;
+		}
+
 
 		int getScore() const { return score };
 		std::string getName() const { return name };
@@ -36,8 +64,12 @@ public:
 		getRecords();
 	};
 	
-	void addRecord(Record record) {
+	void addRecord(Record& record) {
 		records.push_back(record);
+	}
+
+	void addRecord(Record&& record) {
+		records.push_back(std::move(record));
 	}
 
 	void getRecords() {
