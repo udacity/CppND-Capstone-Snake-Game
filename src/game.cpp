@@ -67,17 +67,6 @@ void Game::PlaceFood() {
   }
 }
 
-void Game::SupplyFood() {
-    while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-
-        std::lock_guard<std::mutex> lock(foodMutex);
-
-        PlaceFood();
-    }
-
-}
-
 void Game::Update() {
     if (!snake.alive) return;
 
@@ -87,15 +76,12 @@ void Game::Update() {
     int new_y = static_cast<int>(snake.head_y);
 
     // Check if there's food over here
-    {
-        std::lock_guard<std::mutex> lock(foodMutex);
-        if (food.x == new_x && food.y == new_y) {
-            score++;
-            PlaceFood();
-            // Grow snake and increase speed.
-            snake.GrowBody();
-            snake.speed += 0.02;
-        }
+    if (food.x == new_x && food.y == new_y) {
+        score++;
+        PlaceFood();
+        // Grow snake and increase speed.
+        snake.GrowBody();
+        snake.speed += 0.02;
     }
 }
 
