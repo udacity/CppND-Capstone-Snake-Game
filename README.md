@@ -40,6 +40,8 @@ In this project, you can build your own C++ application or extend this Snake gam
 ## New Features Added
 **12/02/2024** - Added a leaderboard. The leaderboard is saved to a text file. The leaderboard is displayed at the end of the game. The leaderboard is sorted by the highest score. The leaderboard is limited to the top 10 scores. The leaderboard also displays the current users score.
 
+**13/02/2024** - Adding a food thread to add additional food to the game. The food is added at a user-specified interval.
+
 ## Ideas for future features
 
 - Render the snake and food on different threads.
