@@ -40,7 +40,7 @@ In this project, you can build your own C++ application or extend this Snake gam
 ## New Features Added
 **12/02/2024** - Added a leaderboard. The leaderboard is saved to a text file. The leaderboard is displayed at the end of the game. The leaderboard is sorted by the highest score. The leaderboard is limited to the top 10 scores. The leaderboard also displays the current users score.
 
-**13/02/2024** - Adding a food thread to add additional food to the game. The food is added at a user-specified interval.
+**13/02/2024** - To meet the concurrency requirement, I added a thread to load the leaderboard from a file.
 
 ## Ideas for future features
 
@@ -65,7 +65,8 @@ In this project, you can build your own C++ application or extend this Snake gam
 - Add another snake to the game that is controlled by the computer using the A* search algorithm.
 - Add two player mode.
 - Add replay functionality to the game, storing the game state at each frame (or ever n frames) and then replaying the game from the start. Admittedly, you could just record the snakes's position and the food's position and then replay the game from the start.
-
+- Try adding a food and a snake thread to manage the game's state.
+- 
 ## Project Rubric
 
 ### README (All Rubric Points REQUIRED)
