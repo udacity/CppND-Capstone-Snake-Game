@@ -23,7 +23,13 @@
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "linux_x64" ],
       "wslPath": "${defaultWSLPath}",
-      "variables": []
+      "variables": [
+        {
+          "name": "CMAKE_CXX_FLAGS",
+          "value": "-pthread",
+          "type": "STRING"
+        }
+      ]
     }
   ]
 }
