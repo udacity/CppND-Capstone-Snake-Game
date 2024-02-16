@@ -1,7 +1,12 @@
 #include <iostream>
+#include <future>
+#include <thread>
+#include <string>
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
+#include "leaderboard.h"
+
 #undef main
 
 int main() {
@@ -12,12 +17,31 @@ int main() {
   constexpr std::size_t kGridWidth{32};
   constexpr std::size_t kGridHeight{32};
 
+  // Get the Leaderboard in the backgrond
+  std::promise<Leaderboard> p;
+  std::future<Leaderboard> f = p.get_future();
+  std::thread t([&p] {p.set_value(Leaderboard()); });
+
+	  // Get the name of the player
+	  std::string name;
+	  std::cout << "Enter your name: ";
+		std::cin >> name;
+
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
   Game game(kGridWidth, kGridHeight);
   game.Run(controller, renderer, kMsPerFrame);
+
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";
   std::cout << "Size: " << game.GetSize() << "\n";
+
+  // Get the Leaderboard from the future
+  Leaderboard leaderboard = f.get();
+  t.join();
+  leaderboard.addRecord(Record(game.GetScore(), name));
+  leaderboard.saveRecords();
+  leaderboard.printRecords(10);
+
   return 0;
 }
