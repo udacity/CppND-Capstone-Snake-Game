@@ -14,8 +14,8 @@ public:
     ~Record();
     Record(const Record& other);
     Record& operator = (const Record& other);
-    Record(Record&& other);
-    Record& operator = (Record&& other);
+    Record(Record&& other) noexcept;
+    Record& operator = (Record&& other) noexcept;
 
     int getScore() const;
     std::string getName() const;
