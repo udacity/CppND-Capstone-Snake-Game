@@ -4,6 +4,16 @@
 - [Introduction](#introduction)
 - [Dependencies for Running Locally](#dependencies-for-running-locally)
 - [Basic Build Instructions](#basic-build-instructions)
+- [New Features Added](#new-features-added)
+- [Feature Ideas](#feature-ideas)
+- [Project Rubric](#project-rubric)
+  - [README (All Rubric Points REQUIRED)](#readme-all-rubric-points-required)
+  - [Compiling and Testing (All Rubric Points REQUIRED)](#compiling-and-testing-all-rubric-points-required)
+  - [Loops, Functions, I/O - meet at least 2 criteria](#loops-functions-io---meet-at-least-2-criteria)
+  - [Object Oriented Programming - meet at least 3 criteria](#object-oriented-programming---meet-at-least-3-criteria)
+  - [Memory Management - meet at least 3 criteria](#memory-management---meet-at-least-3-criteria)
+  - [Concurrency - meet at least 2 criteria](#concurrency---meet-at-least-2-criteria)
+- [References](#references)
 - [CC Attribution-ShareAlike 4.0 International](#cc-attribution-sharealike-40-international)
 
 ## Introduction
@@ -38,17 +48,17 @@ In this project, you can build your own C++ application or extend this Snake gam
 4. Run it: `./SnakeGame`.
 
 ## New Features Added
-**12/02/2024** - Added a leaderboard. The leaderboard is saved to a text file. The leaderboard is displayed at the end of the game. The leaderboard is sorted by the highest score. The leaderboard is limited to the top 10 scores. The leaderboard also displays the current users score.
+**12/02/2024** - Added a leaderboard. The leaderboard is saved to a text file. The leaderboard is displayed at the end of the game. The leaderboard is sorted by the highest score. The leaderboard is limited to the top 10 scores.
 
-**13/02/2024** - To meet the concurrency requirement, I added a thread to load the leaderboard from a file.
+**13/02/2024** - To meet the concurrency requirement, I used a thread to load the leaderboard from a file in the background.
 
-## Ideas for future features
+## Feature Ideas
 
 - Render the snake and food on different threads.
 - Use threads to manage the game loop.
 - Have a dialog at to start a new game.
 - Allow players to enter their names and save their high scores to a text file.
-  - Add a leaderboard at the end of the game.
+  - Add a graphical leaderboard at the end of the game.
 - Add fixed and moving obstacles to the game:
   - Implement a hard barrier temporarily.
 - Add different types of food to the game:
@@ -87,20 +97,20 @@ In this project, you can build your own C++ application or extend this Snake gam
 
 | Done | Success Criteria | Specifications | Evidence |
 |------|------------------|----------------|----------|
-| &#9745; | The project demonstrates an understanding of C++ functions and control structures. | A variety of control structures are added to the project. The project code is clearly organized into functions. | leaderboard.cpp uses for, while and if loops. Each class has functions with clearly defined scope.         |
-| &#9745; | The project reads data from a file and process the data, or the program writes data to a file. | The project reads data from an external file or writes data to a file as part of the necessary operation of the program. | learderboard.cpp has `getRecords` and `saveRecords` methods  which read and write data to a file. |
+| &#9745; | The project demonstrates an understanding of C++ functions and control structures. | A variety of control structures are added to the project. The project code is clearly organized into functions. | *leaderboard.cpp* uses for, while and if loops, switch-case blocks and try-catch blcoks. Each class has functions with clearly defined scope.         |
+| &#9745; | The project reads data from a file and process the data, or the program writes data to a file. | The project reads data from an external file or writes data to a file as part of the necessary operation of the program. | *learderboard.cpp* has `getRecords` and `saveRecords` methods, starting on lines 62 and 77 respectively, which read and write data to a file. |
 |      | The project accepts user input and processes the input. | In addition to controlling the snake, the game can also receive new types of input from the player. |          |
-| &#9745; | The project uses data structures and immutable variables. | The project uses arrays or vectors and uses constant variables. | The `Leaderboard` class keeps a vector of `Records`. |
+| &#9745; | The project uses data structures and immutable variables. | The project uses arrays or vectors and uses constant variables. | The `Leaderboard` class stores each game result in a vector of `Records` as shown on line 41 of *leaderboard.h.* From line 15 of *leaderboard.h* the copy constructor ad copy-assignment operator for the `Record` class are defined, which take inputs defined as `const`. |
 
 ### Object Oriented Programming - meet at least 3 criteria
 
 | Done | Success Criteria | Specifications | Evidence |
 |------|------------------|----------------|----------|
-| &#9745; | One or more classes are added to the project with appropriate access specifiers for class members. | Classes are organized with attributes to hold data and methods to perform tasks. All class data members are explicitly specified as public, protected, or private. Member data that is subject to an invariant is hidden from the user and accessed via member methods. | leaderboard.cpp contains both the `Leaderboard` and `Record` classes. |
-| &#9745; | Class constructors utilize member initialization lists. | All class members that are set to argument values are initialized through member initialization lists. | The `Record` class uses an initialiser list. |
-| &#9745; | Classes abstract implementation details from their interfaces. | All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change the program state in undocumented ways. | The `Record` class's implementation is abstracted from it's interface. We can change our records without changing our `Leaderboard` class.     |
-|      | Overloaded functions allow the same function to operate on different parameters. | One function is overloaded with different signatures for the same function name. | The `Record` class has two constructors.         |
-| &#9745; | Classes follow an appropriate inheritance hierarchy. | Inheritance hierarchies are logical. On member functions in an inherited class override virtual base class functions. |          |
+| &#9745; | One or more classes are added to the project with appropriate access specifiers for class members. | Classes are organized with attributes to hold data and methods to perform tasks. All class data members are explicitly specified as public, protected, or private. Member data that is subject to an invariant is hidden from the user and accessed via member methods. | *leaderboard.h* declares both the `Leaderboard` and `Record` classes. |
+| &#9745; | Class constructors utilize member initialization lists. | All class members that are set to argument values are initialized through member initialization lists. | The `Record` class uses an initialiser list for the constructor defined on line 3 of *leaderboard.cpp*.  |
+| &#9745; | Classes abstract implementation details from their interfaces. | All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change the program state in undocumented ways. | The `Record` class's implementation is abstracted from it's interface. We can change our records without changing how the `Record` class is used by the `Leaderboard` class.     |
+| &#9745; | Overloaded functions allow the same function to operate on different parameters. | One function is overloaded with different signatures for the same function name. | The `Record` class has two constructors with different function signatures defined on lines 3 and 5 of *leaderboard.cpp* |
+|        | Classes follow an appropriate inheritance hierarchy. | Inheritance hierarchies are logical. On member functions in an inherited class override virtual base class functions. |          |
 |      | Template generalise functions in the project. | One function or class is declared with a template that allows it to accept a generic parameter. |          |
 
 
@@ -108,19 +118,19 @@ In this project, you can build your own C++ application or extend this Snake gam
 
 | Done | Success Criteria | Specifications | Evidence |
 |------|------------------|----------------|----------|
-| &#9745; | The project makes use of references in function declarations. | At least two variables are defined as references, or two functions use pass-by-reference in the project code. | The `Record` constructor and `write` method use pass by reference.          |
+| &#9745; | The project makes use of references in function declarations. | At least two variables are defined as references, or two functions use pass-by-reference in the project code. | The `Record` class' constructor defined on line 5 of *leaderboard.cpp* and `write` method defined on line 46 of *leaderboard.cpp* use pass by reference.|
 |      | The project uses destructors appropriately. | At least one class that uses unmanaged dynamically allocated memory, along with any class that otherwise needs to modify state upon the termination of an object, uses a destructor. |          |
 |      | The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate. | The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction. |          |
-| &#9745; | The project follows the Rule of 5. | For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined. | Added the rule of 5 to the `Record` class as the move constructor will be called from the `addRecord` method |
-| &#9745; | The project uses move semantics to move data instead of copying it, where possible. | The project relies on the move semantics, instead of copying the object. |  The `Leaderboard` class uses move semantics to add r-value `Records` |
+| &#9745; | The project follows the Rule of 5. | For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined. | Added the rule of 5 to the `Record` class as the move constructor will be called from the `addRecord` method of the `Leaderboard` class defined on line 58 of *leaderboard.cpp*.  |
+| &#9745; | The project uses move semantics to move data instead of copying it, where possible. | The project relies on the move semantics, instead of copying the object. |  The `Leaderboard` class uses move semantics to add r-value `Records` on line 58 of *leaderboard.cpp* |
 |      | The project uses smart pointers instead of raw pointers. | The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. |          |
 
 ### Concurrency - meet at least 2 criteria
 
 | Done | Success Criteria | Specifications | Evidence |
 |------|------------------|----------------|----------|
-|      | The project uses multithreading. | The project uses multiple threads or async tasks in the execution. |          |
-|      | A promise and future is used in the project. | A promise and future is used to pass data from a worker thread to a parent thread in the project code. |          |
+| &#9745; | The project uses multithreading. | The project uses multiple threads or async tasks in the execution. | A thread is used to load the current leaderboard on line 23 of *main.cpp*. |
+| &#9745; | A promise and future is used in the project. | A promise and future is used to pass data from a worker thread to a parent thread in the project code. | A `Leaderboard` class promise and future are created on lines 21 and 22 of *main.cpp*, respectively. |
 |      | A mutex or lock is used in the project. | A mutex or lock (e.g. std::lock_guard or `std::unique_lock) is used to protect data that is shared across multiple threads in the project code. |          |
 |      | A condition variable is used in the project. | A std::condition_variable is used in the project code to synchronize thread execution. |          |
 

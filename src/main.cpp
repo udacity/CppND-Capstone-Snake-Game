@@ -10,7 +10,7 @@
 #undef main
 
 int main() {
-	constexpr std::size_t kFramesPerSecond{60};
+  constexpr std::size_t kFramesPerSecond{60};
   constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};
   constexpr std::size_t kScreenWidth{640};
   constexpr std::size_t kScreenHeight{640};
@@ -21,7 +21,6 @@ int main() {
   std::promise<Leaderboard> p;
   std::future<Leaderboard> f = p.get_future();
   std::thread t([&p] {p.set_value(Leaderboard()); });
-
 
   std::string name;
   std::cout << "Enter your name: ";
