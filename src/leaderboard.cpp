@@ -102,7 +102,7 @@ void Leaderboard::printRecords(int n) {
             default:
                 std::cout << i + 1 << "th: "; break;
             }
-            std::cout << records[i].getName() << " " << records[i].getScore() << "\n";
+            std::cout << records[i].getName() << " - " << records[i].getScore() << "\n";
         }
         else {
             break;
