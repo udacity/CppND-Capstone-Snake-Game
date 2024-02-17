@@ -37,12 +37,17 @@ public:
 	void BadFoodTimer() {
 		const int duration = 10;
 		auto start_time = std::chrono::high_resolution_clock::now();
-		while (is_active) {
+		while (true) {
+			if !(IsActive()) {
+				break;
+			}
 			auto current_time = std::chrono::high_resolution_clock::now();
 			auto elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
 			if (elapsed_seconds >= duration) {
 				Remove();
 				break;
+		}
+			std::this_thread::sleep_for(std::chrono::milliseconds(800));
 		}
 	}
 
