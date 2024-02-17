@@ -28,11 +28,11 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food)
-
-    lock.lock();
-    renderer.RenderBadFood(bad_food);
-    lock.unlock();
+    renderer.Render(snake, food);
+    if (badFood.IsActive()) {
+        auto [bad_food_x, bad_food_y] = badFood.GetPosition();
+        renderer.RenderBadFood(bad_food_x, bad_food_y);
+    }
 
     frame_end = SDL_GetTicks();
 
@@ -73,19 +73,16 @@ void Game::PlaceFood() {
 }
 
 void Game::PlaceBadFood() {
-	int x, y;
+    int x, y;
     while (true) {
-		x = random_w(engine);
-		y = random_h(engine);
-		// Check that the location is not occupied by a snake item before placing
-		// food.
+        x = random_w(engine);
+        y = random_h(engine);
+        // Check that the location is not occupied by a snake item before placing
+        // food.
         if (!snake.SnakeCell(x, y) && (x != food.x && y != food.y)) {
-			bad_food.x = x;
-			bad_food.y = y;
-            is_bad_food_active = true;
-			return;
-		}
-	}
+            badFood.Place(x, y);
+        }
+    }
 }
 
 void Game::BadFoodTimer()
@@ -120,31 +117,30 @@ void Game::Update() {
     int new_y = static_cast<int>(snake.head_y);
 
     // Check if there's bad food over here
-    lock.lock();
-    if (is_bad_food_active && bad_food.x == new_x && bad_food.y == new_y) {
-        lock.unlock();
-        return;
+    if (badFood.IsEaten(new_x, new_y))
+    {
+        score--;
+		badFood.Remove();
+        snake.GrowBody();
+		snake.speed += 0.02;
 	}
-    lock.unlock();
 
     // Check if there's food over here
     if (food.x == new_x && food.y == new_y) {
         score++;
-        PlaceFood();
-        lock.lock();
-        if (!is_bad_food_active)
+        
+        PlaceFood();        
+        if (score > 0 && score % 3 == 0)
         {
-            if (score>0 && score % 3 == 0)
-            {
-                PlaceBadFood();
-                is_bad_food_active = true;
-                badFoodTimer = std::thread(&Game::badFoodTimer, this);
-                BadFoodTimer.detach();
-			}
+            PlaceBadFood();
+            badFoodTimer = std::thread(&BadFood::BadFoodTimer, &badFood);
+
 		}
+
         // Grow snake and increase speed.
         snake.GrowBody();
         snake.speed += 0.02;
+        
     }
 }
 
