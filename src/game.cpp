@@ -12,6 +12,13 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
   PlaceFood();
 }
 
+Game::~Game() {
+    badFood.Cancel();
+    if (badFoodTimer.joinable) {
+        badFoodTimer.join();
+    }
+}
+
 void Game::Run(Controller const &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
@@ -81,30 +88,14 @@ void Game::PlaceBadFood() {
         // food.
         if (!snake.SnakeCell(x, y) && (x != food.x && y != food.y)) {
             badFood.Place(x, y);
+            if (badFoodTimer.joinable())
+            {
+                badFood.Cancel();
+				badFoodTimer.join();
+			}
+            badFoodTimer = std::thread(&BadFood::BadFoodTimer, &badFood);
+            return;
         }
-    }
-}
-
-void Game::BadFoodTimer()
-{
-    const int badSeconds = 10;
-    auto startTime = std::chrono::high_resolution_clock::now();
-    std::unique_lock<std::mutex> lock(mutex);
-    while (is_bad_food_active)
-    {
-        auto current_Time = std::chrono::high_resolution_clock::now();
-        auto elapsed_Seconds = std::chrono::duration_cast<std::chrono::seconds>(current_Time - startTime).count();
-        if (elapsed_Seconds >= badSeconds )
-        {
-            // Bonus food time is up
-            is_bad_food_active = false;
-            bad_food.x = 1;
-            bad_food.y = 1;
-            break;
-        }
-        lock.unlock();
-        // Wait for a short interval or until the condition_variable is notified
-        cond.wait_for(lock, std::chrono::milliseconds(800));
     }
 }
 
@@ -120,27 +111,31 @@ void Game::Update() {
     if (badFood.IsEaten(new_x, new_y))
     {
         score--;
+
 		badFood.Remove();
+        badFood.Cancel();
+        if (badFoodTimer.joinable()) badFoodTimer.join();
+
         snake.GrowBody();
 		snake.speed += 0.02;
 	}
 
     // Check if there's food over here
     if (food.x == new_x && food.y == new_y) {
-        score++;
         
+        // Update the score
+        score++;
+
+        // Place any more food
         PlaceFood();        
-        if (score > 0 && score % 3 == 0)
+        if (score > 0 && score % 3 == 0 && !badFood.IsActive())
         {
             PlaceBadFood();
-            badFoodTimer = std::thread(&BadFood::BadFoodTimer, &badFood);
-
 		}
 
         // Grow snake and increase speed.
         snake.GrowBody();
-        snake.speed += 0.02;
-        
+        snake.speed += 0.02;   
     }
 }
 
