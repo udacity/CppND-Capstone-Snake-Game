@@ -38,7 +38,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
- void Renderer::RenderBadFood(SDL_Point const &&bad_food) {
+ void Renderer::RenderBadFood(SDL_Point const &bad_food) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -48,9 +48,11 @@ Renderer::~Renderer() {
   block.x = bad_food.x * block.w;
   block.y = bad_food.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
+
+  SDL_RenderPresent(sdl_renderer);
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food) {
+void Renderer::Render(Snake const snake, SDL_Point const &food, BadFood const &bad_food) {
 
   SDL_Rect block;
   block.w = screen_width / grid_width;
@@ -59,6 +61,10 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
   SDL_RenderClear(sdl_renderer);
+
+  if (bad_food.IsActive()) {
+      RenderBadFood(bad_food.GetPosition());
+  }
 
   // Render food
   SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);

@@ -35,10 +35,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
-    if (badFood.IsActive()) {
-        renderer.RenderBadFood(badFood.GetPosition());
-    }
+    renderer.Render(snake, food, badFood);
 
     frame_end = SDL_GetTicks();
 
@@ -86,12 +83,12 @@ void Game::PlaceBadFood() {
         // Check that the location is not occupied by a snake item before placing
         // food.
         if (!snake.SnakeCell(x, y) && (x != food.x && y != food.y)) {
-            badFood.Place(x, y);
             if (badFoodTimer.joinable())
             {
                 badFood.Cancel();
 				badFoodTimer.join();
 			}
+            badFood.Place(x, y);
             badFoodTimer = std::thread(&BadFood::BadFoodTimer, &badFood);
             return;
         }
@@ -116,7 +113,7 @@ void Game::Update() {
         if (badFoodTimer.joinable()) badFoodTimer.join();
 
         snake.GrowBody();
-		snake.speed += 0.02;
+		snake.speed += speed_increment;
 	}
 
     // Check if there's food over here
@@ -127,14 +124,14 @@ void Game::Update() {
 
         // Place any more food
         PlaceFood();        
-        if (score > 0 && score % 3 == 0 && !badFood.IsActive())
+        if (score > 0 && !badFood.IsActive())
         {
             PlaceBadFood();
 		}
 
         // Grow snake and increase speed.
         snake.GrowBody();
-        snake.speed += 0.02;   
+        snake.speed += speed_increment;   
     }
 }
 

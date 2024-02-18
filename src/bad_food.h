@@ -12,15 +12,16 @@ public:
 
 	void Place(int new_x, int new_y);
 	void Remove();
-	bool IsActive();
+	bool IsActive() const;
 	void Cancel();
-	bool IsEaten(int head_x, int head_y);
-	SDL_Point GetPosition();
+	bool IsEaten(int head_x, int head_y) const;
+	SDL_Point GetPosition() const;
 	void BadFoodTimer();
 
 private:
-	std::mutex data_mutex;
+	mutable std::mutex data_mutex;
 	std::mutex cancel_mutex;
+	std::condition_variable cond;
 	bool is_active;
 	bool cancel = false;
 	SDL_Point position;

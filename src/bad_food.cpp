@@ -1,7 +1,7 @@
 #include "bad_food.h"
 #include <chrono>
 
-BadFood::BadFood() : is_active(false), x(1), y(1) {}
+BadFood::BadFood() : is_active(false) {}
 
 void BadFood::Place(int new_x, int new_y) {
     std::lock_guard<std::mutex> lock(data_mutex);
@@ -17,7 +17,8 @@ void BadFood::Remove() {
     is_active = false;
 }
 
-bool BadFood::IsActive() {
+
+bool BadFood::IsActive() const {
     std::lock_guard<std::mutex> lock(data_mutex);
     return is_active;
 }
@@ -28,20 +29,21 @@ void BadFood::Cancel() {
     cond.notify_one();
 }
 
-bool BadFood::IsEaten(int head_x, int head_y) {
+bool BadFood::IsEaten(int head_x, int head_y) const {
     std::lock_guard<std::mutex> lock(data_mutex);
     return head_x == position.x && head_y == position.y;
 }
 
-SDL_Point BadFood::GetPosition() {
+SDL_Point BadFood::GetPosition() const {
     std::lock_guard<std::mutex> lock(data_mutex);
-    return location
+    return position;
 }
 
 void BadFood::BadFoodTimer() {
     const int duration = 10;
     auto start_time = std::chrono::high_resolution_clock::now();
     std::unique_lock<std::mutex> lock(cancel_mutex);
+    cancel = false;
     while (!cancel && IsActive()) {
         auto current_time = std::chrono::high_resolution_clock::now();
         auto elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
@@ -51,4 +53,5 @@ void BadFood::BadFoodTimer() {
         }
         cond.wait_for(lock, std::chrono::milliseconds(500));
     }
+    cancel = false;
 }
