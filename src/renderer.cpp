@@ -38,19 +38,19 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
- void Renderer::RenderBadFood(SDL_Point const& bad_food) {
+ void Renderer::RenderBadFood(SDL_Point const &&bad_food) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
 
   // Render bad food
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF));
+  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   block.x = bad_food.x * block.w;
   block.y = bad_food.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food, bool const is_bad_food_active, SDL_Point const &bad_food) {
+void Renderer::Render(Snake const snake, SDL_Point const &food) {
 
   SDL_Rect block;
   block.w = screen_width / grid_width;

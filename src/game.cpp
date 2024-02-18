@@ -14,7 +14,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
 
 Game::~Game() {
     badFood.Cancel();
-    if (badFoodTimer.joinable) {
+    if (badFoodTimer.joinable()) {
         badFoodTimer.join();
     }
 }
@@ -37,8 +37,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     Update();
     renderer.Render(snake, food);
     if (badFood.IsActive()) {
-        auto [bad_food_x, bad_food_y] = badFood.GetPosition();
-        renderer.RenderBadFood(bad_food_x, bad_food_y);
+        renderer.RenderBadFood(badFood.GetPosition());
     }
 
     frame_end = SDL_GetTicks();
