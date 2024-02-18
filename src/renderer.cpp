@@ -39,7 +39,7 @@ Renderer::~Renderer() {
 }
 
  void Renderer::RenderBadFood(SDL_Point const &bad_food) {
-  SDL_Rect block;
+  SDL_Rect block{ 0, 0, screen_width / grid_width, screen_height / grid_height };
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
 
@@ -48,13 +48,11 @@ Renderer::~Renderer() {
   block.x = bad_food.x * block.w;
   block.y = bad_food.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
-
-  SDL_RenderPresent(sdl_renderer);
 }
 
 void Renderer::Render(Snake const snake, SDL_Point const &food, BadFood const &bad_food) {
 
-  SDL_Rect block;
+  SDL_Rect block{ 0, 0, screen_width / grid_width, screen_height / grid_height };
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
 

@@ -1,7 +1,7 @@
 #include "bad_food.h"
 #include <chrono>
 
-BadFood::BadFood() : is_active(false) {}
+BadFood::BadFood() : is_active(false), position{0, 0} {}
 
 void BadFood::Place(int new_x, int new_y) {
     std::lock_guard<std::mutex> lock(data_mutex);

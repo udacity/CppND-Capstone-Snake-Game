@@ -18,9 +18,9 @@ int main() {
   constexpr std::size_t kGridHeight{32};
 
   // Get the Leaderboard in the backgrond
-  std::promise<Leaderboard> p;
-  std::future<Leaderboard> f = p.get_future();
-  std::thread t([&p] {p.set_value(Leaderboard()); });
+  std::future<Leaderboard> f = std::async(std::launch::async, []() {
+	return Leaderboard();
+  });
 
   std::string name;
   std::cout << "Enter your name: ";
@@ -38,7 +38,6 @@ int main() {
 
   // Get the Leaderboard from the future
   Leaderboard leaderboard = f.get();
-  t.join();
   leaderboard.addRecord(Record(game.GetScore(), name));
   leaderboard.saveRecords();
   leaderboard.printRecords(10);
