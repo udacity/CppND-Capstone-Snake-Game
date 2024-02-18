@@ -44,7 +44,7 @@ Renderer::~Renderer() {
   block.h = screen_height / grid_height;
 
   // Render bad food
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
   block.x = bad_food.x * block.w;
   block.y = bad_food.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);

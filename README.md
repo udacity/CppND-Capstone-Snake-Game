@@ -48,35 +48,45 @@ In this project, you can build your own C++ application or extend this Snake gam
 4. Run it: `./SnakeGame`.
 
 ## New Features Added
-**12/02/2024** - Added a leaderboard. The leaderboard is saved to a text file. The leaderboard is displayed at the end of the game. The leaderboard is sorted by the highest score. The leaderboard is limited to the top 10 scores.
+**12/02/2024** - Added a leaderboard. The leaderboard is saved to a text file. The leaderboard is displayed at the end of the game. The leaderboard is sorted by the highest score. The leaderboard is limited to the top 10 scores. The leaderboard is initialised using `std::async` in case the file to load is very large.
 
-**13/02/2024** - To meet the concurrency requirement, I used a thread to load the leaderboard from a file in the background.
+**18/02/2024** - To meet the concurrency requirement, I've implemented a second food that exists for a specified time. The food is "bad", rendered as a red square and disappears after 10s. A thread is required so that a timing loop can run without blocking the main thread of execution.
 
 ## Feature Ideas
 
-- Render the snake and food on different threads.
-- Use threads to manage the game loop.
-- Have a dialog at to start a new game.
-- Allow players to enter their names and save their high scores to a text file.
+- **Make the game look better**:
+  - Add a background image.
+  - Add a game over screen.
+  - Add a start screen.
+  - Add a pause screen.
+  - Add a settings screen.
+  - Add a game over sound.
+  - Add a sound when the snake eats food.
+  - Add a sound when the snake dies.
+  - Add a sound when the snake moves.
+  - Add a sound when the snake changes direction.
+  - Add a sound when the snake speeds up.
+  - Add a sound when the snake slows down
   - Add a graphical leaderboard at the end of the game.
-- Add fixed and moving obstacles to the game:
-  - Implement a hard barrier temporarily.
-- Add different types of food to the game:
+  - Render items with sprites instead of squares.
+- **Explore software design ideas**:
+  - Manage the snake and food on different threads.
   - Have a parent class to track all consummables.
   - Have each consumable managed by it's own thread. Aim to understand the benefits of just using a loop.
+- **Add new mechanics to the game**:
   - A consumable with a message queue to decide when to draw a new consumable/change the state of a consumable for the renderer e.g. food that becomes a barrier.
   - A consumable that makes the snake go into "ghost" mode temporarily.
-  - A consumable linked to another consumable that becomes.
-  - A consumable that renders a sprite image.
+  - A consumable that goes bad/mouldy and reduces a player's score.
   - A moving consumable.
-- Allow players to select game settings
-  - Set the intial speed of the snake.
-  - Add a starting dialogue.
-- Add another snake to the game that is controlled by the computer using the A* search algorithm.
-- Add two player mode.
-- Add replay functionality to the game, storing the game state at each frame (or ever n frames) and then replaying the game from the start. Admittedly, you could just record the snakes's position and the food's position and then replay the game from the start.
-- Try adding a food and a snake thread to manage the game's state.
-- 
+  - A consumable that behaves as a barrier
+  - A consumable that implement a hard barrier around the games's border temporarily.
+- **Functionality Improvements**:
+  - Allow players to select game settings e.g. the intial speed of the snake.
+  - Add another snake to the game that is controlled by the computer using the A* search algorithm.
+  - Add two player mode.
+  - Add replay functionality to the game, storing the game state at each frame (or ever n frames) and then replaying the game from the start. Admittedly, you could just record the snakes's position and the food's position and then replay the game from the start.
+
+	- 
 ## Project Rubric
 
 ### README (All Rubric Points REQUIRED)
@@ -129,10 +139,10 @@ In this project, you can build your own C++ application or extend this Snake gam
 
 | Done | Success Criteria | Specifications | Evidence |
 |------|------------------|----------------|----------|
-| &#9745; | The project uses multithreading. | The project uses multiple threads or async tasks in the execution. | A thread is used to load the current leaderboard on line 23 of *main.cpp*. |
-| &#9745; | A promise and future is used in the project. | A promise and future is used to pass data from a worker thread to a parent thread in the project code. | A `Leaderboard` class promise and future are created on lines 21 and 22 of *main.cpp*, respectively. |
-|      | A mutex or lock is used in the project. | A mutex or lock (e.g. std::lock_guard or `std::unique_lock) is used to protect data that is shared across multiple threads in the project code. |          |
-|      | A condition variable is used in the project. | A std::condition_variable is used in the project code to synchronize thread execution. |          |
+| &#9745; | The project uses multithreading. | The project uses multiple threads or async tasks in the execution. | `std::async` is used to load the current leaderboard on line 21 of *main.cpp*. A thread is used for the `bad_food` timer on line 93 of *game.cpp* |
+|  | A promise and future is used in the project. | A promise and future is used to pass data from a worker thread to a parent thread in the project code. | A `Leaderboard` class future is created on lines 21 of *main.cpp*, respectively. |
+| &#9745; | A mutex or lock is used in the project. | A mutex or lock (e.g. `std::lock_guard` or `std::unique_lock`) is used to protect data that is shared across multiple threads in the project code. | The `BadFood` class, implemented in *bad_food.cpp*, demonstrates extensive use of locks and mutexes to ensure that `bad-food` in *game.cpp* is accessed in a thread-safe way. |
+| &#9745; | A condition variable is used in the project. | A std::condition_variable is used in the project code to synchronize thread execution. | A condition variable is used to cancel our timing loop immediately, without waiting for the 0.5s rest interval in the `BadFoodTimer` method to elapse. See the `BadFoodTimer` and `Cancel` methods starting on lines 26 and 42 of *bad_food.cpp*, respectively. |
 
 
 ## References
