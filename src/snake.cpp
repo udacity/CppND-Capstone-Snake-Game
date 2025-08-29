@@ -19,6 +19,7 @@ void Snake::Update() {
   }
 }
 
+// Note: Grid origin -> upper left corner
 void Snake::UpdateHead() {
   switch (direction) {
     case Direction::kUp:
