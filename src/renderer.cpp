@@ -38,7 +38,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(const std::vector<std::shared_ptr<Snake>> &snakes,
+void Renderer::Render(const std::vector<std::unique_ptr<Snake>> &snakes,
                       SDL_Point const &food) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
@@ -100,4 +100,73 @@ void Renderer::UpdateWindowTitle(const std::vector<int> &scores, int fps) {
   title += "FPS: " + std::to_string(fps);
 
   SDL_SetWindowTitle(sdl_window, title.c_str());
+}
+
+int Renderer::ShowPlayerMenu() {
+  bool in_menu = true;
+  int selected = 1; // 1P by default
+
+  // basic layout
+  SDL_Rect left, right, title;
+  left.w  = screen_width / 3;
+  left.h  = screen_height / 3;
+  left.x  = screen_width / 6;
+  left.y  = screen_height / 2 - left.h / 2;
+
+  right    = left;
+  right.x  = screen_width - left.x - left.w;
+
+  title.x = 0; title.y = screen_height / 8;
+  title.w = screen_width; title.h = screen_height / 10;
+
+  while (in_menu) {
+    // --- input ---
+    SDL_Event e;
+    while (SDL_PollEvent(&e)) {
+      if (e.type == SDL_QUIT) return 1; // fallback to 1P if window closed
+      if (e.type == SDL_KEYDOWN) {
+        switch (e.key.keysym.sym) {
+          case SDLK_LEFT:  selected = 1; break;
+          case SDLK_RIGHT: selected = 2; break;
+          case SDLK_RETURN:
+          case SDLK_KP_ENTER:
+            return selected;
+          case SDLK_1: return 1;
+          case SDLK_2: return 2;
+        }
+      }
+    }
+
+    // --- draw ---
+    SDL_SetRenderDrawColor(sdl_renderer, 0x12, 0x12, 0x12, 0xFF); // bg
+    SDL_RenderClear(sdl_renderer);
+
+    // title bar
+    SDL_SetRenderDrawColor(sdl_renderer, 0x22, 0x22, 0x22, 0xFF);
+    SDL_RenderFillRect(sdl_renderer, &title);
+
+    // left panel (1P)
+    if (selected == 1) SDL_SetRenderDrawColor(sdl_renderer, 0x33, 0x88, 0xCC, 0xFF);
+    else               SDL_SetRenderDrawColor(sdl_renderer, 0x33, 0x33, 0x33, 0xFF);
+    SDL_RenderFillRect(sdl_renderer, &left);
+
+    // right panel (2P)
+    if (selected == 2) SDL_SetRenderDrawColor(sdl_renderer, 0x33, 0x88, 0xCC, 0xFF);
+    else               SDL_SetRenderDrawColor(sdl_renderer, 0x33, 0x33, 0x33, 0xFF);
+    SDL_RenderFillRect(sdl_renderer, &right);
+
+    // decorative “snake heads” to indicate 1P vs 2P
+    auto draw_head = [&](int cx, int cy){
+      SDL_Rect head{cx-12, cy-12, 24, 24};
+      SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
+      SDL_RenderFillRect(sdl_renderer, &head);
+    };
+    draw_head(left.x + left.w/2,  left.y + left.h/2);               // 1 head
+    draw_head(right.x + right.w/2 - 18, right.y + right.h/2);       // 2 heads
+    draw_head(right.x + right.w/2 + 18, right.y + right.h/2);
+
+    SDL_RenderPresent(sdl_renderer);
+    SDL_Delay(16); // ~60 FPS
+  }
+  return selected; // not reached, but keeps compiler happy
 }

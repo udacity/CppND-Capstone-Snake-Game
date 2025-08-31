@@ -10,12 +10,14 @@ int main() {
   constexpr std::size_t kScreenHeight{640};
   constexpr std::size_t kGridWidth{32};
   constexpr std::size_t kGridHeight{32};
-  constexpr std::size_t nPlayers{2};
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
+  int nPlayers = renderer.ShowPlayerMenu();  // 👈 get 1 or 2 from SDL menu
+
   Controller controller;
   Game game(kGridWidth, kGridHeight, nPlayers);
   game.Run(controller, renderer, kMsPerFrame);
+
   std::cout << "Game has terminated successfully!\n";
   auto scores = game.GetScore();
   auto sizes  = game.GetSize();

@@ -12,7 +12,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height, int num_players) :
   for (int i = 0; i < n_players; i++) {
     int dx = (i - (n_players - 1) / 2.0) * (grid_width / 4);  // space them evenly
     int dy = 0;  // keep them centered vertically
-    snakes.push_back(std::make_shared<Snake>(grid_width, grid_height, dx, dy));
+    snakes.push_back(std::make_unique<Snake>(grid_width, grid_height, dx, dy));
   }
   PlaceFood();
 }
@@ -57,6 +57,27 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
+void Game::Update() {
+  for (std::size_t i = 0; i < snakes.size(); i++) {
+    // Skip a snake if not alive
+    if (!(snakes[i]->alive)) continue;
+    // Otherwise update it
+    snakes[i]->Update();
+    // Check if it ate the food
+    int new_x = static_cast<int>(snakes[i]->head_x);
+    int new_y = static_cast<int>(snakes[i]->head_y);
+    if (food.x == new_x && food.y == new_y) {
+      // Add a new food
+      PlaceFood();
+      // Update the scores
+      scores[i]++;
+      // Grow snake and increase speed.
+      snakes[i]->GrowBody();
+      snakes[i]->speed += 0.02;
+    }
+  }
+}
+
 void Game::PlaceFood() {
   int x, y;
   while (true) {
@@ -72,28 +93,6 @@ void Game::PlaceFood() {
   }
 }
 
-void Game::Update() {
-  for (std::size_t i = 0; i < snakes.size(); i++) {
-    // Skip a snake if not alive
-    if (!(snakes[i]->alive)) continue;
-    // Otherwise update it
-    snakes[i]->Update();
-    // Check if it ate the food
-    int new_x = static_cast<int>(snakes[i]->head_x);
-    int new_y = static_cast<int>(snakes[i]->head_y);
-    if (food.x == new_x && food.y == new_y) {
-      // Update the scores
-      scores[i]++;
-      // Add a new food
-      PlaceFood();
-      // Grow snake and increase speed.
-      snakes[i]->GrowBody();
-      snakes[i]->speed += 0.02;
-    }
-  }
-}
-
-std::vector<int> Game::GetScore() const { return scores; }
 
 std::vector<int> Game::GetSize() const {
   std::vector<int> sizes;

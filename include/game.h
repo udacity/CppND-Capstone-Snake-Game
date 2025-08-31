@@ -15,8 +15,8 @@ class Game {
            std::size_t target_frame_duration);
   
   // Getters/Setters and invariants
-  std::vector<int> GetScore() const;
   std::vector<int> GetSize() const;
+  std::vector<int> GetScore() const { return scores; }
   void SetNumPlayers(const int &num_players) { 
     if (num_players < 1 || num_players > 2) {
         throw std::invalid_argument("The number of players must be 1 or 2");
@@ -27,7 +27,7 @@ class Game {
 
  private:
   int n_players;
-  std::vector<std::shared_ptr<Snake>> snakes;
+  std::vector<std::unique_ptr<Snake>> snakes;
   SDL_Point food;
 
   std::random_device dev;

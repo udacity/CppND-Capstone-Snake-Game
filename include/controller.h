@@ -8,7 +8,7 @@
 class Controller {
  public:
   // Methods
-  void HandleInput(bool &running, const std::vector<std::shared_ptr<Snake>> &snakes) const;
+  void HandleInput(bool &running, const std::vector<std::unique_ptr<Snake>> &snakes) const;
 
  private:
   // Keymaps
@@ -28,7 +28,7 @@ class Controller {
   };
 
   // Methods
-  void ChangeDirection(const std::shared_ptr<Snake> &snake, Snake::Direction input,
+  void ChangeDirection(const std::unique_ptr<Snake> &snake, Snake::Direction input,
                        Snake::Direction opposite) const;
 };
 
