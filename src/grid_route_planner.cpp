@@ -72,6 +72,9 @@ std::vector<Node*> RoutePlanner::ConstructFinalPath(Node *current_node) {
 // Write the A* Search algorithm here.
 void RoutePlanner::AStarSearch() {
     // Init
+    plan.clear();
+    plan_cells.clear();
+    open_list.clear();
     Node *current_node = start_node;
     current_node->g_value = 0.0f;
     current_node->visited = true;
@@ -88,8 +91,12 @@ void RoutePlanner::AStarSearch() {
         }
         // Check if the next node is the end one
         if (current_node == end_node){
-            // If so, construct final path
+            // Build path using Node* (valid only within this Grid instance)
             plan = ConstructFinalPath(current_node);
+            // Also build path as coordinate copies (safe for async / thread use)
+            plan_cells.reserve(plan.size());
+            for (auto *n : plan)
+                plan_cells.emplace_back(n->x, n->y);
             return;
         }
         // Otherwise, keep adding neighbors

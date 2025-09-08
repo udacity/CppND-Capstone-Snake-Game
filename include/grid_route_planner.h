@@ -18,6 +18,7 @@ class RoutePlanner {
     Node *NextNode();
     void AStarSearch();
     const std::vector<Node*>& GetPlan() const { return plan; }
+    const std::vector<std::pair<int,int>>& GetPlanCells() const { return plan_cells; }
 
   private:
     Grid &model;
@@ -25,6 +26,7 @@ class RoutePlanner {
     Node *start_node = nullptr;
     Node *end_node = nullptr;
     std::vector<Node*> plan;
+    std::vector<std::pair<int,int>> plan_cells;
 };
 
 #endif

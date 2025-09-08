@@ -2,6 +2,9 @@
 #define GAME_H
 
 #include <random>
+#include <algorithm>
+#include <future>
+#include <utility>
 
 #include "SDL.h"
 #include "controller.h"
@@ -49,6 +52,12 @@ class Game {
 
   Grid grid_model;
 
+  std::vector<std::future<std::vector<std::pair<int,int>>>> plan_futures;
+  std::vector<std::pair<int,int>> planned_goal;
+
+  void SubmitPlan(std::size_t i);
+  void TryInstallPlan(std::size_t i);
+  
   void PlaceFood();
   void Update();
 };

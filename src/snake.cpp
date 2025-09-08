@@ -9,11 +9,8 @@ void Snake::Update() {
       static_cast<int>(
           head_y)};
   // Update the snake's head position depending on the mode in use
-  if (mode == Mode::Autonomous) {
-    UpdateHeadAutonomous();
-  } else {
-    UpdateHeadManual();
-  }
+  if (IsAutonomous())  UpdateHeadAutonomous();
+  else                 UpdateHeadManual();
   // We then capture the head's cell after updating (rendering)
   SDL_Point current_cell{
       static_cast<int>(head_x),

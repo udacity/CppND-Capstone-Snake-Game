@@ -14,6 +14,10 @@ Game::Game(std::size_t grid_w, std::size_t grid_h, int num_players, Uint32 inact
 
   // N of players
   SetNumPlayers(num_players);
+  // Concurrency
+  plan_futures.resize(n_players);
+  planned_goal.assign(n_players, {-1, -1});
+  // Inactivity settings
   last_input_ms.assign(n_players, SDL_GetTicks());
   // Spawn snakes
   for (int i = 0; i < n_players; i++) {
@@ -83,28 +87,24 @@ void Game::Update() {
       snakes[i]->SetMode(Snake::Mode::Manual);
       snakes[i]->ClearPlannedPath();
     }
-    // Autonomous planning if needed
+    // Autonomous planning if needed (async, non-blocking)
     if (snakes[i]->IsAutonomous()) {
-      if (!(snakes[i]->HasPlannedPath()) || snakes[i]->replan_requested) {
-        // Reset search state before running A*
-        grid_model.Reset();
-        // Get start and end planning goals
-        Node &start = grid_model.At(
-            static_cast<int>(snakes[i]->head_x),
-            static_cast<int>(snakes[i]->head_y));
-        Node &goal = grid_model.At(food.x, food.y);
-        // Plan route and set it
-        RoutePlanner planner(grid_model, &start, &goal);
-        planner.AStarSearch();
-        snakes[i]->SetPlannedPath(planner.GetPlan());
+      // Only submit if: (a) we have no valid path, AND (b) no job already running.
+      if ( (!snakes[i]->HasPlannedPath() || snakes[i]->replan_requested)
+          && !plan_futures[i].valid() ) {
         snakes[i]->replan_requested = false;
+        snakes[i]->ClearPlannedPath();
+        SubmitPlan(i);  // Trigger planning
       }
+
+      // Try to install any finished plan this frame
+      TryInstallPlan(i);
     }
 
     // SNAKES UPDATE
     snakes[i]->Update();
 
-    // FOOD
+    // FOOD & STATS UPDATE
     int new_x = static_cast<int>(snakes[i]->head_x);
     int new_y = static_cast<int>(snakes[i]->head_y);
     if (food.x == new_x && food.y == new_y) {
@@ -137,6 +137,66 @@ void Game::PlaceFood() {
   }
 }
 
+void Game::SubmitPlan(std::size_t i) {
+  Snake &s = *snakes[i];
+
+  // Build a temporary grid, local to the async task (no races with grid_model)
+  Grid temp(static_cast<int>(grid_width), static_cast<int>(grid_height));
+  // Mark food (goal)
+  temp.MarkFood(food.x, food.y);
+  // Define start and goal
+  const int sx = static_cast<int>(s.head_x);
+  const int sy = static_cast<int>(s.head_y);
+  const int gx = food.x;
+  const int gy = food.y;
+  planned_goal[i] = {gx, gy}; // remember which goal this plan targets
+
+  // Submit A* planning async task (ownership of temporary grid)
+  plan_futures[i] = std::async(std::launch::async,
+    [sx, sy, gx, gy, temp = std::move(temp)]() mutable -> std::vector<std::pair<int,int>> {
+      Node &snode = temp.At(sx, sy);
+      Node &gnode = temp.At(gx, gy);
+
+      RoutePlanner planner(temp, &snode, &gnode);
+      planner.AStarSearch();
+
+      // Return coordinate path (safe across threads)
+      return planner.GetPlanCells();
+    }
+  );
+}
+
+void Game::TryInstallPlan(std::size_t i) {
+  auto &fut = plan_futures[i];
+  if (!fut.valid()) return;
+
+  using namespace std::chrono_literals;
+  if (fut.wait_for(0ms) != std::future_status::ready) return;
+
+  std::vector<std::pair<int,int>> cells;
+  try {
+  cells = fut.get();
+  } catch (const std::exception &e) {
+    std::cerr << "Planning failed: " << e.what() << "\n";
+    snakes[i]->replan_requested = true;  // try again next frame
+    return; }
+
+  // Only install if still autonomous and goal unchanged
+  if (!snakes[i]->IsAutonomous()) return;
+  if (planned_goal[i].first  != food.x ||
+    planned_goal[i].second != food.y) {
+    snakes[i]->replan_requested = true;
+    return;
+  }
+
+  // Map coords -> live grid Node* and install
+  std::vector<Node*> ptrs;
+  ptrs.reserve(cells.size());
+  for (auto &c : cells) {
+    ptrs.push_back(&grid_model.At(c.first, c.second));
+  }
+  snakes[i]->SetPlannedPath(ptrs);
+}
 
 std::vector<int> Game::GetSize() const {
   std::vector<int> sizes;
