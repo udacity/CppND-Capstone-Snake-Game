@@ -3,15 +3,18 @@
 #include "game.h"
 #include "SDL.h"
 
-Game::Game(std::size_t grid_w, std::size_t grid_h, int num_players) :
+Game::Game(std::size_t grid_w, std::size_t grid_h, int num_players, Uint32 inactivity_timout) :
       grid_width(grid_w),
       grid_height(grid_h),
+      inactivity_ms(inactivity_timout),
       engine(dev()),
       random_w(0, static_cast<int>(grid_w - 1)),
       random_h(0, static_cast<int>(grid_h - 1)),
       grid_model(grid_w, grid_h) {
+
   // N of players
   SetNumPlayers(num_players);
+  last_input_ms.assign(n_players, SDL_GetTicks());
   // Spawn snakes
   for (int i = 0; i < n_players; i++) {
     int dx = (i - (n_players - 1) / 2.0) * (grid_width / 4);  // space them evenly
@@ -36,7 +39,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller.HandleInput(running, snakes);
+    controller.HandleInput(running, snakes, last_input_ms);
     Update();
     renderer.Render(snakes, food);
 
@@ -65,10 +68,22 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
 void Game::Update() {
   for (std::size_t i = 0; i < snakes.size(); i++) {
+    // SNAKES STATUS UPDATE
+
     // Skip a snake if not alive
     if (!(snakes[i]->alive)) continue;
-
-    // Autonomous?
+    // Mode switching based on inactivity / recent input
+    Uint32 now = SDL_GetTicks();
+    bool inactive = (now - last_input_ms[i] >= inactivity_ms);
+    if (inactive && !(snakes[i]->IsAutonomous())) {
+      snakes[i]->SetMode(Snake::Mode::Autonomous);
+      snakes[i]->ClearPlannedPath();  // force fresh plan
+    } else if (!inactive && snakes[i]->IsAutonomous()) {
+      // A key was pressed recently for this player
+      snakes[i]->SetMode(Snake::Mode::Manual);
+      snakes[i]->ClearPlannedPath();
+    }
+    // Autonomous planning if needed
     if (snakes[i]->IsAutonomous()) {
       if (!(snakes[i]->HasPlannedPath()) || snakes[i]->replan_requested) {
         // Reset search state before running A*
@@ -86,10 +101,10 @@ void Game::Update() {
       }
     }
 
-    // Otherwise update it
+    // SNAKES UPDATE
     snakes[i]->Update();
 
-    // Check if it ate the food
+    // FOOD
     int new_x = static_cast<int>(snakes[i]->head_x);
     int new_y = static_cast<int>(snakes[i]->head_y);
     if (food.x == new_x && food.y == new_y) {

@@ -9,7 +9,9 @@ void Controller::ChangeDirection(const std::unique_ptr<Snake> &snake, Snake::Dir
   return;
 }
 
-void Controller::HandleInput(bool &running, const std::vector<std::unique_ptr<Snake>> &snakes) const {
+void Controller::HandleInput(bool &running,
+                             const std::vector<std::unique_ptr<Snake>> &snakes,
+                             std::vector<Uint32> &last_input_ms) const {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {
@@ -22,7 +24,11 @@ void Controller::HandleInput(bool &running, const std::vector<std::unique_ptr<Sn
           auto it = map.find(e.key.keysym.sym);
           // Skip if no key found
           if (it == map.end()) continue;
-          // Map it otherwise
+          
+          // Otherwise:
+          // Update last input to detect player inactivity
+          last_input_ms[i] = SDL_GetTicks();
+          // Map key 
           switch (it->second) {
             case Snake::Direction::kUp:
               ChangeDirection(snakes[i], Snake::Direction::kUp,

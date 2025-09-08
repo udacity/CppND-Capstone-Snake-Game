@@ -34,7 +34,7 @@ class Snake {
   bool HasPlannedPath() const { return !planned_path.empty(); }
 
   Direction direction = Direction::kUp;
-  Mode mode{Mode::Autonomous};
+  Mode mode{Mode::Manual};
 
   float speed{0.1f};
   int size{1};

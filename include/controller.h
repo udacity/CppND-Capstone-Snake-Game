@@ -8,7 +8,9 @@
 class Controller {
  public:
   // Methods
-  void HandleInput(bool &running, const std::vector<std::unique_ptr<Snake>> &snakes) const;
+  void HandleInput(bool &running,
+                 const std::vector<std::unique_ptr<Snake>> &snakes,
+                 std::vector<Uint32> &last_input_ms) const;
 
  private:
   // Keymaps

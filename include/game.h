@@ -12,7 +12,7 @@
 
 class Game {
  public:
-  Game(std::size_t grid_w, std::size_t grid_h, int num_players);
+  Game(std::size_t grid_w, std::size_t grid_h, int num_players, Uint32 inactivity_timout);
 
   // Public methods
   void Run(Controller const &controller, Renderer &renderer,
@@ -32,6 +32,9 @@ class Game {
  private:
   std::size_t grid_width;
   std::size_t grid_height;
+
+  Uint32 inactivity_ms;
+  std::vector<Uint32> last_input_ms;
 
   int n_players;
   std::vector<std::unique_ptr<Snake>> snakes;
