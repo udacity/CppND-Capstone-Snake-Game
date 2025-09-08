@@ -1,20 +1,26 @@
-#include "game.h"
 #include <iostream>
+
+#include "game.h"
 #include "SDL.h"
 
-Game::Game(std::size_t grid_width, std::size_t grid_height, int num_players) :
+Game::Game(std::size_t grid_w, std::size_t grid_h, int num_players) :
+      grid_width(grid_w),
+      grid_height(grid_h),
       engine(dev()),
-      random_w(0, static_cast<int>(grid_width - 1)),
-      random_h(0, static_cast<int>(grid_height - 1)) {
-
+      random_w(0, static_cast<int>(grid_w - 1)),
+      random_h(0, static_cast<int>(grid_h - 1)),
+      grid_model(grid_w, grid_h) {
+  // N of players
   SetNumPlayers(num_players);
-  // Create snakes
+  // Spawn snakes
   for (int i = 0; i < n_players; i++) {
     int dx = (i - (n_players - 1) / 2.0) * (grid_width / 4);  // space them evenly
     int dy = 0;  // keep them centered vertically
     snakes.push_back(std::make_unique<Snake>(grid_width, grid_height, dx, dy));
   }
+  // Place objective food
   PlaceFood();
+  grid_model.MarkFood(food.x, food.y);
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -61,14 +67,37 @@ void Game::Update() {
   for (std::size_t i = 0; i < snakes.size(); i++) {
     // Skip a snake if not alive
     if (!(snakes[i]->alive)) continue;
+
+    // Autonomous?
+    if (snakes[i]->IsAutonomous()) {
+      if (!(snakes[i]->HasPlannedPath()) || snakes[i]->replan_requested) {
+        // Reset search state before running A*
+        grid_model.Reset();
+        // Get start and end planning goals
+        Node &start = grid_model.At(
+            static_cast<int>(snakes[i]->head_x),
+            static_cast<int>(snakes[i]->head_y));
+        Node &goal = grid_model.At(food.x, food.y);
+        // Plan route and set it
+        RoutePlanner planner(grid_model, &start, &goal);
+        planner.AStarSearch();
+        snakes[i]->SetPlannedPath(planner.GetPlan());
+        snakes[i]->replan_requested = false;
+      }
+    }
+
     // Otherwise update it
     snakes[i]->Update();
+
     // Check if it ate the food
     int new_x = static_cast<int>(snakes[i]->head_x);
     int new_y = static_cast<int>(snakes[i]->head_y);
     if (food.x == new_x && food.y == new_y) {
       // Add a new food
       PlaceFood();
+      // Update model
+      grid_model.Reset();
+      grid_model.MarkFood(food.x, food.y);
       // Update the scores
       scores[i]++;
       // Grow snake and increase speed.

@@ -12,7 +12,7 @@ int main() {
   constexpr std::size_t kGridHeight{32};
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-  int nPlayers = renderer.ShowPlayerMenu();  // 👈 get 1 or 2 from SDL menu
+  int nPlayers = renderer.ShowPlayerMenu();  // N of players menu selection
 
   Controller controller;
   Game game(kGridWidth, kGridHeight, nPlayers);
